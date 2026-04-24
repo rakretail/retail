@@ -5,14 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RAK - UAE Retail Walkin Analytics</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-
         const firebaseConfig = {
             apiKey: "AIzaSyDfjbpGfUEzYCbKYyQi6XVt7zZ4Tp54phU",
             authDomain: "rakretail.firebaseapp.com",
@@ -22,17 +19,14 @@
             messagingSenderId: "507453199562",
             appId: "1:507453199562:web:520cf23c6baf435e5f1033"
         };
-
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         window.db = db;
         window.dbRef = ref;
         window.dbOnValue = onValue;
         window.basePath = "stores/";
-
         initMasterApp();
     </script>
-
     <style>
         :root {
             --primary: #006666; 
@@ -43,7 +37,6 @@
             --accent: #00a3a3;
             --header-black: #000000;
         }
-
         body.dark-mode {
             --bg: #0f1717;
             --card-bg: #1a2626;
@@ -51,28 +44,41 @@
             --shadow-soft: 0 12px 40px rgba(0, 0, 0, 0.4);
             --header-black: #ffffff;
         }
-
         * { font-family: 'Poppins', sans-serif !important; box-sizing: border-box; transition: background 0.3s ease, color 0.3s ease; }
-
         body { background: var(--bg); color: var(--text-main); margin: 0; padding: 20px; }
         .container { max-width: 1200px; margin: 0 auto; padding-bottom: 100px; }
-        
+
+        /* FIXED HEADER: Using Grid for perfect alignment on Tablet/Mobile */
         header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 30px; 
-            padding: 0 10px; 
-            position: relative; 
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 10px;
+            width: 100%;
         }
-        .title-corner { font-size: 1.8rem; font-weight: 800; color: var(--header-black); margin: 0; text-transform: uppercase; z-index: 2; }
+        .title-corner { 
+            font-size: 1.8rem; 
+            font-weight: 800; 
+            color: var(--header-black); 
+            margin: 0; 
+            text-transform: uppercase;
+            justify-self: start;
+        }
         .title-center { 
-            position: absolute; left: 50%; transform: translateX(-50%);
-            font-size: 2.2rem; font-weight: 800; color: var(--primary); 
-            margin: 0; letter-spacing: -1px; text-transform: uppercase; width: max-content;
+            font-size: 2.2rem; 
+            font-weight: 800; 
+            color: var(--primary); 
+            margin: 0; 
+            letter-spacing: -1px; 
+            text-transform: uppercase;
+            text-align: center;
+            white-space: nowrap;
+        }
+        .theme-toggle-wrapper {
+            justify-self: end;
         }
 
-        /* NEW: Visually appealing Icon Toggle */
         .theme-toggle-btn {
             background: var(--card-bg);
             border: 1px solid var(--primary);
@@ -86,7 +92,6 @@
             cursor: pointer;
             box-shadow: var(--shadow-soft);
             transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 10;
         }
         .theme-toggle-btn:hover { transform: scale(1.1); border-width: 2px; }
         .theme-toggle-btn svg { width: 24px; height: 24px; fill: currentColor; transition: transform 0.5s; }
@@ -125,12 +130,10 @@
             text-transform: uppercase;
         }
         .grid-header::before { content: ''; width: 4px; height: 24px; background: var(--primary); border-radius: 4px; }
-        
         .black-text { color: var(--header-black) !important; }
 
         .dynamic-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 40px; }
         .data-card { background: var(--card-bg); padding: 20px; border-radius: 24px; box-shadow: var(--shadow-soft); text-align: center; border: 1px solid rgba(0, 102, 102, 0.05); transition: 0.3s; }
-        
         .data-card h4 { margin: 0; font-size: 0.9rem; color: var(--primary); font-weight: 700; text-transform: uppercase; }
         .data-card .val { font-size: 1.8rem; font-weight: 800; color: var(--primary); margin: 8px 0; }
 
@@ -148,27 +151,31 @@
             font-weight: 700; cursor: pointer; transition: 0.3s; text-transform: uppercase;
         }
 
-        @media (max-width: 992px) { 
-            .charts-container { grid-template-columns: 1fr; } 
-            .title-center { font-size: 1.6rem; } 
+        /* Screen Compatibility Adjustments */
+        @media (max-width: 1024px) {
+            .title-center { font-size: 1.8rem; }
+            .title-corner { font-size: 1.5rem; }
         }
         @media (max-width: 768px) { 
-            .totals { grid-template-columns: 1fr; } 
-            .title-center { font-size: 1.2rem; } 
+            header { grid-template-columns: 1fr auto; }
             .title-corner { display: none; }
+            .title-center { font-size: 1.4rem; justify-self: start; }
+            .totals { grid-template-columns: 1fr; }
+            .charts-container { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-
 <div class="container">
     <header>
         <h1 class="title-corner">RAK</h1>
         <h1 class="title-center">UAE RETAIL</h1>
-        <div class="theme-toggle-btn" onclick="toggleDarkMode()">
-            <svg id="theme-icon" viewBox="0 0 24 24">
-                <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"></path>
-            </svg>
+        <div class="theme-toggle-wrapper">
+            <div class="theme-toggle-btn" onclick="toggleDarkMode()">
+                <svg id="theme-icon" viewBox="0 0 24 24">
+                    <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"></path>
+                </svg>
+            </div>
         </div>
     </header>
 
@@ -229,7 +236,6 @@
     let rawData = [];
     let weeklyChart, monthlyChart;
 
-    // Polished Dark Mode Logic
     const moonPath = "M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z";
     const sunPath = "M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z";
 
@@ -244,7 +250,6 @@
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('startDate').value = today;
         document.getElementById('endDate').value = today;
-
         window.dbOnValue(window.dbRef(window.db, window.basePath), snap => {
             const stores = snap.val() || {};
             processData(stores);
@@ -287,10 +292,8 @@
         const now = new Date();
         const startOfWeek = new Date(now).setDate(now.getDate() - now.getDay());
         const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-
         let dCount = 0, wCount = 0, mCount = 0;
         let breakdown = {};
-
         data.forEach(r => {
             const rDate = new Date(r.timestamp);
             if (rDate.toDateString() === now.toDateString()) dCount += r.count;
@@ -301,17 +304,14 @@
                 breakdown[key] = (breakdown[key] || 0) + r.count;
             }
         });
-
         document.getElementById("daily").innerText = dCount;
         document.getElementById("weekly").innerText = wCount;
         document.getElementById("monthly").innerText = mCount;
-        
         if (selectedShowroom === "all") {
             document.getElementById("gridTitle").innerHTML = `Showroom Totals`;
         } else {
             document.getElementById("gridTitle").innerHTML = `${selectedShowroom.toUpperCase()} <span class="black-text">EXECUTIVES</span>`;
         }
-        
         const grid = document.getElementById("mainGrid");
         grid.innerHTML = Object.entries(breakdown).sort((a,b) => b[1] - a[1]).map(([name, val]) => `
             <div class="data-card">
@@ -320,7 +320,6 @@
                 <div style="font-size:0.6rem; opacity:0.4; letter-spacing:1px; color: var(--primary);">VISITORS</div>
             </div>
         `).join('');
-
         renderCharts(data);
     }
 
@@ -328,13 +327,11 @@
         const isDark = document.body.classList.contains('dark-mode');
         const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
         const tickColor = isDark ? '#e0eaea' : '#1a2a2a';
-
         const now = new Date();
         const startOfWeek = new Date(now).setDate(now.getDate() - now.getDay());
         const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         const dayCounts = [0, 0, 0, 0, 0, 0, 0];
         const dailyMap = {};
-
         data.forEach(r => {
             const dt = new Date(r.timestamp);
             if (dt >= startOfWeek) dayCounts[dt.getDay()] += r.count;
@@ -342,43 +339,23 @@
                 dailyMap[dt.getDate()] = (dailyMap[dt.getDate()] || 0) + r.count;
             }
         });
-
         const monthLabels = Array.from({length: now.getDate()}, (_, i) => i + 1);
         const monthPoints = monthLabels.map(day => dailyMap[day] || 0);
-
         const commonOptions = {
-            responsive: true, 
-            maintainAspectRatio: false, 
-            scales: { 
-                y: { 
-                    beginAtZero: true, min: 0, ticks: { stepSize: 1, color: tickColor },
-                    grid: { color: gridColor }
-                },
-                x: {
-                    ticks: { color: tickColor },
-                    grid: { display: false }
-                }
-            }, 
-            plugins: { legend: { display: false } } 
+            responsive: true, maintainAspectRatio: false, 
+            scales: { y: { beginAtZero: true, ticks: { color: tickColor }, grid: { color: gridColor } }, x: { ticks: { color: tickColor }, grid: { display: false } } },
+            plugins: { legend: { display: false } }
         };
-
         if (weeklyChart) weeklyChart.destroy();
         weeklyChart = new Chart(document.getElementById('weeklyChart'), {
             type: 'bar',
-            data: {
-                labels: days,
-                datasets: [{ data: dayCounts, backgroundColor: '#006666', borderRadius: 8 }]
-            },
+            data: { labels: days, datasets: [{ data: dayCounts, backgroundColor: '#006666', borderRadius: 8 }] },
             options: commonOptions
         });
-
         if (monthlyChart) monthlyChart.destroy();
         monthlyChart = new Chart(document.getElementById('monthlyChart'), {
             type: 'line',
-            data: {
-                labels: monthLabels,
-                datasets: [{ data: monthPoints, borderColor: '#00a3a3', backgroundColor: 'rgba(0, 163, 163, 0.1)', fill: true, tension: 0.3 }]
-            },
+            data: { labels: monthLabels, datasets: [{ data: monthPoints, borderColor: '#00a3a3', backgroundColor: 'rgba(0, 163, 163, 0.1)', fill: true, tension: 0.3 }] },
             options: commonOptions
         });
     }
@@ -387,30 +364,24 @@
         const s = document.getElementById("startDate").value;
         const e = document.getElementById("endDate").value;
         const selStore = document.getElementById("showroomFilter").value;
-
         const filtered = rawData.filter(d => {
             const dateStr = new Date(d.timestamp).toISOString().split('T')[0];
             return (selStore === "all" || d.showroom === selStore) && (dateStr >= s && dateStr <= e);
         });
-
         if(filtered.length === 0) return alert("No records found.");
-        
         const rows = [["Showroom", "Executive", "Count", "Date", "Time"]];
         filtered.sort((a, b) => b.timestamp - a.timestamp).forEach(d => {
             const dt = new Date(d.timestamp);
             rows.push([d.showroom.toUpperCase(), d.executive, d.count, dt.toLocaleDateString('en-GB'), dt.toLocaleTimeString([], { hour12: false })]);
         });
-
         const ws = XLSX.utils.aoa_to_sheet(rows);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "MasterReport");
         XLSX.writeFile(wb, `RAK_Report_${s}_to_${e}.xlsx`);
     }
 </script>
-
-<footer style="text-align:center; padding:20px; color:#888; font-size:13px; background: var(--card-bg); border-radius: 0 0 35px 35px;">
+<footer style="text-align:center; padding:20px; color:#888; font-size:13px; background: var(--card-bg); border-radius: 0 0 35px 35px; margin-top: 20px;">
     © 2026 Hesper. All rights reserved.
 </footer>
-
 </body>
 </html>
