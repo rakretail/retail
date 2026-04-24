@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RAK Master Analytics</title>
+    <title>RAK - UAE Retail Walkin Analytics</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
@@ -30,27 +33,34 @@
         initMasterApp();
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <style>
         :root {
-            --primary: #006666; --bg: #f0f4f4; --card-bg: #ffffff; --text-main: #1a2a2a;
+            --primary: #006666; 
+            --bg: #f0f4f4; 
+            --card-bg: #ffffff; 
+            --text-main: #1a2a2a;
             --shadow-soft: 0 12px 40px rgba(0, 102, 102, 0.06);
             --accent: #00a3a3;
         }
-        * { font-family: 'Poppins', sans-serif !important; }
+
+        * { font-family: 'Poppins', sans-serif !important; box-sizing: border-box; }
 
         body { background: var(--bg); color: var(--text-main); margin: 0; padding: 20px; }
         .container { max-width: 1200px; margin: 0 auto; padding-bottom: 100px; }
         
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding: 0 10px; }
-        .title-corner { font-size: 1.8rem; font-weight: 800; color: #000000; margin: 0; text-transform: uppercase; }
-        
+        header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 30px; 
+            padding: 0 10px; 
+            position: relative; 
+        }
+        .title-corner { font-size: 1.8rem; font-weight: 800; color: #000000; margin: 0; text-transform: uppercase; z-index: 2; }
         .title-center { 
             position: absolute; left: 50%; transform: translateX(-50%);
             font-size: 2.2rem; font-weight: 800; color: var(--primary); 
-            margin: 0; letter-spacing: -1px; text-transform: uppercase; 
+            margin: 0; letter-spacing: -1px; text-transform: uppercase; width: max-content;
         }
 
         .top-nav { display: flex; justify-content: center; margin-bottom: 30px; margin-top: 20px; }
@@ -74,12 +84,26 @@
         .stat-card h3 { font-size: 0.85rem; margin: 0; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; }
         .stat-card span { font-size: 2.2rem; font-weight: 800; color: var(--primary); }
 
-        .grid-header { font-weight: 800; font-size: 1.4rem; margin: 30px 0 15px 5px; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+        .grid-header { 
+            font-weight: 800; 
+            font-size: 1.4rem; 
+            margin: 30px 0 15px 5px; 
+            color: var(--primary); 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            text-transform: uppercase;
+        }
         .grid-header::before { content: ''; width: 4px; height: 24px; background: var(--primary); border-radius: 4px; }
         
+        /* The specific black color for the label EXECUTIVES */
+        .black-text { color: #000000 !important; }
+
         .dynamic-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 40px; }
         .data-card { background: white; padding: 20px; border-radius: 24px; box-shadow: var(--shadow-soft); text-align: center; border: 1px solid #edf2f2; transition: 0.3s; }
-        .data-card h4 { margin: 0; font-size: 0.9rem; opacity: 0.7; }
+        
+        /* Executive names and Showroom names in cards now back to Teal */
+        .data-card h4 { margin: 0; font-size: 0.9rem; color: var(--primary); font-weight: 700; text-transform: uppercase; }
         .data-card .val { font-size: 1.8rem; font-weight: 800; color: var(--primary); margin: 8px 0; }
 
         .charts-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px; }
@@ -96,8 +120,14 @@
             font-weight: 700; cursor: pointer; transition: 0.3s; text-transform: uppercase;
         }
 
-        @media (max-width: 992px) { .charts-container { grid-template-columns: 1fr; } .title-center { display: none; } }
-        @media (max-width: 768px) { .totals { grid-template-columns: 1fr; } }
+        @media (max-width: 992px) { 
+            .charts-container { grid-template-columns: 1fr; } 
+            .title-center { font-size: 1.6rem; } 
+        }
+        @media (max-width: 768px) { 
+            .totals { grid-template-columns: 1fr; } 
+            .title-center { font-size: 1.2rem; } 
+        }
     </style>
 </head>
 <body>
@@ -106,7 +136,7 @@
     <header>
         <h1 class="title-corner">RAK</h1>
         <h1 class="title-center">UAE RETAIL</h1>
-        <div style="width: 80px;"></div>
+        <div style="width: 180px;"></div>
     </header>
 
     <div class="top-nav">
@@ -157,10 +187,10 @@
 
 <script>
     const storeNameMap = {
-        "fuj": "Fujairah Showroom","rak": "RAK Showroom","mus": "Musaffah Showroom","auh": "AlKhaldya Showroom","zahia": "AlZahia Showroom",
-        "aln": "Al ain Showroom","deira": "Deira Showroom","kludi": "Kludi Showroom",
-        "ajm": "Ajman Showroom","shj": "Sharjah Showroom",
-        "szr": "Sheikh Zayed Showroom"
+        "fuj": "Fujairah Showroom", "rak": "RAK Showroom", "mus": "Musaffah Showroom",
+        "auh": "AlKhaldya Showroom", "zahia": "AlZahia Showroom", "aln": "Al ain Showroom",
+        "deira": "Deira Showroom", "kludi": "Kludi Showroom", "ajm": "Ajman Showroom",
+        "shj": "Sharjah Showroom", "szr": "Sheikh Zayed Showroom"
     };
 
     let rawData = [];
@@ -232,14 +262,20 @@
         document.getElementById("weekly").innerText = wCount;
         document.getElementById("monthly").innerText = mCount;
         
-        document.getElementById("gridTitle").innerText = (selectedShowroom === "all") ? "Showroom Totals" : `${selectedShowroom.toUpperCase()} Executives`;
+        // Showroom Totals stays Teal. 
+        // When selected: Showroom Name (Teal) + EXECUTIVES (Black)
+        if (selectedShowroom === "all") {
+            document.getElementById("gridTitle").innerHTML = `Showroom Totals`;
+        } else {
+            document.getElementById("gridTitle").innerHTML = `${selectedShowroom.toUpperCase()} <span class="black-text">EXECUTIVES</span>`;
+        }
         
         const grid = document.getElementById("mainGrid");
         grid.innerHTML = Object.entries(breakdown).sort((a,b) => b[1] - a[1]).map(([name, val]) => `
             <div class="data-card">
                 <h4>${name}</h4>
                 <div class="val">${val}</div>
-                <div style="font-size:0.6rem; opacity:0.4; letter-spacing:1px;">VISITORS</div>
+                <div style="font-size:0.6rem; opacity:0.4; letter-spacing:1px; color: var(--primary);">VISITORS</div>
             </div>
         `).join('');
 
@@ -274,7 +310,7 @@
             options: { 
                 responsive: true, 
                 maintainAspectRatio: false, 
-                scales: { y: { beginAtZero: true, min: 0 } }, // Force start at 0
+                scales: { y: { beginAtZero: true, min: 0, ticks: { stepSize: 1 } } }, 
                 plugins: { legend: { display: false } } 
             }
         });
@@ -289,7 +325,7 @@
             options: { 
                 responsive: true, 
                 maintainAspectRatio: false, 
-                scales: { y: { beginAtZero: true, min: 0 } }, // Force start at 0
+                scales: { y: { beginAtZero: true, min: 0, ticks: { stepSize: 1 } } }, 
                 plugins: { legend: { display: false } } 
             }
         });
@@ -319,8 +355,10 @@
         XLSX.writeFile(wb, `RAK_Report_${s}_to_${e}.xlsx`);
     }
 </script>
-<footer style="text-align:center; padding:20px; color:#888; font-size:13px; background: var(--card-bg); border-radius: 0 0 35px 35px;"> 
-      © 2026 Hesper. All rights reserved.
+
+<footer style="text-align:center; padding:20px; color:#888; font-size:13px; background: var(--card-bg); border-radius: 0 0 35px 35px;">
+    © 2026 Hesper. All rights reserved.
 </footer>
+
 </body>
 </html>
