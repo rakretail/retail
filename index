@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAK Master Analytics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfjbpGfUEzYCbKYyQi6XVt7zZ4Tp54phU",
+            authDomain: "rakretail.firebaseapp.com",
+            databaseURL: "https://rakretail-default-rtdb.firebaseio.com",
+            projectId: "rakretail",
+            storageBucket: "rakretail.firebasestorage.app",
+            messagingSenderId: "507453199562",
+            appId: "1:507453199562:web:520cf23c6baf435e5f1033"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        window.db = db;
+        window.dbRef = ref;
+        window.dbOnValue = onValue;
+        window.basePath = "stores/";
+
+        initMasterApp();
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --primary: #006666; --bg: #f0f4f4; --card-bg: #ffffff; --text-main: #1a2a2a;
+            --shadow-soft: 0 12px 40px rgba(0, 102, 102, 0.06);
+            --accent: #00a3a3;
+        }
+        * { font-family: 'Poppins', sans-serif !important; }
+
+        body { background: var(--bg); color: var(--text-main); margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; padding-bottom: 100px; }
+        
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding: 0 10px; }
+        .title-corner { font-size: 1.8rem; font-weight: 800; color: #000000; margin: 0; text-transform: uppercase; }
+        
+        .title-center { 
+            position: absolute; left: 50%; transform: translateX(-50%);
+            font-size: 2.2rem; font-weight: 800; color: var(--primary); 
+            margin: 0; letter-spacing: -1px; text-transform: uppercase; 
+        }
+
+        .top-nav { display: flex; justify-content: center; margin-bottom: 30px; margin-top: 20px; }
+        .select-container { position: relative; width: 100%; max-width: 400px; }
+        .select-container label { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; color: var(--primary); margin-left: 15px; display: block; margin-bottom: 8px; }
+        
+        .premium-select {
+            appearance: none; width: 100%; padding: 16px 20px; border-radius: 18px; 
+            border: 2px solid #e0eaea; background: white; font-size: 1rem; font-weight: 600;
+            color: var(--primary); cursor: pointer; transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft); outline: none;
+        }
+        .premium-select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(0, 102, 102, 0.1); }
+        .select-container::after {
+            content: '▼'; font-size: 0.8rem; color: var(--primary); position: absolute;
+            right: 20px; bottom: 20px; pointer-events: none;
+        }
+
+        .totals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: var(--card-bg); padding: 25px; border-radius: 30px; text-align: center; box-shadow: var(--shadow-soft); }
+        .stat-card h3 { font-size: 0.85rem; margin: 0; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-card span { font-size: 2.2rem; font-weight: 800; color: var(--primary); }
+
+        .grid-header { font-weight: 800; font-size: 1.4rem; margin: 30px 0 15px 5px; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+        .grid-header::before { content: ''; width: 4px; height: 24px; background: var(--primary); border-radius: 4px; }
+        
+        .dynamic-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 40px; }
+        .data-card { background: white; padding: 20px; border-radius: 24px; box-shadow: var(--shadow-soft); text-align: center; border: 1px solid #edf2f2; transition: 0.3s; }
+        .data-card h4 { margin: 0; font-size: 0.9rem; opacity: 0.7; }
+        .data-card .val { font-size: 1.8rem; font-weight: 800; color: var(--primary); margin: 8px 0; }
+
+        .charts-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px; }
+        .chart-wrapper { background: var(--card-bg); padding: 25px; border-radius: 35px; box-shadow: var(--shadow-soft); height: 350px; }
+
+        .export-hub {
+            background: #1a2a2a; color: white; padding: 25px; border-radius: 30px; 
+            display: flex; gap: 20px; align-items: flex-end; flex-wrap: wrap; margin-top: 50px;
+        }
+        .export-hub label { font-size: 0.7rem; font-weight: 600; opacity: 0.7; margin-bottom: 5px; display: block; }
+        .export-hub input { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 12px; border-radius: 12px; color: white; width: 160px; }
+        .btn-download {
+            background: var(--accent); color: white; border: none; padding: 14px 30px; border-radius: 15px; 
+            font-weight: 700; cursor: pointer; transition: 0.3s; text-transform: uppercase;
+        }
+
+        @media (max-width: 992px) { .charts-container { grid-template-columns: 1fr; } .title-center { display: none; } }
+        @media (max-width: 768px) { .totals { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1 class="title-corner">RAK</h1>
+        <h1 class="title-center">UAE RETAIL</h1>
+        <div style="width: 80px;"></div>
+    </header>
+
+    <div class="top-nav">
+        <div class="select-container">
+            <label>Current View</label>
+            <select id="showroomFilter" class="premium-select" onchange="applyFilters()">
+                <option value="all">RAK Retail</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="totals">
+        <div class="stat-card"><h3>Daily Walkins</h3><span id="daily">0</span></div>
+        <div class="stat-card"><h3>Weekly Walkins</h3><span id="weekly">0</span></div>
+        <div class="stat-card"><h3>Monthly Walkins</h3><span id="monthly">0</span></div>
+    </div>
+
+    <div id="gridTitle" class="grid-header">Performance Breakdown</div>
+    <div class="dynamic-grid" id="mainGrid"></div>
+
+    <div class="charts-container">
+        <div class="chart-wrapper">
+            <h4 style="margin: 0 0 15px 0; font-size: 0.9rem; color: var(--primary);">Weekly Traffic (Days)</h4>
+            <canvas id="weeklyChart"></canvas>
+        </div>
+        <div class="chart-wrapper">
+            <h4 style="margin: 0 0 15px 0; font-size: 0.9rem; color: var(--primary);">Monthly Trend (Dates)</h4>
+            <canvas id="monthlyChart"></canvas>
+        </div>
+    </div>
+
+    <div class="export-hub">
+        <div style="flex: 1;">
+            <h3 style="margin:0 0 5px 0; font-size:1.1rem;">Export Data Report</h3>
+            <p style="margin:0; opacity:0.6; font-size:0.8rem;">Select range to download Excel</p>
+        </div>
+        <div>
+            <label>From Date</label>
+            <input type="date" id="startDate">
+        </div>
+        <div>
+            <label>To Date</label>
+            <input type="date" id="endDate">
+        </div>
+        <button class="btn-download" onclick="exportToExcel()">Download XLS</button>
+    </div>
+</div>
+
+<script>
+    const storeNameMap = {
+        "fuj": "Fujairah Showroom","rak": "RAK Showroom","mus": "Musaffah Showroom","auh": "AlKhaldya Showroom","zahia": "AlZahia Showroom",
+        "aln": "Al ain Showroom","deira": "Deira Showroom","kludi": "Kludi Showroom",
+        "ajm": "Ajman Showroom","shj": "Sharjah Showroom",
+        "szr": "Sheikh Zayed Showroom"
+    };
+
+    let rawData = [];
+    let weeklyChart, monthlyChart;
+
+    function initMasterApp() {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('startDate').value = today;
+        document.getElementById('endDate').value = today;
+
+        window.dbOnValue(window.dbRef(window.db, window.basePath), snap => {
+            const stores = snap.val() || {};
+            processData(stores);
+            updateShowroomList(Object.keys(stores));
+        });
+    }
+
+    function processData(stores) {
+        rawData = [];
+        for (let storeId in stores) {
+            const walkins = stores[storeId].walkins || {};
+            Object.values(walkins).forEach(record => {
+                const displayName = storeNameMap[storeId] || storeId;
+                rawData.push({ ...record, showroom: displayName });
+            });
+        }
+        applyFilters();
+    }
+
+    function updateShowroomList(storeIds) {
+        const sel = document.getElementById("showroomFilter");
+        const current = sel.value;
+        sel.innerHTML = '<option value="all">RAK RETAIL (UAE)</option>';
+        storeIds.sort().forEach(id => {
+            const displayName = storeNameMap[id] || id;
+            const opt = document.createElement("option");
+            opt.value = displayName; opt.innerText = displayName.toUpperCase();
+            sel.appendChild(opt);
+        });
+        sel.value = current;
+    }
+
+    function applyFilters() {
+        const selStore = document.getElementById("showroomFilter").value;
+        const filtered = rawData.filter(d => (selStore === "all" || d.showroom === selStore));
+        updateUI(filtered, selStore);
+    }
+
+    function updateUI(data, selectedShowroom) {
+        const now = new Date();
+        const startOfWeek = new Date(now).setDate(now.getDate() - now.getDay());
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+        let dCount = 0, wCount = 0, mCount = 0;
+        let breakdown = {};
+
+        data.forEach(r => {
+            const rDate = new Date(r.timestamp);
+            if (rDate.toDateString() === now.toDateString()) dCount += r.count;
+            if (rDate >= startOfWeek) wCount += r.count;
+            if (rDate >= startOfMonth) {
+                mCount += r.count;
+                const key = (selectedShowroom === "all") ? r.showroom : r.executive;
+                breakdown[key] = (breakdown[key] || 0) + r.count;
+            }
+        });
+
+        document.getElementById("daily").innerText = dCount;
+        document.getElementById("weekly").innerText = wCount;
+        document.getElementById("monthly").innerText = mCount;
+        
+        document.getElementById("gridTitle").innerText = (selectedShowroom === "all") ? "Showroom Totals" : `${selectedShowroom.toUpperCase()} Executives`;
+        
+        const grid = document.getElementById("mainGrid");
+        grid.innerHTML = Object.entries(breakdown).sort((a,b) => b[1] - a[1]).map(([name, val]) => `
+            <div class="data-card">
+                <h4>${name}</h4>
+                <div class="val">${val}</div>
+                <div style="font-size:0.6rem; opacity:0.4; letter-spacing:1px;">VISITORS</div>
+            </div>
+        `).join('');
+
+        renderCharts(data);
+    }
+
+    function renderCharts(data) {
+        const now = new Date();
+        const startOfWeek = new Date(now).setDate(now.getDate() - now.getDay());
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const dayCounts = [0, 0, 0, 0, 0, 0, 0];
+        const dailyMap = {};
+
+        data.forEach(r => {
+            const dt = new Date(r.timestamp);
+            if (dt >= startOfWeek) dayCounts[dt.getDay()] += r.count;
+            if(dt.getMonth() === now.getMonth() && dt.getFullYear() === now.getFullYear()) {
+                dailyMap[dt.getDate()] = (dailyMap[dt.getDate()] || 0) + r.count;
+            }
+        });
+
+        const monthLabels = Array.from({length: now.getDate()}, (_, i) => i + 1);
+        const monthPoints = monthLabels.map(day => dailyMap[day] || 0);
+
+        if (weeklyChart) weeklyChart.destroy();
+        weeklyChart = new Chart(document.getElementById('weeklyChart'), {
+            type: 'bar',
+            data: {
+                labels: days,
+                datasets: [{ data: dayCounts, backgroundColor: '#006666', borderRadius: 8 }]
+            },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                scales: { y: { beginAtZero: true, min: 0 } }, // Force start at 0
+                plugins: { legend: { display: false } } 
+            }
+        });
+
+        if (monthlyChart) monthlyChart.destroy();
+        monthlyChart = new Chart(document.getElementById('monthlyChart'), {
+            type: 'line',
+            data: {
+                labels: monthLabels,
+                datasets: [{ data: monthPoints, borderColor: '#00a3a3', backgroundColor: 'rgba(0, 163, 163, 0.1)', fill: true, tension: 0.3 }]
+            },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                scales: { y: { beginAtZero: true, min: 0 } }, // Force start at 0
+                plugins: { legend: { display: false } } 
+            }
+        });
+    }
+
+    function exportToExcel() {
+        const s = document.getElementById("startDate").value;
+        const e = document.getElementById("endDate").value;
+        const selStore = document.getElementById("showroomFilter").value;
+
+        const filtered = rawData.filter(d => {
+            const dateStr = new Date(d.timestamp).toISOString().split('T')[0];
+            return (selStore === "all" || d.showroom === selStore) && (dateStr >= s && dateStr <= e);
+        });
+
+        if(filtered.length === 0) return alert("No records found.");
+        
+        const rows = [["Showroom", "Executive", "Count", "Date", "Time"]];
+        filtered.sort((a, b) => b.timestamp - a.timestamp).forEach(d => {
+            const dt = new Date(d.timestamp);
+            rows.push([d.showroom.toUpperCase(), d.executive, d.count, dt.toLocaleDateString('en-GB'), dt.toLocaleTimeString([], { hour12: false })]);
+        });
+
+        const ws = XLSX.utils.aoa_to_sheet(rows);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "MasterReport");
+        XLSX.writeFile(wb, `RAK_Report_${s}_to_${e}.xlsx`);
+    }
+</script>
+<footer style="text-align:center; padding:20px; color:#888; font-size:13px; background: var(--card-bg); border-radius: 0 0 35px 35px;"> 
+      © 2026 Hesper. All rights reserved.
+</footer>
+</body>
+</html>
