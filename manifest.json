@@ -1,13 +1,13 @@
 {
-  "name": "Fujairah Showroom Tracker",
-  "short_name": "FujTracker",
+  "name": "RAK Retail Walkin Analytics",
+  "short_name": "UAERETAIL",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f2f7f7",
   "theme_color": "#006666",
   "icons": [
     {
-      "src": "RAKWAKLIN.png",
+      "src": "rakwalkin.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
