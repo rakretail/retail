@@ -276,67 +276,6 @@ function RakHourFlow({stats:e}){
   ]});
 }
 
-function RakStoreCard({stats:e,storeFilter:t}){
-  if(t!=="all"||e.rangeAData.length===0)return null;
-  var storeMap=new Map();
-  e.rangeAData.forEach(function(r){
-    if(!storeMap.has(r.storeId))storeMap.set(r.storeId,{total:0,dates:new Set(),hours:Array(24).fill(0)});
-    var s=storeMap.get(r.storeId);
-    s.total+=r.count;
-    s.dates.add(r.dateStr||n2(r.timestamp));
-    s.hours[new Date(r.timestamp).getHours()]+=r.count;
-  });
-  var grandTotal=e.totalA||1;
-  var storeRows=Array.from(storeMap.entries()).map(function(entry){
-    var storeId=entry[0],data=entry[1];
-    var hrs=data.hours;
-    var phIdx=hrs.indexOf(Math.max.apply(null,hrs));
-    var daysActive=data.dates.size||1;
-    return{id:storeId,name:Ba(storeId),total:data.total,daysActive:daysActive,dailyAvg:Math.round(data.total/daysActive),peakHour:String(phIdx).padStart(2,"0")+":00",share:(data.total/grandTotal*100).toFixed(1)};
-  }).sort(function(a,b){return b.total-a.total;});
-  return D.jsxs("div",{className:"space-y-4",children:[
-    D.jsxs("h2",{className:"text-sm font-black uppercase tracking-widest text-primary flex items-center gap-2",children:[
-      D.jsx("div",{className:"w-1.5 h-4 bg-primary rounded-full"}),
-      "Store Performance Scorecard"
-    ]}),
-    D.jsx(xi,{className:"border shadow-sm overflow-hidden",children:
-      D.jsx("div",{className:"overflow-x-auto",children:
-        D.jsxs("table",{className:"w-full text-sm",children:[
-          D.jsx("thead",{children:
-            D.jsx("tr",{className:"border-b bg-muted/40",children:[
-              D.jsx("th",{className:"text-left px-4 py-2.5 text-xs font-black uppercase tracking-widest text-muted-foreground",children:"Store"}),
-              D.jsx("th",{className:"text-right px-4 py-2.5 text-xs font-black uppercase tracking-widest text-muted-foreground",children:"Total"}),
-              D.jsx("th",{className:"text-right px-4 py-2.5 text-xs font-black uppercase tracking-widest text-muted-foreground hidden sm:table-cell",children:"Days Active"}),
-              D.jsx("th",{className:"text-right px-4 py-2.5 text-xs font-black uppercase tracking-widest text-muted-foreground",children:"Daily Avg"}),
-              D.jsx("th",{className:"text-right px-4 py-2.5 text-xs font-black uppercase tracking-widest text-muted-foreground hidden md:table-cell",children:"Peak Hour"}),
-              D.jsx("th",{className:"px-4 py-2.5 text-xs font-black uppercase tracking-widest text-muted-foreground",children:"Share"})
-            ]})
-          }),
-          D.jsx("tbody",{children:
-            storeRows.map(function(r,idx){
-              var rowJsx=D.jsxs("tr",{className:lt("border-b last:border-0 transition-colors hover:bg-muted/30",idx===0?"bg-primary/5":""),children:[
-                D.jsx("td",{className:"px-4 py-3",children:D.jsxs("div",{className:"flex items-center gap-2",children:[
-                  D.jsx("div",{className:lt("w-1.5 h-4 rounded-full shrink-0",idx===0?"bg-primary":"bg-muted-foreground/30")}),
-                  D.jsx("span",{className:lt("font-bold",idx===0?"text-primary":""),children:r.name})
-                ]})}),
-                D.jsx("td",{className:"px-4 py-3 text-right font-black tabular-nums text-primary",children:wo(r.total)}),
-                D.jsx("td",{className:"px-4 py-3 text-right tabular-nums text-muted-foreground hidden sm:table-cell",children:r.daysActive}),
-                D.jsx("td",{className:"px-4 py-3 text-right font-bold tabular-nums",children:wo(r.dailyAvg)}),
-                D.jsx("td",{className:"px-4 py-3 text-right font-mono text-xs text-muted-foreground hidden md:table-cell",children:r.peakHour}),
-                D.jsx("td",{className:"px-4 py-3",children:D.jsxs("div",{className:"flex items-center justify-end gap-2",children:[
-                  D.jsx("div",{className:"w-16 h-1.5 bg-muted rounded-full overflow-hidden",children:D.jsx("div",{className:"h-full bg-primary rounded-full",style:{width:r.share+"%"}})}),
-                  D.jsx("span",{className:"text-xs font-black tabular-nums w-10 text-right",children:r.share+"%"})
-                ]})})
-              ]},r.id);
-              return rowJsx;
-            })
-          })
-        ]})
-      })
-    })
-  ]});
-}
-
 function RakExecEff({stats:e,storeFilter:t}){
   if(e.rangeAData.length===0)return null;
   var execMap=new Map();
@@ -404,7 +343,7 @@ function RakExecEff({stats:e,storeFilter:t}){
   ]});
 }
 
-;function d6e({rawData:e,storeFilter:t}){const[n,r]=R.useState($l(new Date,"yyyy-MM-01")),[i,a]=R.useState($l(new Date,"yyyy-MM-dd")),o=()=>{const l=new Date(n).getTime(),u=new Date(i).getTime()+864e5,f=e.filter(m=>m.timestamp>=l&&m.timestamp<u).filter(m=>t==="all"||m.storeId===t).map(m=>({Date:m.dateStr,Showroom:Ba(m.storeId),Executive:m.executive,"Walk-ins":m.count}));if(f.length===0){alert("No data found for the selected range.");return}const h=qA.json_to_sheet(f),p=qA.book_new();qA.book_append_sheet(p,h,"Walkins"),e6e(p,`rak-walkins-${n}_to_${i}.xlsx`)};return D.jsxs(xi,{className:"bg-primary text-primary-foreground border-none overflow-hidden relative",children:[D.jsx("div",{className:"absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 pointer-events-none"}),D.jsx(Hi,{className:"p-5 md:p-6 relative z-10",children:D.jsxs("div",{className:"flex flex-col gap-4",children:[D.jsx("h2",{className:"text-base md:text-lg font-black uppercase tracking-tight",children:"Export Data Report"}),D.jsxs("div",{className:"grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] items-end gap-3",children:[D.jsxs("div",{className:"space-y-1 min-w-0",children:[D.jsx(Os,{className:"text-[0.6rem] font-bold uppercase tracking-widest text-primary-foreground/70 ml-1",children:"From"}),D.jsx(Xl,{type:"date",value:n,onChange:l=>r(l.target.value),className:"bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground focus:border-primary-foreground/50 h-10 w-full"})]}),D.jsxs("div",{className:"space-y-1 min-w-0",children:[D.jsx(Os,{className:"text-[0.6rem] font-bold uppercase tracking-widest text-primary-foreground/70 ml-1",children:"To"}),D.jsx(Xl,{type:"date",value:i,onChange:l=>a(l.target.value),className:"bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground focus:border-primary-foreground/50 h-10 w-full"})]}),D.jsxs(uf,{onClick:o,className:"h-10 bg-accent hover:bg-accent/90 text-accent-foreground font-black uppercase tracking-widest text-xs px-5 sm:px-6 whitespace-nowrap w-full sm:w-auto",children:[D.jsx(nne,{className:"w-4 h-4 mr-2"}),"Download XLS"]})]})]})})]})}function p6e(){const{rawData:e,loading:t,lastUpdated:n}=pde(),[r,i]=R.useState("all"),[a,o]=R.useState({start:Ku(new Date),end:Ql(new Date)}),[l,u]=R.useState(null),f=R.useMemo(()=>{const p=new Set;return e.forEach(m=>p.add(m.storeId)),Array.from(p).sort()},[e]),h=mde(e,r,a,l);return D.jsxs("div",{className:"min-h-screen bg-background flex flex-col",children:[D.jsx(cle,{lastUpdated:n,storeFilter:r,setStoreFilter:i,availableStores:f}),D.jsx("main",{className:"flex-1 p-4 md:p-8 max-w-[1600px] mx-auto w-full space-y-6",children:t?D.jsx("div",{className:"h-[60vh] flex items-center justify-center",children:D.jsxs("div",{className:"animate-pulse flex flex-col items-center gap-4",children:[D.jsx("div",{className:"h-12 w-12 rounded-full border-4 border-primary border-t-transparent animate-spin"}),D.jsx("p",{className:"text-muted-foreground font-medium uppercase tracking-widest text-sm",children:"Loading Analytics..."})]})}):D.jsxs("div",{className:"flex flex-col gap-8 animate-in fade-in duration-500",children:[D.jsx(iNe,{stats:h}),D.jsx(aNe,{stats:h,storeFilter:r}),D.jsx(mNe,{rangeA:a,setRangeA:o,rangeB:l,setRangeB:u}),D.jsxs("div",{className:"grid grid-cols-1 xl:grid-cols-3 gap-6",children:[D.jsx("div",{className:"xl:col-span-2",children:D.jsx(vNe,{stats:h,storeFilter:r})}),D.jsx("div",{className:"xl:col-span-1",children:D.jsx(gNe,{stats:h,storeFilter:r})})]}),D.jsx(bNe,{stats:h,storeFilter:r}),D.jsx(_Ne,{stats:h}),D.jsx(wNe,{stats:h}),D.jsx(SNe,{stats:h,storeFilter:r}),D.jsx(RakHourFlow,{stats:h}),D.jsx(RakStoreCard,{stats:h,storeFilter:r}),D.jsx(RakExecEff,{stats:h,storeFilter:r}),D.jsx(d6e,{rawData:e,storeFilter:r})]})})]})}const m6e=new Tee,{hook:v6e}=QJ({path:"/"});function g6e(){return D.jsxs(YJ,{children:[D.jsx(N4,{path:"/",component:p6e}),D.jsx(N4,{component:Zie})]})}function y6e(){const e={hook:v6e};return D.jsx(Uoe,{attribute:"class",defaultTheme:"light",enableSystem:!1,children:D.jsx(Aee,{client:m6e,children:D.jsxs(qie,{children:[D.jsx(H9,{...e,children:D.jsx(g6e,{})}),D.jsx(ure,{})]})})})}PJ.createRoot(document.getElementById("root")).render(D.jsx(y6e,{}));
+;function d6e({rawData:e,storeFilter:t}){const[n,r]=R.useState($l(new Date,"yyyy-MM-01")),[i,a]=R.useState($l(new Date,"yyyy-MM-dd")),o=()=>{const l=new Date(n).getTime(),u=new Date(i).getTime()+864e5,f=e.filter(m=>m.timestamp>=l&&m.timestamp<u).filter(m=>t==="all"||m.storeId===t).map(m=>({Date:m.dateStr,Showroom:Ba(m.storeId),Executive:m.executive,"Walk-ins":m.count}));if(f.length===0){alert("No data found for the selected range.");return}const h=qA.json_to_sheet(f),p=qA.book_new();qA.book_append_sheet(p,h,"Walkins"),e6e(p,`rak-walkins-${n}_to_${i}.xlsx`)};return D.jsxs(xi,{className:"bg-primary text-primary-foreground border-none overflow-hidden relative",children:[D.jsx("div",{className:"absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 pointer-events-none"}),D.jsx(Hi,{className:"p-5 md:p-6 relative z-10",children:D.jsxs("div",{className:"flex flex-col gap-4",children:[D.jsx("h2",{className:"text-base md:text-lg font-black uppercase tracking-tight",children:"Export Data Report"}),D.jsxs("div",{className:"grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] items-end gap-3",children:[D.jsxs("div",{className:"space-y-1 min-w-0",children:[D.jsx(Os,{className:"text-[0.6rem] font-bold uppercase tracking-widest text-primary-foreground/70 ml-1",children:"From"}),D.jsx(Xl,{type:"date",value:n,onChange:l=>r(l.target.value),className:"bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground focus:border-primary-foreground/50 h-10 w-full"})]}),D.jsxs("div",{className:"space-y-1 min-w-0",children:[D.jsx(Os,{className:"text-[0.6rem] font-bold uppercase tracking-widest text-primary-foreground/70 ml-1",children:"To"}),D.jsx(Xl,{type:"date",value:i,onChange:l=>a(l.target.value),className:"bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground focus:border-primary-foreground/50 h-10 w-full"})]}),D.jsxs(uf,{onClick:o,className:"h-10 bg-accent hover:bg-accent/90 text-accent-foreground font-black uppercase tracking-widest text-xs px-5 sm:px-6 whitespace-nowrap w-full sm:w-auto",children:[D.jsx(nne,{className:"w-4 h-4 mr-2"}),"Download XLS"]})]})]})})]})}function p6e(){const{rawData:e,loading:t,lastUpdated:n}=pde(),[r,i]=R.useState("all"),[a,o]=R.useState({start:Ku(new Date),end:Ql(new Date)}),[l,u]=R.useState(null),f=R.useMemo(()=>{const p=new Set;return e.forEach(m=>p.add(m.storeId)),Array.from(p).sort()},[e]),h=mde(e,r,a,l);return D.jsxs("div",{className:"min-h-screen bg-background flex flex-col",children:[D.jsx(cle,{lastUpdated:n,storeFilter:r,setStoreFilter:i,availableStores:f}),D.jsx("main",{className:"flex-1 p-4 md:p-8 max-w-[1600px] mx-auto w-full space-y-6",children:t?D.jsx("div",{className:"h-[60vh] flex items-center justify-center",children:D.jsxs("div",{className:"animate-pulse flex flex-col items-center gap-4",children:[D.jsx("div",{className:"h-12 w-12 rounded-full border-4 border-primary border-t-transparent animate-spin"}),D.jsx("p",{className:"text-muted-foreground font-medium uppercase tracking-widest text-sm",children:"Loading Analytics..."})]})}):D.jsxs("div",{className:"flex flex-col gap-8 animate-in fade-in duration-500",children:[D.jsx(iNe,{stats:h}),D.jsx(aNe,{stats:h,storeFilter:r}),D.jsx(mNe,{rangeA:a,setRangeA:o,rangeB:l,setRangeB:u}),D.jsxs("div",{className:"grid grid-cols-1 xl:grid-cols-3 gap-6",children:[D.jsx("div",{className:"xl:col-span-2",children:D.jsx(vNe,{stats:h,storeFilter:r})}),D.jsx("div",{className:"xl:col-span-1",children:D.jsx(gNe,{stats:h,storeFilter:r})})]}),D.jsx(bNe,{stats:h,storeFilter:r}),D.jsx(_Ne,{stats:h}),D.jsx(wNe,{stats:h}),D.jsx(SNe,{stats:h,storeFilter:r}),D.jsx(RakHourFlow,{stats:h}),D.jsx(RakExecEff,{stats:h,storeFilter:r}),D.jsx(d6e,{rawData:e,storeFilter:r})]})})]})}const m6e=new Tee,{hook:v6e}=QJ({path:"/"});function g6e(){return D.jsxs(YJ,{children:[D.jsx(N4,{path:"/",component:p6e}),D.jsx(N4,{component:Zie})]})}function y6e(){const e={hook:v6e};return D.jsx(Uoe,{attribute:"class",defaultTheme:"light",enableSystem:!1,children:D.jsx(Aee,{client:m6e,children:D.jsxs(qie,{children:[D.jsx(H9,{...e,children:D.jsx(g6e,{})}),D.jsx(ure,{})]})})})}PJ.createRoot(document.getElementById("root")).render(D.jsx(y6e,{}));
     })();
   } catch (e) {
     console.error("dashboard bootstrap error", e);
