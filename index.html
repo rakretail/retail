@@ -1254,7 +1254,7 @@ document.addEventListener('visibilitychange',()=>{ if(!document.hidden&&Date.now
 /* ───────── self-update ─────────
    On open, on return to the foreground and every few minutes, the page downloads itself past every cache.
    If the copy on the server differs from the one running, it refreshes the cached copies and reloads. */
-const BUILD='2026.10.15-4';   // shown in the footer, so you can see which version a device is running
+const BUILD='2026.10.15-3';   // shown in the footer, so you can see which version a device is running
 const SELF_JS=document.currentScript?document.currentScript.textContent:'', SELF_CSS=(document.querySelector('style')||{}).textContent||'';
 $('#ver').textContent='Version '+BUILD;
 const bust=()=>{const u=new URL(location.href);u.searchParams.set('v',Date.now());location.replace(u)};
