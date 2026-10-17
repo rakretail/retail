@@ -362,7 +362,7 @@ button,select,[data-store],[data-day]{touch-action:manipulation}
   .rrow{grid-template-columns:24px minmax(0,1fr) auto auto;row-gap:5px}
   .rrow .trk{grid-column:2/-1;grid-row:2}
 }
-@media print{#upd{display:none!important}}
+@media print{#upd{display:none!important}#msgDlg{display:none!important}}
 .chs{display:inline-flex;gap:8px;white-space:nowrap;font-variant-numeric:tabular-nums}
 .chs i{font-style:normal;display:inline-flex;align-items:center;gap:4px}
 .chs i::before{content:"";width:7px;height:7px;border-radius:2px;background:var(--walk)}
@@ -370,6 +370,65 @@ button,select,[data-store],[data-day]{touch-action:manipulation}
 .mixbar{display:inline-flex;width:56px;height:6px;border-radius:999px;overflow:hidden;background:var(--surface-2);vertical-align:middle;margin-right:6px}
 .mixbar i{background:var(--walk)} .mixbar b{background:var(--phone)}
 td.cw{color:var(--walk);font-weight:600} td.cp{color:var(--phone);font-weight:600}
+/* ───────── messages to showrooms ───────── */
+.hbtn.msg{background:var(--brand);border-color:var(--brand);font-weight:650;display:inline-flex;align-items:center;gap:7px}
+.hbtn.msg:hover{background:#a50d26}
+.hbtn.msg .n{background:#fff;color:var(--brand);border-radius:999px;font-size:11px;font-weight:700;padding:1px 7px;line-height:1.5}
+#msgDlg{border:0;padding:0;border-radius:20px;width:min(640px,calc(100vw - 32px));max-height:calc(100vh - 32px);background:var(--surface);color:var(--ink);box-shadow:0 30px 80px rgba(0,0,0,.35)}
+#msgDlg::backdrop{background:rgba(6,20,24,.55);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.mh{display:flex;align-items:center;gap:12px;padding:18px 22px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:1}
+.mh h2{margin:0;font:700 19px/1.2 var(--fd);flex:1}
+.mh p{margin:2px 0 0;font-size:12.5px;color:var(--muted)}
+.mx{border:0;background:var(--surface-2);border-radius:999px;width:34px;height:34px;cursor:pointer;font-size:18px;line-height:1}
+.mb{padding:18px 22px 22px}
+.mf{display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
+.mf label.l{display:block;font-size:12px;font-weight:650;color:var(--ink-2);margin:0 0 6px}
+.mf input[type=text],.mf textarea,.mf select{width:100%;min-width:0;font-family:inherit;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 11px;font-size:14px}
+.mf textarea{min-height:92px;resize:vertical;line-height:1.5}
+.mf input:focus,.mf textarea:focus,.mf select:focus{outline:2px solid var(--s1);outline-offset:0;border-color:transparent}
+.mrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+@media (max-width:560px){.mrow{grid-template-columns:minmax(0,1fr)}.mh,.mb{padding-left:16px;padding-right:16px}}
+.mcnt{font-size:12px;color:var(--muted);text-align:right;margin-top:4px}
+.mcnt.over{color:var(--crit);font-weight:650}
+.mst{display:flex;flex-wrap:wrap;gap:6px}
+.mst button{border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:5px 11px;font-size:12.5px;cursor:pointer;min-height:30px;color:var(--ink-2)}
+.mst button[aria-pressed=true]{background:var(--primary);border-color:var(--primary);color:#fff;font-weight:650}
+.mst button.all{font-weight:650}
+.mchk{display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer}
+.mchk input{width:17px;height:17px;accent-color:var(--brand)}
+.mprev{border-radius:12px;padding:10px 14px;background:linear-gradient(90deg,#9e0b23,#d4142f 45%,#9e0b23);font-weight:700;color:#f2f7f8;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mprev .pl{display:inline-block;padding:2px 10px;border-radius:999px;background:#fff;font-weight:800;font-size:11px;letter-spacing:1px;margin-right:8px;color:#c8102e}
+.mact{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.mact .btn.pri{background:var(--brand);border-color:var(--brand);color:#fff}
+.mact .btn.pri:disabled{opacity:.55;cursor:not-allowed}
+.mmsg{font-size:12.5px;color:var(--muted)} .mmsg.err{color:var(--crit);font-weight:600} .mmsg.ok{color:var(--up);font-weight:600}
+.msent{margin-top:22px;border-top:1px solid var(--border);padding-top:16px}
+.msent h3{margin:0 0 10px;font:650 15px/1.3 var(--fd);display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.msent h3 span{font:400 12.5px var(--fb);color:var(--muted)}
+.mi{border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.mi.off{opacity:.62}
+.mi .t{margin:0 0 6px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.5}
+.mi .m{font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center}
+.mi .tag{display:inline-block;font-size:11px;font-weight:700;border-radius:999px;padding:1px 8px;letter-spacing:.3px}
+.mi .tag.live{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--up)}
+.mi .tag.end{background:var(--surface-2);color:var(--ink-2)}
+.mi .tag.urg{background:color-mix(in srgb,var(--crit) 14%,transparent);color:var(--crit)}
+.mi .ack{margin-top:8px;display:flex;flex-wrap:wrap;gap:5px}
+.mi .ack span{font-size:11.5px;border-radius:999px;padding:2px 8px;background:var(--surface-2);color:var(--muted)}
+.mi .ack span.y{background:color-mix(in srgb,var(--s1) 16%,transparent);color:var(--ink)}
+.ackd{margin-top:10px}
+.ackd summary{cursor:pointer;font-size:12.5px;color:var(--ink-2);list-style-position:outside}
+.ackt{width:100%;border-collapse:collapse;margin-top:8px;font-size:12.5px}
+.ackt th{text-align:left;font-weight:650;white-space:nowrap;padding:6px 12px 6px 0;vertical-align:top;width:1%;color:var(--ink)}
+.ackt td{padding:4px 0;border-top:0}
+.ackt tr+tr th,.ackt tr+tr td{border-top:1px solid var(--border)}
+.ackt td span{display:inline-block;margin:2px 4px 2px 0;border-radius:999px;padding:2px 9px;font-size:12px}
+.ackt td span.y{background:color-mix(in srgb,var(--s1) 16%,transparent);color:var(--ink);font-weight:600}
+.ackt td span.y i{font-style:normal;font-weight:400;color:var(--muted);margin-left:3px}
+.ackt td span.n{background:var(--surface-2);color:var(--muted)}
+.ackt td em{color:var(--muted);font-style:normal}
+.mi .ia{margin-top:10px;display:flex;gap:8px}
+.mi .ia .btn{min-height:30px;padding:4px 12px;font-size:12.5px}
 </style>
 </head>
 <body>
@@ -378,6 +437,7 @@ td.cw{color:var(--walk);font-weight:600} td.cp{color:var(--phone);font-weight:60
     <div class="mark"><img src="https://rakretail.github.io/retail/rakwalkin.png" alt="" width="44" height="44" onerror="this.remove()"><span class="wm" aria-label="RAK Ceramics" data-keep><b>RAK</b><span>CERAMICS</span></span><span class="ttl" data-keep>UAE Retail<small>Walk-in analytics</small></span></div>
     <div class="sp"></div>
     <div class="live"><span class="dot" id="dot"></span><span id="liveTxt">Connecting…</span></div>
+    <button class="hbtn msg" id="btnMsg" type="button" data-keep>Message showrooms<span class="n" id="msgN" hidden>0</span></button>
     <button class="hbtn" id="btnRefresh" type="button">Refresh</button>
     <button class="hbtn" id="btnTheme" type="button" aria-label="Switch between light and dark theme">Theme</button>
   </div>
@@ -503,6 +563,28 @@ td.cw{color:var(--walk);font-weight:600} td.cp{color:var(--phone);font-weight:60
     <footer><p class="note" id="method"></p><p class="note copy"><span>© 2026 Hesper. All rights reserved.</span><span id="ver"></span></p></footer>
   </div>
 </div></main>
+<dialog id="msgDlg" aria-labelledby="msgH" data-keep>
+  <div class="mh"><div style="flex:1"><h2 id="msgH">Message the showrooms</h2><p>Pops up on every showroom screen, then runs on a red Urgent line under their Live Feed until it expires.</p></div>
+    <button class="mx" type="button" id="msgX" aria-label="Close">×</button></div>
+  <div class="mb">
+    <form class="mf" id="msgForm" autocomplete="off">
+      <div class="mrow">
+        <div><label class="l" id="mFromL">From</label><div class="mst" id="mFrom" role="group" aria-labelledby="mFromL">
+          <button type="button" data-from="Hagop" aria-pressed="true">Hagop</button><button type="button" data-from="Dilya" aria-pressed="false">Dilya</button></div></div>
+        <div><label class="l" for="mFor">Show in the Live Feed for</label><select id="mFor">
+          <option value="2h">2 hours</option><option value="eod">Until the end of today</option><option value="24h" selected>24 hours</option>
+          <option value="3d">3 days</option><option value="7d">1 week</option></select></div>
+      </div>
+      <div><label class="l" for="mText">Message</label><textarea id="mText" maxlength="400" placeholder="e.g. Great work this week, team — let's push for 50 walk-ins each by Thursday!" required></textarea>
+        <div class="mcnt" id="mCnt">0 / 280</div></div>
+      <div><label class="l" id="mToL">Send to</label><div class="mst" id="mTo" role="group" aria-labelledby="mToL"></div></div>
+      <label class="mchk"><input type="checkbox" id="mUrg"> Mark as urgent <span style="color:var(--muted)">(red pop-up)</span></label>
+      <div><label class="l">Live Feed preview</label><div class="mprev" id="mPrev"></div></div>
+      <div class="mact"><button class="btn pri" type="submit" id="mSend">Send to all showrooms</button><span class="mmsg" id="mMsg" role="status"></span></div>
+    </form>
+    <div class="msent"><h3>Sent messages <span id="mSentSub"></span></h3><div id="mList"><p class="note">Loading…</p></div></div>
+  </div>
+</dialog>
 <div id="tip" role="tooltip"></div>
 
 <script>
@@ -1251,10 +1333,126 @@ let rz,lastW=innerWidth;window.addEventListener('resize',()=>{if(innerWidth===la
 setInterval(()=>{ if(!document.hidden) refresh(false) },POLL);
 setInterval(tick,20e3);
 document.addEventListener('visibilitychange',()=>{ if(!document.hidden&&Date.now()-S.updated>POLL) refresh(false) });
+/* ───────── messages to showrooms ─────────
+   Each message is written to stores/{id}/broadcasts/{msgId} for every selected showroom, in one request.
+   The showroom pages listen live: the message pops up and leads their Live Feed until `until`.
+   When someone taps "Got it" there, their name lands in seen/, which the list below shows back. */
+const MSG_MAX=280;
+const SENDERS=['Hagop','Dilya'];
+const M={to:new Set(),sent:[],busy:false,from:'Hagop'};
+function mRenderFrom(){ $('#mFrom').querySelectorAll('[data-from]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.from===M.from)) }
+const mStores=()=>(S.stores&&S.stores.length?S.stores:Object.keys(NAMES)).slice().sort((a,b)=>short(a).localeCompare(short(b)));
+const mId=()=>'m'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+function mUntil(v){ const now=Date.now();
+  if(v==='2h')return now+2*36e5; if(v==='24h')return now+24*36e5; if(v==='3d')return now+3*DAY; if(v==='7d')return now+7*DAY;
+  return (dn(now)+1)*DAY-OFF; }                                      // end of today, UAE time
+const mWhen=ts=>{const d=dn(ts),t=dn(Date.now());return (d===t?'Today':d===t-1?'Yesterday':d===t+1?'Tomorrow':fDay(d))+', '+fTime(ts)};
+function mRenderTo(){
+  const ids=mStores(), all=ids.every(id=>M.to.has(id));
+  $('#mTo').innerHTML=`<button type="button" class="all" data-to="*" aria-pressed="${all}">All showrooms</button>`+
+    ids.map(id=>`<button type="button" data-to="${esc(id)}" aria-pressed="${M.to.has(id)}">${esc(short(id))}</button>`).join('');
+  const n=M.to.size; $('#mSend').textContent=n===ids.length?'Send to all showrooms':n?`Send to ${n} showroom${n===1?'':'s'}`:'Pick at least one showroom';
+  mValidate();
+}
+function mValidate(){
+  const len=$('#mText').value.trim().length, c=$('#mCnt');
+  c.textContent=len+' / '+MSG_MAX; c.classList.toggle('over',len>MSG_MAX);
+  $('#mSend').disabled=M.busy||!len||len>MSG_MAX||!M.to.size||!M.from;
+  const from=(M.from||'').toUpperCase(), urg=$('#mUrg').checked;
+  $('#mPrev').innerHTML=`<span class="pl">URGENT · ${esc(from)}</span>${esc($('#mText').value.trim().replace(/\s+/g,' ')||'Your message will scroll here…')}`;
+}
+async function mLoad(){
+  const ids=mStores(); $('#mSentSub').textContent='';
+  const res=await Promise.all(ids.map(id=>j(`${DB}/stores/${id}/broadcasts.json`).then(v=>[id,v]).catch(()=>[id,undefined])));
+  const by=new Map(); let failed=0;
+  for(const [id,v] of res){ if(v===undefined){failed++;continue}
+    for(const k in (v||{})){ const b=v[k]; if(!b||typeof b.text!=='string')continue;
+      const g=by.get(k)||{id:k,text:b.text,from:b.from,ts:+b.ts||0,until:+b.until||0,urgent:!!b.urgent,stores:[],seen:{}};
+      g.stores.push(id); g.until=Math.max(g.until,+b.until||0); g.seen[id]=b.seen&&typeof b.seen==='object'?b.seen:{}; by.set(k,g); } }
+  M.sent=[...by.values()].sort((a,b)=>b.ts-a.ts);
+  mRenderList(failed);
+}
+function mRenderList(failed){
+  const now=Date.now(), live=M.sent.filter(b=>!b.until||b.until>now);
+  const n=$('#msgN'); n.textContent=live.length; n.hidden=!live.length;
+  $('#mSentSub').textContent=M.sent.length?`${live.length} live · ${M.sent.length} total`:'';
+  if(!M.sent.length){ $('#mList').innerHTML=`<p class="note">${failed?"Couldn't load sent messages — check the connection.":'Nothing sent yet. Messages you send appear here with who has seen them.'}</p>`; return }
+  $('#mList').innerHTML=M.sent.slice(0,30).map((b,i)=>{
+    const on=!b.until||b.until>now, acked=b.stores.filter(id=>Object.keys(b.seen[id]||{}).length);
+    const rows=b.stores.slice().sort((x,y)=>short(x).localeCompare(short(y))).map(id=>mAckRow(id,b.seen[id]||{}));
+    const ppl=rows.reduce((a,r)=>a+r.yes,0), tot=rows.reduce((a,r)=>a+r.yes+r.no,0);
+    return `<div class="mi${on?'':' off'}">
+      <p class="t">${esc(b.text)}</p>
+      <div class="m">${b.urgent?'<span class="tag urg">Urgent</span>':''}<span class="tag ${on?'live':'end'}">${on?'Live':'Ended'}</span>
+        <span>${esc(b.from||'Head office')} · ${esc(mWhen(b.ts))}</span><span>${on?'until':'ended'} ${esc(mWhen(b.until))}</span>
+        <span><b>${acked.length}</b> of ${b.stores.length} showroom${b.stores.length===1?'':'s'} acknowledged</span></div>
+      <details class="ackd"${i===0?' open':''}><summary><b>${ppl}</b>${tot?` of ${tot}`:''} ${(tot||ppl)===1?'person':'people'} acknowledged · see names</summary>
+        <table class="ackt"><tbody>${rows.map(r=>r.html).join('')}</tbody></table></details>
+      <div class="ia">${on?`<button class="btn" type="button" data-stop="${esc(b.id)}">Stop showing</button>`:''}<button class="btn" type="button" data-del="${esc(b.id)}">Delete</button></div>
+    </div>`}).join('')+(failed?`<p class="note">${failed} showroom${failed===1?'':'s'} could not be read just now.</p>`:'');
+}
+/* one row per showroom: who tapped "Got it" (with time), and who on that showroom's roster hasn't yet */
+function mAckRow(id,seen){
+  const key=n=>String(n).replace(/[.#$\[\]\/]/g,'_');
+  const yes=Object.entries(seen).filter(([,ts])=>+ts>0).sort((x,y)=>x[1]-y[1]);
+  const done=new Set(yes.map(([n])=>n));
+  const no=(S.roster[id]||[]).filter(n=>!done.has(key(n))).sort((x,y)=>x.localeCompare(y));
+  const html=`<tr><th>${esc(short(id))}</th><td>${yes.length?yes.map(([n,ts])=>`<span class="y">✓ ${esc(n==='Screen'?'Shared screen':n)} <i>${esc(mWhen(+ts))}</i></span>`).join(''):''}${
+    no.map(n=>`<span class="n">${esc(n)}</span>`).join('')}${!yes.length&&!no.length?'<em>No one yet</em>':''}</td></tr>`;
+  return {html,yes:yes.length,no:no.length};
+}
+async function mPatch(body){
+  const r=await fetch(DB+'/.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(!r.ok){ let why='HTTP '+r.status; try{const e=await r.json(); if(e&&e.error) why=e.error}catch(_){}
+    throw new Error(/permission/i.test(why)?'The database rules block this. Allow writes to stores/$store/broadcasts in Firebase.':why) }
+}
+function mSay(txt,cls){ const e=$('#mMsg'); e.textContent=txt; e.className='mmsg'+(cls?' '+cls:'') }
+async function mSend(ev){
+  ev.preventDefault(); if($('#mSend').disabled) return;
+  const text=$('#mText').value.trim(), from=M.from, urgent=$('#mUrg').checked, ids=[...M.to];
+  const id=mId(), rec={text,from,ts:Date.now(),until:mUntil($('#mFor').value),urgent};
+  const body={}; ids.forEach(s=>body[`stores/${s}/broadcasts/${id}`]=rec);
+  M.busy=true; mValidate(); mSay('Sending…');
+  try{ await mPatch(body); try{localStorage.setItem('rakMsgFrom',from)}catch(_){}
+    $('#mText').value=''; $('#mUrg').checked=false;
+    mSay(`Sent to ${ids.length===mStores().length?'all showrooms':ids.length+' showroom'+(ids.length===1?'':'s')} — it's on their screens now.`,'ok');
+    await mLoad(); }
+  catch(e){ mSay("Couldn't send: "+e.message,'err') }
+  M.busy=false; mValidate();
+}
+async function mAct(id,del){
+  const b=M.sent.find(x=>x.id===id); if(!b) return;
+  if(del&&!confirm('Delete this message from every showroom? Its acknowledgements will be removed too.')) return;
+  const body={}; b.stores.forEach(s=>body[`stores/${s}/broadcasts/${id}`+(del?'':'/until')]=del?null:Date.now());
+  try{ await mPatch(body); mSay(del?'Message deleted.':'Message stopped — it has left the Live Feeds.','ok'); await mLoad() }
+  catch(e){ mSay("Couldn't update: "+e.message,'err') }
+}
+function mOpen(){
+  if(!M.to.size) mStores().forEach(id=>M.to.add(id));
+  try{const f=localStorage.getItem('rakMsgFrom'); if(SENDERS.includes(f)) M.from=f}catch(_){}
+  mRenderFrom();
+  mSay(''); mRenderTo(); const d=$('#msgDlg');
+  if(d.showModal) d.showModal(); else d.setAttribute('open','');
+  setTimeout(()=>$('#mText').focus(),30); mLoad();
+}
+$('#btnMsg').addEventListener('click',mOpen);
+$('#msgX').addEventListener('click',()=>$('#msgDlg').close());
+$('#msgDlg').addEventListener('click',e=>{ if(e.target===e.currentTarget) e.currentTarget.close() });   // click on the backdrop
+$('#mFrom').addEventListener('click',e=>{ const b=e.target.closest('[data-from]'); if(!b) return; M.from=b.dataset.from; mRenderFrom(); mValidate() });
+$('#mTo').addEventListener('click',e=>{ const b=e.target.closest('[data-to]'); if(!b) return; const ids=mStores();
+  if(b.dataset.to==='*'){ const all=ids.every(id=>M.to.has(id)); M.to.clear(); if(!all) ids.forEach(id=>M.to.add(id)) }
+  else M.to.has(b.dataset.to)?M.to.delete(b.dataset.to):M.to.add(b.dataset.to);
+  mRenderTo() });
+['input','change'].forEach(t=>$('#msgForm').addEventListener(t,mValidate));
+$('#msgForm').addEventListener('submit',mSend);
+$('#mList').addEventListener('click',e=>{ const s=e.target.closest('[data-stop]'), d=e.target.closest('[data-del]');
+  if(s) mAct(s.dataset.stop,false); else if(d) mAct(d.dataset.del,true) });
+mLoad().catch(()=>{});                                               // fills the live-count badge on the button
+setInterval(()=>{ if(!document.hidden) mLoad().catch(()=>{}) },2*60e3);
 /* ───────── self-update ─────────
    On open, on return to the foreground and every few minutes, the page downloads itself past every cache.
    If the copy on the server differs from the one running, it refreshes the cached copies and reloads. */
-const BUILD='2026.10.15-3';   // shown in the footer, so you can see which version a device is running
+const BUILD='2026.10.17-6';   // shown in the footer, so you can see which version a device is running
 const SELF_JS=document.currentScript?document.currentScript.textContent:'', SELF_CSS=(document.querySelector('style')||{}).textContent||'';
 $('#ver').textContent='Version '+BUILD;
 const bust=()=>{const u=new URL(location.href);u.searchParams.set('v',Date.now());location.replace(u)};
