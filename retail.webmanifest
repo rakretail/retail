@@ -1,9 +1,9 @@
 {
-  "id": "./retail.html",
+  "id": "./",
   "name": "RAK Retail · Walk-in Analytics",
   "short_name": "RAK Retail",
   "description": "Live walk-in and phone-inquiry analytics for RAK Ceramics UAE showrooms.",
-  "start_url": "./retail.html?source=app",
+  "start_url": "./?source=app",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
@@ -16,8 +16,8 @@
     { "src": "retail-icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
-    { "name": "Showrooms", "url": "./retail.html#showrooms", "icons": [{ "src": "retail-icon-192.png", "sizes": "192x192" }] },
-    { "name": "Team", "url": "./retail.html#team", "icons": [{ "src": "retail-icon-192.png", "sizes": "192x192" }] },
-    { "name": "Inactivity watch", "url": "./retail.html#health", "icons": [{ "src": "retail-icon-192.png", "sizes": "192x192" }] }
+    { "name": "Showrooms", "url": "./#showrooms", "icons": [{ "src": "retail-icon-192.png", "sizes": "192x192" }] },
+    { "name": "Team", "url": "./#team", "icons": [{ "src": "retail-icon-192.png", "sizes": "192x192" }] },
+    { "name": "Inactivity watch", "url": "./#health", "icons": [{ "src": "retail-icon-192.png", "sizes": "192x192" }] }
   ]
 }
