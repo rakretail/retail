@@ -5,380 +5,464 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
 <title>RAK Retail Walkin Analytics</title>
-<meta name="theme-color" content="#006666">
-<link rel="icon" type="image/png" href="https://rakretail.github.io/retail/rakwalkin.png">
-<link rel="apple-touch-icon" href="https://rakretail.github.io/retail/rakwalkin.png">
-<link rel="manifest" href="https://rakretail.github.io/retail/manifest.json">
+<meta name="description" content="Live walk-in and phone-inquiry analytics for RAK Ceramics UAE showrooms.">
+<meta name="theme-color" content="#0a2b24">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="RAK Retail">
+<meta name="application-name" content="RAK Retail">
+<link rel="icon" type="image/png" href="retail-icon-192.png">
+<link rel="apple-touch-icon" href="retail-icon-192.png">
+<link rel="manifest" href="retail.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Hanken+Grotesk:wght@400..700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400..800&family=Onest:wght@400..700&display=swap" rel="stylesheet">
+<script>try{var P=localStorage.getItem("rakPal"),T=localStorage.getItem("rakTheme");if(P)document.documentElement.dataset.palette=P;if(T==="dark"||T==="light")document.documentElement.dataset.theme=T}catch(e){}</script>
 <style>
+/* ================================================================
+   RAK Retail · walk-in analytics · v4 "cobalt glaze"
+   ================================================================ */
+/* ── palettes: each sets a few base colours; every other token is derived from them ── */
+:root,:root[data-palette="emerald"]{ --p1:#0f8a68; --p1d:#0b5a45; --acc:#d9a53a; --hA:#0a2b24; --hB:#12523f; --hLine:#f0c35a; --hMuted:#a9c8bc; }
+:root[data-palette="ocean"]{ --p1:#1577ad; --p1d:#0d4a6e; --acc:#f2a024; --hA:#061c2b; --hB:#0e4563; --hLine:#ffbe55; --hMuted:#a6c3d6; }
+:root[data-palette="aubergine"]{ --p1:#7246a8; --p1d:#47286f; --acc:#ef6a4c; --hA:#1c0f29; --hB:#45215f; --hLine:#ff8c6e; --hMuted:#c3b2d6; }
+:root[data-palette="charcoal"]{ --p1:#3f5fb0; --p1d:#283d75; --acc:#d3172f; --hA:#141619; --hB:#2a2e35; --hLine:#ff4d5e; --hMuted:#a9afb8; }
 :root{
   color-scheme:light;
-  --page:#eef1f2; --surface:#ffffff; --surface-2:#f1f4f5; --ink:#13222a; --ink-2:#4a5a63; --muted:#6f7e88;
-  --grid:#e4e9eb; --axis:#c2ccd1; --band:#f4f7f8; --border:rgba(19,34,42,.10); --shadow:0 1px 0 rgba(19,34,42,.04),0 14px 34px -26px rgba(19,34,42,.45);
-  --s1:#0d9488; --s1-soft:#99d6ce; --s1-deep:#006666;
-  --seq-lo:#ddf1ee; --seq-hi:#005a5a; --seq-on-hi:#ffffff; --cell-empty:#eff2f3;
-  --div-up:#0d8a7f;
-  --walk:#0d9488; --phone:#6366f1; --primary:#006666; --div-down:#c23a3a; --div-mid:#e1e6e8;
-  --up:#0a6b2a; --down:#b42323; --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b;
-  --brand:#c8102e; --hero-a:#062a2e; --hero-b:#007070; --hero-ink:#f2f7f8; --hero-muted:#a3b9c1; --hero-line:#5eead4;
-  --fd:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --fb:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --r:16px;
+  --surface:#ffffff;
+  --page:color-mix(in oklab,var(--p1) 5%,#f5f6f7);
+  --surface-2:color-mix(in oklab,var(--p1) 7%,#f1f3f4);
+  --surface-3:color-mix(in oklab,var(--p1) 12%,#e7eaec);
+  --ink:color-mix(in oklab,var(--hA) 55%,#0b0c0d);
+  --ink-2:color-mix(in oklab,var(--hA) 30%,#474c53);
+  --muted:color-mix(in oklab,var(--hA) 20%,#6c727a);
+  --grid:color-mix(in oklab,var(--p1) 7%,#e8eaed); --axis:color-mix(in oklab,var(--p1) 12%,#c6cad0); --band:color-mix(in oklab,var(--p1) 5%,#f6f7f8);
+  --border:color-mix(in oklab,var(--hA) 12%,transparent);
+  --shadow:0 1px 2px rgba(15,20,25,.05),0 14px 32px -22px color-mix(in oklab,var(--hA) 45%,transparent);
+  --s1:var(--p1); --s1-deep:var(--p1d); --s1-soft:color-mix(in oklab,var(--p1) 30%,#fff);
+  --hl:var(--acc); --hl-deep:color-mix(in oklab,var(--acc) 72%,#000);
+  --seq-lo:color-mix(in oklab,var(--p1) 9%,#fff); --seq-hi:var(--p1d); --seq-on-hi:#ffffff; --cell-empty:color-mix(in oklab,var(--p1) 4%,#f1f2f4);
+  --walk:var(--p1); --phone:#d9620b; --primary:var(--p1d);
+  --div-up:#13936a; --div-down:#d23f45; --div-mid:#e6e8eb;
+  --up:#0b7a52; --down:#c0262e; --good:#16a36a; --warn:#f0a500; --serious:#e8743b; --crit:#d23f45;
+  --brand:#c8102e; --accent:var(--acc); --gold:var(--acc);
+  --ht:255,255,255; --hero-a:var(--hA); --hero-b:var(--hB); --hero-ink:#f6f8f7; --hero-muted:var(--hMuted); --hero-line:var(--hLine); --hero-panel:rgba(255,255,255,.07);
+  --fd:"Unbounded",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --fb:"Onest",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --r:18px; --r-sm:12px; --gut:24px;
+  --logo:url("data:image/png;base64,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");
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
     color-scheme:dark;
-    --page:#0a1114; --surface:#141c20; --surface-2:#1c262b; --ink:#ffffff; --ink-2:#c0cbd1; --muted:#8b9aa3;
-    --grid:#243036; --axis:#34434b; --band:#182227; --border:rgba(255,255,255,.10); --shadow:none;
-    --s1:#2dd4bf; --s1-soft:#11605c; --s1-deep:#99f6e4;
-    --seq-lo:#0f2e2c; --seq-hi:#5eead4; --seq-on-hi:#04201e; --cell-empty:#1b2429;
-    --div-up:#2dd4bf; --walk:#2dd4bf; --phone:#8b8cff; --primary:#19b8b0; --div-down:#e66767; --div-mid:#2c383e;
-    --up:#3fcf5e; --down:#f08a8a; --hero-a:#041a1c; --hero-b:#005252;
+    --page:color-mix(in oklab,var(--hA) 40%,#08090a); --surface:color-mix(in oklab,var(--hA) 35%,#121416);
+    --surface-2:color-mix(in oklab,var(--hA) 35%,#1b1e21); --surface-3:color-mix(in oklab,var(--hA) 35%,#25292d);
+    --ink:#f2f4f3; --ink-2:#c6ccc9; --muted:#959c99;
+    --grid:color-mix(in oklab,var(--hA) 30%,#23272b); --axis:color-mix(in oklab,var(--hA) 25%,#3b4147); --band:color-mix(in oklab,var(--hA) 35%,#16191b);
+    --border:rgba(255,255,255,.09); --shadow:none;
+    --s1:color-mix(in oklab,var(--p1) 62%,#fff); --s1-deep:color-mix(in oklab,var(--p1) 35%,#fff); --s1-soft:color-mix(in oklab,var(--p1) 55%,#15181a);
+    --hl:color-mix(in oklab,var(--acc) 85%,#fff); --hl-deep:var(--acc);
+    --seq-lo:color-mix(in oklab,var(--p1) 18%,#16191b); --seq-hi:color-mix(in oklab,var(--p1) 50%,#fff); --seq-on-hi:#0c0e0f; --cell-empty:color-mix(in oklab,var(--hA) 30%,#1a1c1f);
+    --walk:var(--s1); --phone:#e07a3a; --primary:var(--s1);
+    --div-up:#2fbf8c; --div-down:#e66767; --div-mid:#2c3036; --up:#45d29a; --down:#f28d8d;
+    --hero-a:color-mix(in oklab,var(--hA) 70%,#000); --hero-b:var(--hA);
   }
 }
 :root[data-theme="dark"]{
   color-scheme:dark;
-  --page:#0a1114; --surface:#141c20; --surface-2:#1c262b; --ink:#ffffff; --ink-2:#c0cbd1; --muted:#8b9aa3;
-  --grid:#243036; --axis:#34434b; --band:#182227; --border:rgba(255,255,255,.10); --shadow:none;
-  --s1:#2dd4bf; --s1-soft:#11605c; --s1-deep:#99f6e4;
-  --seq-lo:#0f2e2c; --seq-hi:#5eead4; --seq-on-hi:#04201e; --cell-empty:#1b2429;
-  --div-up:#2dd4bf; --walk:#2dd4bf; --phone:#8b8cff; --primary:#19b8b0; --div-down:#e66767; --div-mid:#2c383e;
-  --up:#3fcf5e; --down:#f08a8a; --hero-a:#041a1c; --hero-b:#005252;
+  --page:color-mix(in oklab,var(--hA) 40%,#08090a); --surface:color-mix(in oklab,var(--hA) 35%,#121416);
+  --surface-2:color-mix(in oklab,var(--hA) 35%,#1b1e21); --surface-3:color-mix(in oklab,var(--hA) 35%,#25292d);
+  --ink:#f2f4f3; --ink-2:#c6ccc9; --muted:#959c99;
+  --grid:color-mix(in oklab,var(--hA) 30%,#23272b); --axis:color-mix(in oklab,var(--hA) 25%,#3b4147); --band:color-mix(in oklab,var(--hA) 35%,#16191b);
+  --border:rgba(255,255,255,.09); --shadow:none;
+  --s1:color-mix(in oklab,var(--p1) 62%,#fff); --s1-deep:color-mix(in oklab,var(--p1) 35%,#fff); --s1-soft:color-mix(in oklab,var(--p1) 55%,#15181a);
+  --hl:color-mix(in oklab,var(--acc) 85%,#fff); --hl-deep:var(--acc);
+  --seq-lo:color-mix(in oklab,var(--p1) 18%,#16191b); --seq-hi:color-mix(in oklab,var(--p1) 50%,#fff); --seq-on-hi:#0c0e0f; --cell-empty:color-mix(in oklab,var(--hA) 30%,#1a1c1f);
+  --walk:var(--s1); --phone:#e07a3a; --primary:var(--s1);
+  --div-up:#2fbf8c; --div-down:#e66767; --div-mid:#2c3036; --up:#45d29a; --down:#f28d8d;
+  --hero-a:color-mix(in oklab,var(--hA) 70%,#000); --hero-b:var(--hA);
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--page);color:var(--ink);font:14px/1.45 var(--fb);-webkit-font-smoothing:antialiased}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:70px}
+body{margin:0;background:var(--page);color:var(--ink);font:14.5px/1.5 var(--fb);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
 button,input,select{font:inherit;color:inherit}
-.wrap{max-width:1440px;margin:0 auto;padding:0 24px}
-@media (max-width:640px){.wrap{padding:0 16px}}
+:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.wrap{max-width:1440px;margin:0 auto;padding-left:max(var(--gut),env(safe-area-inset-left));padding-right:max(var(--gut),env(safe-area-inset-right))}
+@media (max-width:640px){:root{--gut:16px}}
+button,select,[data-store],[data-day]{touch-action:manipulation}
 
-/* header + hero: one glazed band with a faint tile-grout grid */
-header.top{color:var(--hero-ink);background:
-  linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px) 0 0/56px 56px,
-  linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px) 0 0/56px 56px,
-  radial-gradient(90% 120% at 88% -10%,var(--hero-b),transparent 60%),radial-gradient(70% 90% at 0% 110%,color-mix(in srgb,var(--hero-b) 55%,transparent),transparent 60%),var(--hero-a)}
-.top .bar{display:flex;align-items:center;gap:14px;padding:16px 0;flex-wrap:wrap}
+/* ───────── header + hero: a cobalt glaze with a tile-joint grid ───────── */
+header.top{position:relative;color:var(--hero-ink);padding-top:env(safe-area-inset-top);overflow:hidden;
+  background:
+   linear-gradient(rgba(var(--ht),.045) 1px,transparent 1px) 0 0/64px 64px,
+   linear-gradient(90deg,rgba(var(--ht),.045) 1px,transparent 1px) 0 0/64px 64px,
+   radial-gradient(70% 100% at 85% -10%,var(--hero-b) 0,transparent 60%),
+   linear-gradient(170deg,var(--hero-b),var(--hero-a))}
+.top svg{color:var(--hero-ink)}
+.top .hbtn svg{color:inherit}
+.top .d.flat{background:rgba(var(--ht),.07);color:var(--hero-ink)}
+.top .d.up{color:#86efb8;background:rgba(134,239,184,.15)} .top .d.down{color:#ffb3b3;background:rgba(255,179,179,.16)}
+header.top::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:linear-gradient(90deg,var(--brand) 0 22%,var(--hero-line) 22% 30%,transparent 30%)}
+.top .bar{display:flex;align-items:center;gap:10px;padding:16px 0 10px;flex-wrap:wrap}
 .mark{display:flex;align-items:center;gap:12px;min-width:0}
-.mark img{width:44px;height:44px;border-radius:11px;object-fit:cover;flex:none;box-shadow:0 0 0 1px rgba(255,255,255,.18)}
-.mark .wm{display:flex;flex-direction:column;align-items:center;line-height:1;color:#fff;font-family:'Poppins',system-ui,sans-serif}
-.mark .wm b{font-weight:400;font-size:30px;letter-spacing:.07em;margin-right:-.07em}
-.mark .wm span{font-size:7.5px;font-weight:500;letter-spacing:.34em;margin-right:-.34em;margin-top:5px}
-.mark .ttl{font:700 15px/1.15 var(--fd);letter-spacing:.08em;text-transform:uppercase;padding-left:14px;border-left:2px solid var(--brand)}
-.mark .ttl small{display:block;font:500 12.5px/1.3 var(--fb);letter-spacing:0;text-transform:none;color:var(--hero-muted)}
+.mark .logo{height:40px;aspect-ratio:300/174;flex:none;display:block;background:var(--hero-ink);-webkit-mask:var(--logo) center/contain no-repeat;mask:var(--logo) center/contain no-repeat}
+.mark .ttl{font:600 14px/1.15 var(--fd);padding-left:13px;border-left:2px solid var(--brand)}
+.mark .ttl small{display:block;font:500 12.5px/1.3 var(--fb);color:var(--hero-muted);margin-top:3px}
 .top .sp{flex:1}
-.live{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--hero-muted);white-space:nowrap}
-.dot{width:8px;height:8px;border-radius:50%;background:#77756f;flex:none}
-.dot.on{background:#3fcf5e;box-shadow:0 0 0 0 rgba(63,207,94,.6);animation:pulse 2s infinite}
+.live{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--hero-muted);white-space:nowrap;padding:6px 12px;border-radius:999px;background:rgba(var(--ht),.06)}
+.dot{width:8px;height:8px;border-radius:50%;background:#8a8fa8;flex:none}
+.dot.on{background:#3fe08a;box-shadow:0 0 0 0 rgba(63,224,138,.6);animation:pulse 2s infinite}
 .dot.err{background:var(--crit)}
-@keyframes pulse{70%{box-shadow:0 0 0 7px rgba(63,207,94,0)}100%{box-shadow:0 0 0 0 rgba(63,207,94,0)}}
-.hbtn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:var(--hero-ink);border-radius:999px;padding:7px 14px;font-size:12.5px;cursor:pointer;min-height:34px}
-.hbtn:hover{background:rgba(255,255,255,.18)}
-.hero{display:grid;grid-template-columns:minmax(260px,.8fr) minmax(0,1.7fr);gap:36px;align-items:end;padding:22px 0 26px}
-.hk{margin:0;font:500 17px/1.3 var(--fd);color:var(--hero-muted);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
-.hsel{appearance:none;-webkit-appearance:none;background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23f2f7f8' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E") right 2px center no-repeat;border:0;border-bottom:2px solid rgba(255,255,255,.35);border-radius:0;color:var(--hero-ink);font:650 17px/1.3 var(--fd);padding:1px 24px 3px 0;cursor:pointer;max-width:100%;min-height:0}
-.hsel:hover{border-bottom-color:var(--hero-line)}
-.hsel option{color:#13222a;background:#fff}
-.hv{font:800 clamp(72px,9vw,128px)/.9 var(--fd);letter-spacing:-.045em;margin:10px 0 14px}
+@keyframes pulse{70%{box-shadow:0 0 0 7px rgba(63,224,138,0)}100%{box-shadow:0 0 0 0 rgba(63,224,138,0)}}
+.hbtn{display:inline-flex;align-items:center;justify-content:center;gap:7px;line-height:1;background:var(--hero-panel);border:1px solid rgba(var(--ht),.14);color:var(--hero-ink);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:550;cursor:pointer;min-height:36px;white-space:nowrap}
+.hbtn:hover{background:rgba(var(--ht),.1)}
+.hbtn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.hbtn.ic{width:36px;padding:0}
+.hbtn.msg{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:650}
+.hbtn.msg:hover{background:#a50d26}
+.hbtn.msg .n{background:#fff;color:var(--brand);border-radius:999px;font-size:11px;font-weight:700;padding:1px 7px;line-height:1.5}
+.hbtn.inst{background:var(--hero-line);border-color:var(--hero-line);color:#1a1205;font-weight:700}
+.hbtn.inst:hover{background:var(--hero-ink);opacity:.88}
+.hbtn.idle{background:#fff1cf;border-color:#f2c45a;color:#5a3a00;font-weight:700}
+.hbtn.idle:hover{background:#ffe7a8}
+.hbtn.idle.crit{background:#fff;color:var(--brand);border-color:var(--brand)}
+
+.hero{display:grid;grid-template-columns:minmax(280px,.78fr) minmax(0,1.7fr);gap:40px;align-items:end;padding:18px 0 22px}
+.hk{margin:0;font:500 16px/1.3 var(--fb);color:var(--hero-muted);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.hsel{appearance:none;-webkit-appearance:none;background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E") right 2px center no-repeat;border:0;border-bottom:2px solid var(--hero-line);border-radius:0;color:var(--hero-ink);font:650 16px/1.3 var(--fb);padding:1px 22px 3px 0;cursor:pointer;max-width:100%}
+.hsel option{color:#16191e;background:#fff}
+.hv{font:700 clamp(76px,9vw,132px)/.92 var(--fd);letter-spacing:-.06em;margin:12px 0 16px;color:var(--hero-ink)}
 .hrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13.5px;color:var(--hero-muted)}
 .hrow+.hrow{margin-top:8px}
 .hrow b{color:var(--hero-ink);font-weight:650}
-.top .d.up{color:#7be495;background:rgba(123,228,149,.14)} .top .d.down{color:#ffaaaa;background:rgba(255,170,170,.14)} .top .d.flat{color:var(--hero-ink);background:rgba(255,255,255,.12)}
 .hct{display:flex;justify-content:space-between;align-items:baseline;gap:8px 18px;flex-wrap:wrap;margin-bottom:8px}
-.hct>span:first-child{font:600 14px/1.3 var(--fd)}
+.hct>span:first-child{font:600 13.5px/1.3 var(--fd)}
 .hleg{display:flex;gap:6px 16px;flex-wrap:wrap;font-size:12.5px;color:var(--hero-muted)}
 .hleg span{display:inline-flex;align-items:center;gap:7px}
 .hleg b{color:var(--hero-ink);font-weight:650}
 .hleg i{display:inline-block;width:18px;height:3px;border-radius:2px;background:var(--hero-line)}
-.hleg i.y{height:0;border-top:3px dotted rgba(255,255,255,.7);background:none}
-.hleg i.t{height:10px;background:rgba(255,255,255,.16);border-top:1.5px solid rgba(255,255,255,.4);border-radius:0}
+.hleg i.y{height:0;border-top:3px dotted rgba(var(--ht),.6);background:none}
+.hleg i.t{height:10px;background:rgba(var(--ht),.1);border-top:1.5px solid rgba(var(--ht),.35);border-radius:0}
 #pace svg text{fill:var(--hero-muted)} #pace svg .now{fill:var(--hero-ink);font-weight:700;font-size:13px}
-#pace .hit:hover{fill:rgba(255,255,255,.06)}
-.hpanels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding-bottom:16px}
-.tick{display:flex;gap:8px;align-items:center;overflow-x:auto;padding-bottom:22px;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 92%,transparent);mask-image:linear-gradient(90deg,#000 92%,transparent)}
-.tick::-webkit-scrollbar{display:none}
-.tick .tl2{font:600 13px/1 var(--fd);color:var(--hero-muted);white-space:nowrap;margin-right:4px}
-.tick .tc{display:inline-flex;gap:8px;align-items:baseline;white-space:nowrap;font-size:12.5px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10)}
-.tick .tc b{color:var(--hero-line);font-weight:700;font-variant-numeric:tabular-nums}
-.tick .tc i{font-style:normal;color:var(--hero-muted)}
-.cd{cursor:pointer} .cd:hover{stroke:var(--ink);stroke-width:1.6}
-@media (min-width:1101px){.g2.g2b{grid-template-columns:minmax(0,1fr) minmax(0,1.35fr)}}
-.hp{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.11);border-radius:var(--r);padding:16px 18px;min-width:0}
-.hpk{font:600 13.5px/1.2 var(--fd);color:var(--hero-muted)}
-.hpv{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:4px 0 2px}
-.hpv b{font:750 38px/1.05 var(--fd);letter-spacing:-.03em}
+#pace .hit:hover{fill:rgba(var(--ht),.05)}
+.hpanels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding-bottom:14px}
+.hp{background:var(--hero-panel);border:1px solid rgba(var(--ht),.1);border-radius:var(--r);padding:16px 18px;min-width:0}
+.hpk{font:600 12.5px/1.2 var(--fd);color:var(--hero-muted)}
+.hpv{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:6px 0 2px}
+.hpv b{font:650 34px/1.05 var(--fd);letter-spacing:-.04em}
 .hps{font-size:12.5px;color:var(--hero-muted);min-height:18px}
 .hp svg{display:block;width:100%;height:64px;margin-top:12px}
 .hax{display:flex;justify-content:space-between;font-size:11.5px;color:var(--hero-muted);margin-top:5px}
 .hax7{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:11.5px;color:var(--hero-muted);margin-top:5px}
-.hax7 b{color:var(--hero-ink)}
+.hax7 b{color:var(--hero-line)}
 .fc{position:relative;height:64px;margin-top:12px}
-.fc .trk{position:absolute;left:0;right:0;top:20px;height:14px;border-radius:7px;background:rgba(255,255,255,.10);overflow:hidden}
-.fc .trk i{position:absolute;left:0;top:0;bottom:0;background:color-mix(in srgb,var(--hero-line) 38%,transparent)}
+.fc .trk{position:absolute;left:0;right:0;top:20px;height:14px;border-radius:7px;background:rgba(var(--ht),.09);overflow:hidden}
+.fc .trk i{position:absolute;left:0;top:0;bottom:0;background:color-mix(in srgb,var(--hero-line) 35%,transparent)}
 .fc .trk b{position:absolute;left:0;top:0;bottom:0;background:var(--hero-line);border-radius:7px}
 .fc .mk{position:absolute;top:13px;width:2px;height:28px;background:var(--hero-ink);border-radius:1px}
 .fc .ml{position:absolute;top:46px;font-size:11.5px;color:var(--hero-muted);white-space:nowrap}
 .fc .tl{position:absolute;top:0;font-size:11.5px;color:var(--hero-muted);white-space:nowrap}
-@media (max-width:1000px){.hero{grid-template-columns:minmax(0,1fr);gap:22px}.hpanels{grid-template-columns:minmax(0,1fr)}}
+.tick{display:flex;gap:8px;align-items:center;overflow-x:auto;padding-bottom:22px;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 92%,transparent);mask-image:linear-gradient(90deg,#000 92%,transparent)}
+.tick::-webkit-scrollbar{display:none}
+.tick .tl2{font:600 12px/1 var(--fd);color:var(--hero-muted);white-space:nowrap;margin-right:4px}
+.tick .tc{display:inline-flex;gap:8px;align-items:baseline;white-space:nowrap;font-size:12.5px;padding:6px 12px;border-radius:999px;background:var(--hero-panel);border:1px solid rgba(var(--ht),.09)}
+.tick .tc b{color:var(--hero-line);font-weight:700}
+.tick .tc i{font-style:normal;color:var(--hero-muted)}
+@media (max-width:1000px){.hero{grid-template-columns:minmax(0,1fr);gap:22px}}
+@media (max-width:760px){.hpanels{grid-template-columns:minmax(0,1fr)}}
 
-/* period bar */
-.filters{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--page) 90%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
-.filters .wrap{display:flex;gap:10px 14px;align-items:center;flex-wrap:wrap;padding-top:10px;padding-bottom:10px}
-.fld{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink-2)}
-.fld label{font-weight:600}
-select,input[type=date],input[type=search]{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:6px 10px;font-size:13px;min-height:34px}
-.chips{display:flex;gap:2px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:3px}
-.chip{border:0;background:none;border-radius:999px;padding:5px 12px;font-size:12.5px;cursor:pointer;color:var(--ink-2);min-height:30px}
-.chip:hover{color:var(--ink);background:var(--surface-2)}
-.chip[aria-pressed=true]{background:var(--primary);color:#fff;font-weight:650}
-#chans .chip[data-ch=walkin][aria-pressed=true]{background:var(--walk)}
-#chans .chip[data-ch=phone][aria-pressed=true]{background:var(--phone)}
-.scope{font-size:12.5px;color:var(--ink-2);margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+
+/* appearance pop-over */
+.apw{position:relative}
+.appear{position:absolute;right:0;top:calc(100% + 10px);z-index:60;width:272px;background:var(--surface);color:var(--ink);border:1px solid var(--border);border-radius:18px;padding:14px;box-shadow:0 24px 60px -18px rgba(0,0,0,.45)}
+.aph{margin:0 0 8px;font-size:12px;font-weight:650;color:var(--muted)}
+.aph+.pals{margin-bottom:14px}
+.pals{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pals button{display:flex;align-items:center;gap:9px;border:1px solid var(--border);background:var(--surface);border-radius:12px;padding:8px 10px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink);text-align:left}
+.pals button i{width:26px;height:26px;border-radius:8px;flex:none;background:linear-gradient(135deg,var(--a) 0 50%,var(--b) 50% 82%,var(--c) 82%)}
+.pals button:hover{background:var(--surface-2)}
+.pals button[aria-pressed=true]{border-color:var(--s1);box-shadow:inset 0 0 0 1px var(--s1)}
+.appear .seg{display:flex}.appear .seg button{flex:1}
+
+/* ───────── controls ───────── */
+.filters{background:var(--surface);border-bottom:1px solid var(--border)}
+.filters .wrap{display:flex;gap:10px 12px;align-items:center;flex-wrap:wrap;padding-top:12px;padding-bottom:12px}
+.chips{display:flex;gap:2px;flex-wrap:wrap;background:var(--surface-2);border-radius:999px;padding:3px}
+.chip{border:0;background:none;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:550;cursor:pointer;color:var(--ink-2);min-height:32px;white-space:nowrap}
+.chip:hover{color:var(--ink);background:var(--surface)}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--surface);font-weight:650}
+#chans .chip[data-ch=walkin][aria-pressed=true]{background:var(--p1);color:#fff}
+#chans .chip[data-ch=phone][aria-pressed=true]{background:var(--phone);color:#fff}
+.more{position:relative}
+.more>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:550;min-height:36px;color:var(--ink-2);background:var(--surface)}
+.more>summary::-webkit-details-marker{display:none}
+.more>summary svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.more[open]>summary{background:var(--surface-2);color:var(--ink)}
+.more .pop{position:absolute;z-index:40;top:calc(100% + 8px);left:0;background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:0 22px 50px -18px rgba(15,23,48,.45);padding:16px;display:grid;gap:12px;width:min(380px,calc(100vw - 32px))}
+.fld{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2);flex-wrap:wrap}
+.fld label{font-weight:650;min-width:84px}
+.pop .fld input,.pop .fld select{flex:1;min-width:0}
+select,input[type=date],input[type=search]{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:6px 10px;font-size:13px;min-height:36px}
+.scope{font-size:13px;color:var(--ink-2);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.scope:empty{display:none}
 .scope b{color:var(--ink)}
-.scope .sc-chip{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:var(--surface);border-radius:999px;padding:4px 6px 4px 12px;font-weight:600}
-.scope .sc-chip button{border:0;background:color-mix(in srgb,var(--surface) 22%,transparent);color:inherit;border-radius:999px;padding:2px 9px;font-size:12px;cursor:pointer}
-@media (max-width:900px){.filters{position:static}.chips{border-radius:16px}}
+.scope .sc-chip{display:inline-flex;align-items:center;gap:8px;background:var(--s1);color:#fff;border-radius:999px;padding:4px 5px 4px 12px;font-weight:650}
+.scope .sc-chip button{border:0;background:rgba(255,255,255,.22);color:inherit;border-radius:999px;padding:3px 10px;font-size:12px;cursor:pointer}
 
-/* layout */
-main{padding:26px 0 40px}
-main section{margin-top:34px}
+/* tabs: sticky, the one way around the page */
+.tabs{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--page) 86%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+.tabs .wrap{display:flex;align-items:center;gap:12px}
+.tabl{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0}
+.tabl::-webkit-scrollbar{display:none}
+.tab{position:relative;border:0;background:none;cursor:pointer;padding:15px 14px 13px;font:600 13px/1 var(--fd);color:var(--muted);white-space:nowrap;display:inline-flex;align-items:center;gap:8px}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected=true]{color:var(--ink)}
+.tab[aria-selected=true]::after{content:"";position:absolute;left:12px;right:12px;bottom:-1px;height:3px;border-radius:3px 3px 0 0;background:var(--s1)}
+.tab .bd{font:700 10.5px/1 var(--fb);padding:3px 6px;border-radius:999px;background:var(--crit);color:#fff}
+.tabs .mini-scope{font-size:12.5px;color:var(--muted);white-space:nowrap}
+.tabs .mini-scope b{color:var(--ink)}
+@media (max-width:900px){.tabs .mini-scope{display:none}}
+@media (max-width:640px){.tabl{gap:0;justify-content:space-between}.tab{padding:14px 8px 12px;font-size:12px}.tab .lgo{display:none}}
+
+/* ───────── layout ───────── */
+main{padding:24px 0 40px}
+.pane>section+section{margin-top:30px}
 .sh{display:flex;align-items:baseline;gap:6px 14px;flex-wrap:wrap;margin:0 0 14px}
-.sh h2{margin:0;font:700 21px/1.2 var(--fd);letter-spacing:-.015em}
-.sh h2::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--brand);margin-right:10px}
+.sh h2{margin:0;font:650 19px/1.25 var(--fd);letter-spacing:-.025em}
 .sh span{font-size:13px;color:var(--muted)}
-.grid{display:grid;gap:16px}
+.grid{display:grid;gap:16px;align-items:stretch}
 .g6{grid-template-columns:repeat(6,minmax(0,1fr))}
-.g2{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
+.g2{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.g2b{grid-template-columns:minmax(0,1fr) minmax(0,1.35fr)}
+.g2c{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}
 .g3{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) minmax(0,.8fr)}
 .gp{grid-template-columns:repeat(3,minmax(0,1fr))}
-.gcards{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
-@media (max-width:1100px){.g6{grid-template-columns:repeat(3,minmax(0,1fr))}.g2,.g3{grid-template-columns:minmax(0,1fr)}}
-@media (max-width:760px){.gp{grid-template-columns:minmax(0,1fr)}}
-@media (max-width:560px){.g6{grid-template-columns:repeat(2,minmax(0,1fr))}.mini .s{white-space:normal}.mini .ic{display:none}.mini{grid-template-columns:1fr}}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);padding:18px 20px;min-width:0}
-.card h3{margin:0 0 2px;font:650 16px/1.3 var(--fd);letter-spacing:-.005em}
+.gcards{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+@media (max-width:1100px){.g6{grid-template-columns:repeat(3,minmax(0,1fr))}.g2b,.g2c{grid-template-columns:minmax(0,1fr)}.g3{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.g3>:first-child{grid-column:1/-1}}
+@media (max-width:900px){.g2{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:700px){.g3{grid-template-columns:minmax(0,1fr)}.gp{grid-template-columns:minmax(0,1fr)}}
+@media (min-width:701px) and (max-width:1000px){.gp .pd .ps{grid-template-columns:1fr 1fr}.gp .pd .ps>div:last-child{display:none}}
+@media (max-width:560px){.g6{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px;min-width:0}
+.card h3{margin:0 0 3px;font:650 15.5px/1.3 var(--fb);letter-spacing:-.005em}
 .card .sub{font-size:12.5px;color:var(--muted);margin:0 0 14px}
 .chead{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
 
-/* stat tiles */
-.mini{padding:14px 16px;display:grid;grid-template-columns:auto 1fr;gap:2px 12px;align-items:start}
-.mini .ic{grid-row:1/4;width:36px;height:36px;border-radius:10px;background:color-mix(in srgb,var(--s1) 12%,transparent);color:var(--s1);display:grid;place-items:center}
-.mini .ic svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.mini .k{font-size:12.5px;font-weight:600;color:var(--ink-2)}
-.mini .v{font:750 22px/1.15 var(--fd);letter-spacing:-.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.mini .v.long{font-size:16.5px;line-height:1.55}
+/* KPI tiles: a colour bar on the left encodes nothing but grouping, so keep it the brand's quiet cobalt */
+.mini{padding:16px 18px;display:flex;flex-direction:column;gap:2px;position:relative;overflow:hidden}
+.mini::before{content:"";position:absolute;left:0;top:16px;bottom:16px;width:3px;border-radius:0 3px 3px 0;background:var(--s1)}
+.mini .ic{display:none}
+.mini .k{font-size:12.5px;font-weight:600;color:var(--muted)}
+.mini .v{font:650 23px/1.2 var(--fd);letter-spacing:-.035em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:2px 0}
+.mini .v.long{font:700 17px/1.5 var(--fb);letter-spacing:-.01em}
 .mini .s{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.d{display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:650;padding:2px 8px;border-radius:999px;white-space:nowrap;font-variant-numeric:tabular-nums}
+@media (max-width:560px){.mini .s{white-space:normal}}
+.d{display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:650;padding:2px 8px;border-radius:999px;white-space:nowrap}
 .d.up{color:var(--up);background:color-mix(in srgb,var(--up) 12%,transparent)}
 .d.down{color:var(--down);background:color-mix(in srgb,var(--down) 12%,transparent)}
 .d.flat{color:var(--ink-2);background:var(--surface-2)}
 
 /* insights */
 .ins{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-.ins li{display:grid;grid-template-columns:26px 1fr;gap:12px;font-size:14px;line-height:1.45;padding-bottom:10px;border-bottom:1px solid var(--grid)}
+.ins li{display:grid;grid-template-columns:28px 1fr;gap:12px;font-size:14px;line-height:1.5;padding-bottom:10px;border-bottom:1px solid var(--grid)}
 .ins li:last-child{border-bottom:0;padding-bottom:0}
-.ins i{font-style:normal;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12px;font-weight:700}
+.ins li>div{min-width:0}
+.ins i{font-style:normal;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;font-size:12px;font-weight:700}
 .ins .pos i{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--up)}
-.ins .neg i{background:color-mix(in srgb,var(--crit) 16%,transparent);color:var(--down)}
-.ins .wrn i{background:color-mix(in srgb,var(--serious) 22%,transparent);color:color-mix(in srgb,var(--serious) 60%,var(--ink))}
+.ins .neg i{background:color-mix(in srgb,var(--crit) 15%,transparent);color:var(--down)}
+.ins .wrn i{background:color-mix(in srgb,var(--warn) 24%,transparent);color:color-mix(in srgb,var(--warn) 45%,var(--ink))}
 .ins .inf i{background:color-mix(in srgb,var(--s1) 14%,transparent);color:var(--s1)}
 .ins b{font-weight:650}
 
 /* tables */
-.tw{overflow-x:auto;margin:0 -20px -4px;padding:0 20px 4px}
+.tw{overflow-x:auto;margin:0 -22px -4px;padding:0 22px 4px;-webkit-overflow-scrolling:touch}
 table{border-collapse:collapse;width:100%;font-size:13px}
 th,td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--grid);white-space:nowrap}
-th{font-size:12px;font-weight:600;color:var(--ink-2);position:sticky;top:0;background:var(--surface)}
+th{font-size:12px;font-weight:650;color:var(--ink-2);position:sticky;top:0;background:var(--surface-2)}
+thead th:first-child{border-radius:9px 0 0 9px} thead th:last-child{border-radius:0 9px 9px 0}
 th button{all:unset;cursor:pointer;display:inline-flex;gap:4px;align-items:center}
 th button:hover{color:var(--ink)} th button:focus-visible{outline:2px solid var(--s1);outline-offset:2px;border-radius:4px}
-td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+td.n,th.n{text-align:right}
 tbody tr:last-child td{border-bottom:0}
 tbody tr.click{cursor:pointer} tbody tr.click:hover td{background:var(--surface-2)}
-td .nm{font-weight:600}
+td .nm{font-weight:650}
 .wrapth th{white-space:normal;line-height:1.25;vertical-align:bottom}
 .wrapth th,.wrapth td{padding:9px 8px}
 td .mut{color:var(--muted);font-size:12px}
-.rk{display:inline-grid;place-items:center;min-width:26px;height:24px;border-radius:7px;background:var(--surface-2);font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
+.rk{display:inline-grid;place-items:center;min-width:26px;height:24px;border-radius:7px;background:var(--surface-2);font-size:12px;font-weight:700}
 tr:nth-child(-n+3) .rk.top{background:var(--ink);color:var(--surface)}
 .mv{font-size:11px;font-weight:650;margin-left:4px} .mv.up{color:var(--up)} .mv.down{color:var(--down)}
-.st{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--surface-2);color:var(--ink-2)}
+.st{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
 .st::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--muted)}
 .st.good::before{background:var(--good)} .st.warn::before{background:var(--warn)} .st.ser::before{background:var(--serious)} .st.crit::before{background:var(--crit)}
 .pbar{display:inline-block;width:70px;height:6px;border-radius:3px;background:var(--surface-2);vertical-align:middle;overflow:hidden;margin-right:6px}
 .pbar i{display:block;height:100%;background:var(--s1);border-radius:3px}
+.hcell{display:inline-block;min-width:44px;padding:3px 7px;border-radius:7px;text-align:right;font-weight:600;background:color-mix(in oklab,var(--seq-hi) calc(var(--v)*1%),var(--seq-lo));color:var(--ink-2)}
+.hcell.hi{color:var(--seq-on-hi)}
+.hcell.z{background:var(--cell-empty);color:var(--muted)}
+.hcell.proj{background:transparent;outline:1.5px dashed var(--axis);outline-offset:-1.5px}
 
 /* ranking */
 .rank{display:grid;gap:2px}
-.rrow{display:grid;grid-template-columns:26px minmax(90px,150px) 1fr 52px 74px;gap:10px;align-items:center;padding:6px 6px;border-radius:10px;font-size:13.5px;border:0;background:none;text-align:left;width:100%;color:inherit}
+.rrow{display:grid;grid-template-columns:26px minmax(90px,150px) 1fr 56px 78px;gap:10px;align-items:center;padding:6px;border-radius:10px;font-size:13.5px;border:0;background:none;text-align:left;width:100%;color:inherit}
 button.rrow{cursor:pointer} button.rrow:hover{background:var(--surface-2)}
-.rrow .no{font:700 12px/1 var(--fd);color:var(--muted);text-align:center}
+.rrow .no{font:600 11.5px/1 var(--fd);color:var(--muted);text-align:center}
 .rrow:nth-child(-n+3) .no{display:grid;place-items:center;width:24px;height:24px;border-radius:7px;background:var(--ink);color:var(--surface)}
+.rrow:first-child .no{background:var(--brand);color:#fff}
 .rrow .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
 .rrow .trk{position:relative;height:16px;background:linear-gradient(var(--surface-2),var(--surface-2)) 0 50%/100% 2px no-repeat}
 .rrow .bar{position:absolute;left:0;top:2px;height:12px;border-radius:0 6px 6px 0;background:linear-gradient(90deg,var(--s1-deep),var(--s1));min-width:3px;transform-origin:left}
 .rrow .pm{position:absolute;top:-2px;width:2px;height:20px;background:var(--ink);opacity:.6;border-radius:1px}
-.rrow .val{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.rrow .val{text-align:right;font-weight:700}
 .rrow .dl{text-align:right}
+@media (max-width:560px){.rrow{grid-template-columns:24px minmax(0,1fr) auto auto;row-gap:5px}.rrow .trk{grid-column:2/-1;grid-row:2}}
 .legend{display:flex;gap:8px 16px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-2);margin-top:12px}
 .legend span{display:inline-flex;align-items:center;gap:6px}
-.lg{width:12px;height:10px;border-radius:2px;display:inline-block}
+.lg{width:12px;height:10px;border-radius:3px;display:inline-block}
 .lgl{width:16px;height:2px;display:inline-block;border-radius:1px}
 .lgt{width:2px;height:12px;display:inline-block;background:var(--ink);opacity:.6}
 .lgd{width:120px;height:10px;border-radius:5px;display:inline-block;background:linear-gradient(90deg,var(--div-down),var(--div-mid),var(--div-up))}
 
 /* tile mosaic (treemap) */
 .tm{position:relative;height:340px}
-.tm .t{position:absolute;border:0;padding:9px 10px;border-radius:7px;overflow:hidden;text-align:left;font:inherit;cursor:default;display:flex;flex-direction:column;justify-content:space-between;color:var(--ink);
+.tm .t{position:absolute;border:0;padding:9px 10px;border-radius:8px;overflow:hidden;text-align:left;font:inherit;cursor:default;display:flex;flex-direction:column;justify-content:space-between;color:var(--ink);
   background:color-mix(in oklab,var(--pole) calc(var(--t)*1%),var(--div-mid));box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -2px 0 rgba(0,0,0,.08)}
 .tm button.t{cursor:pointer}
 .tm button.t:hover{filter:brightness(1.08)} .tm button.t:focus-visible{outline:2px solid var(--ink);outline-offset:1px}
 .tm .t.s{color:#fff}
-.tm .t b{font:650 13.5px/1.2 var(--fd);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
-.tm .t .tv{font:750 24px/1 var(--fd);letter-spacing:-.02em}
-.tm .t .tp{font-size:12px;font-weight:600;opacity:.9;white-space:nowrap}
-.tm .t.sm .tv{font-size:16px} .tm .t.sm{padding:6px 7px} .tm .t.xs>*{display:none}
+.tm .t b{font:650 13px/1.2 var(--fb);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
+.tm .t .tv{font:650 22px/1 var(--fd);letter-spacing:-.04em}
+.tm .t .tp{font-size:12px;font-weight:600;opacity:.92;white-space:nowrap}
+.tm .t.sm .tv{font-size:15px} .tm .t.sm{padding:6px 7px} .tm .t.xs>*{display:none}
 
 /* heatmaps */
 .hm{border-collapse:separate;border-spacing:3px;width:auto;font-size:11px}
-.hm th,.hm td{border:0;padding:0;position:static;background:none}
+.hm th,.hm td{border:0;padding:0;position:static;background:none;border-radius:0}
 .hm thead th{font-size:10.5px;font-weight:600;color:var(--muted);text-align:center;padding-bottom:2px;line-height:1.2}
 .hm thead th.wk{color:var(--ink)}
 .hm tbody th{font-size:12.5px;font-weight:600;color:var(--ink);padding-right:12px;text-align:left;position:sticky;left:0;background:var(--surface);z-index:1;max-width:150px;overflow:hidden;text-overflow:ellipsis}
-.hm td.c{min-width:28px;height:28px;border-radius:5px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums;background:color-mix(in oklab,var(--seq-hi) calc(var(--v)*1%),var(--seq-lo));color:var(--ink-2);box-shadow:inset 0 -2px 0 rgba(0,0,0,.06)}
+.hm td.c{min-width:28px;height:28px;border-radius:6px;text-align:center;font-weight:600;background:color-mix(in oklab,var(--seq-hi) calc(var(--v)*1%),var(--seq-lo));color:var(--ink-2)}
 .hm td.c.hi{color:var(--seq-on-hi)}
-.hm td.c.z{background:var(--cell-empty);color:transparent;box-shadow:none}
-.hm td.c.fut{background:transparent;outline:1px solid var(--grid);outline-offset:-1px;box-shadow:none}
+.hm td.c.z{background:var(--cell-empty);color:transparent}
+.hm td.c.fut{background:transparent;outline:1px solid var(--grid);outline-offset:-1px}
 .hm td.c:hover{outline:2px solid var(--ink);outline-offset:-1px}
-.hm td.tot{padding-left:12px;font-size:12.5px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.hm td.c.dv{background:color-mix(in oklab,var(--pole) calc(var(--v)*1%),var(--div-mid));color:var(--ink)}
+.hm td.c.dv.hi{color:#fff}
+.hm td.tot{padding-left:12px;font-size:12.5px;font-weight:700;text-align:right}
 .hm.wide td.c{min-width:48px}
-.scale{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin-top:12px}
+#hmHour,#wdIndex{width:100%}
+#hmHour tbody th,#wdIndex tbody th{width:1%;white-space:nowrap}
+.scale{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin-top:12px;flex-wrap:wrap}
 .scale i{display:block;width:120px;height:8px;border-radius:4px;background:linear-gradient(90deg,var(--seq-lo),var(--seq-hi))}
-.seg{display:inline-flex;border:1px solid var(--border);border-radius:999px;overflow:hidden;padding:2px;background:var(--surface)}
-.seg button{border:0;background:none;padding:5px 12px;font-size:12px;cursor:pointer;color:var(--ink-2);min-height:28px;border-radius:999px}
-.seg button[aria-pressed=true]{background:var(--ink);color:var(--surface);font-weight:650}
+.scale i.dv{background:linear-gradient(90deg,var(--div-down),var(--div-mid),var(--div-up))}
+.seg{display:inline-flex;border-radius:999px;overflow:hidden;padding:3px;background:var(--surface-2)}
+.seg button{border:0;background:none;padding:5px 12px;font-size:12px;font-weight:550;cursor:pointer;color:var(--ink-2);min-height:28px;border-radius:999px}
+.seg button[aria-pressed=true]{background:var(--surface);color:var(--ink);font-weight:650;box-shadow:0 1px 3px rgba(15,23,48,.12)}
 
 /* scorecards + podium */
-.sc{cursor:pointer;text-align:left;font:inherit;color:inherit;display:block;width:100%;transition:transform .12s,border-color .12s}
-.sc:hover{border-color:var(--s1);transform:translateY(-2px)}
-.sc:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.sc{cursor:pointer;text-align:left;font:inherit;color:inherit;display:block;width:100%;transition:border-color .15s}
+.sc:hover{border-color:var(--s1)}
 .sc .t{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
-.sc .t b{font:650 15px/1.25 var(--fd);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
+.sc .t b{font:650 15px/1.25 var(--fb);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
 .sc .v{display:flex;align-items:baseline;gap:8px;margin:4px 0 2px}
-.sc .v b{font:750 30px/1.05 var(--fd);letter-spacing:-.025em}
+.sc .v b{font:650 28px/1.05 var(--fd);letter-spacing:-.045em}
 .sc dl{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin:12px 0 0;font-size:12.5px;border-top:1px solid var(--grid);padding-top:10px}
 .sc dt{color:var(--muted)} .sc dd{margin:0;text-align:right;font-weight:550;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .spark{display:block;width:100%;margin-top:8px}
 .pd{position:relative;overflow:hidden}
-.pd .pr{position:absolute;right:14px;top:-14px;font:800 110px/1 var(--fd);letter-spacing:-.05em;color:var(--surface-2)}
+.pd .pr{position:absolute;right:16px;top:-10px;font:800 104px/1 var(--fd);letter-spacing:-.06em;color:var(--surface-2)}
 .pd .pa{position:relative;display:flex;gap:12px;align-items:center}
-.pd .av{width:44px;height:44px;border-radius:12px;background:var(--ink);color:var(--surface);display:grid;place-items:center;font:700 15px/1 var(--fd);flex:none}
+.pd .av{width:44px;height:44px;border-radius:13px;background:var(--ink);color:var(--surface);display:grid;place-items:center;font:600 14px/1 var(--fd);flex:none}
 .pd:first-child .av{background:var(--brand);color:#fff}
-.pd .pa b{display:block;font:650 16px/1.25 var(--fd)} .pd .pa span{font-size:12.5px;color:var(--muted)}
+.pd .pa b{display:block;font:650 16px/1.25 var(--fb)} .pd .pa span{font-size:12.5px;color:var(--muted)}
 .pd .pv{position:relative;display:flex;align-items:baseline;gap:8px;margin:12px 0 0}
-.pd .pv b{font:750 34px/1.05 var(--fd);letter-spacing:-.03em} .pd .pv span.u{font-size:12.5px;color:var(--muted)}
+.pd .pv b{font:650 32px/1.05 var(--fd);letter-spacing:-.045em} .pd .pv span.u{font-size:12.5px;color:var(--muted)}
 .pd .ps{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;border-top:1px solid var(--grid);padding-top:10px;font-size:12px;color:var(--muted)}
-.pd .ps b{display:block;font:650 15px/1.2 var(--fd);color:var(--ink)}
+.pd .ps b{display:block;font:650 15px/1.2 var(--fb);color:var(--ink)}
 
+/* records + unusual days */
+.recs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.rec{background:var(--surface-2);border-radius:var(--r-sm);padding:12px 14px;min-width:0}
+.rec .k{font-size:12px;color:var(--muted);font-weight:600}
+.rec .v{font:650 21px/1.25 var(--fd);letter-spacing:-.04em;margin:3px 0 1px}
+.rec .s{font-size:12px;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rec.hl{background:color-mix(in srgb,var(--accent) 14%,var(--surface));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 45%,transparent)}
+@media (max-width:420px){.recs{grid-template-columns:minmax(0,1fr)}}
+.odd{display:grid;gap:4px}
+.oddr{display:grid;grid-template-columns:minmax(96px,128px) 1fr 64px;gap:12px;align-items:center;padding:7px 6px;border-radius:10px;font-size:13px;cursor:pointer;border:0;background:none;text-align:left;color:inherit;width:100%}
+.oddr:hover{background:var(--surface-2)}
+.oddr .dt{font-weight:650}
+.oddr .dt small{display:block;font-weight:400;color:var(--muted);font-size:11.5px}
+.oddr .bx{position:relative;height:22px}
+.oddr .bx .ex{position:absolute;top:0;bottom:0;width:2px;background:var(--ink);opacity:.55}
+.oddr .bx .ac{position:absolute;top:5px;height:12px;border-radius:4px}
+.oddr .bx .ac.up{background:var(--div-up)} .oddr .bx .ac.down{background:var(--div-down)}
+.oddr .vv{text-align:right;font-weight:700}
+.oddr .vv small{display:block;font-weight:600;font-size:11.5px}
+.oddr .vv small.up{color:var(--up)} .oddr .vv small.down{color:var(--down)}
+
+/* charts */
 svg text{font:11.5px var(--fb);fill:var(--muted)}
 svg .lab{fill:var(--ink);font-weight:700;paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round}
+svg .qlab{font:600 11px var(--fb);fill:var(--muted)}
 .hit{fill:transparent} .hit:hover{fill:color-mix(in srgb,var(--ink) 6%,transparent)}
-#tip{position:fixed;z-index:99;pointer-events:none;background:#13222a;color:#fff;padding:9px 11px;border-radius:10px;font-size:12.5px;line-height:1.45;max-width:260px;box-shadow:0 10px 30px rgba(0,0,0,.3);opacity:0;transition:opacity .08s;border:1px solid rgba(255,255,255,.12)}
-#tip.on{opacity:1} #tip b{font-weight:650} #tip .tm{opacity:.7;position:static;height:auto}
+.dotm{cursor:pointer} .dotm:hover{stroke:var(--ink);stroke-width:2}
+.cd{cursor:pointer} .cd:hover{stroke:var(--ink);stroke-width:1.6}
+#tip{position:fixed;z-index:99;pointer-events:none;background:#16191e;color:#fff;padding:9px 11px;border-radius:10px;font-size:12.5px;line-height:1.45;max-width:270px;box-shadow:0 10px 30px rgba(0,0,0,.3);opacity:0;transition:opacity .08s;border:1px solid rgba(255,255,255,.12)}
+#tip.on{opacity:1} #tip b{font-weight:650} #tip .tm{opacity:.72;position:static;height:auto}
+.dp{display:grid;gap:7px}
+.dpr{display:grid;grid-template-columns:minmax(80px,130px) 1fr;gap:12px;align-items:center;font-size:13px;border:0;background:none;color:inherit;text-align:left;padding:3px 4px;border-radius:8px;width:100%}
+button.dpr{cursor:pointer} button.dpr:hover{background:var(--surface-2)}
+.dpr .nm{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dpb{display:flex;height:20px;gap:2px}
+.dpb i{display:block;height:100%;font-style:normal;font-size:11px;font-weight:650;line-height:20px;text-align:center;overflow:hidden;white-space:nowrap}
+.dpb i:first-child{border-radius:5px 0 0 5px} .dpb i:last-child{border-radius:0 5px 5px 0}
+.dpb .m{background:var(--seq-lo);color:var(--ink)} .dpb .a{background:color-mix(in oklab,var(--seq-hi) 50%,var(--seq-lo));color:var(--ink)} .dpb .e{background:var(--seq-hi);color:var(--seq-on-hi)}
+
 .banner{margin-bottom:22px;border-radius:14px;padding:12px 16px;font-size:13.5px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;border:1px solid var(--border);background:var(--surface)}
-.banner.err{border-color:var(--crit)} .banner.demo{border-color:var(--warn)}
-.btn{border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:7px 15px;font-size:13px;cursor:pointer;min-height:36px}
+.banner.err{border-color:var(--crit)} .banner.demo{border-color:var(--warn);background:color-mix(in srgb,var(--warn) 10%,var(--surface))}
+.btn{border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:7px 16px;font-size:13px;font-weight:550;cursor:pointer;min-height:38px}
 .btn:hover{background:var(--surface-2)}
 .btn.pri{background:var(--ink);color:var(--surface);border-color:var(--ink);font-weight:650}
 .empty{padding:28px 0;text-align:center;color:var(--muted);font-size:13px}
 .load{padding:80px 0;text-align:center;color:var(--ink-2)}
 .note{font-size:12.5px;color:var(--muted);line-height:1.6;max-width:90ch}
-footer{padding:22px 0 40px;border-top:1px solid var(--border);margin-top:36px}
-
-/* one load moment: bars grow, today's line draws */
-@keyframes grow{from{transform:scaleX(0)}}
-@keyframes draw{to{stroke-dashoffset:0}}
-@keyframes fadein{from{opacity:0}}
-.first .rrow .bar{animation:grow .8s cubic-bezier(.2,.8,.2,1) both}
-.first #pace .today{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.2s .1s ease-out forwards}
-.first #pace .after{animation:fadein .4s 1.1s both}
-@media (prefers-reduced-motion:reduce){.dot.on,.first .rrow .bar,.first #pace .today,.first #pace .after{animation:none;stroke-dashoffset:0}.sc{transition:none}}
-@media print{.filters{position:static}.hbtn,.btn,#exportSec{display:none!important}body{background:#fff}.card{box-shadow:none;break-inside:avoid}}
-/* idle executives, opened from the insight */
-.lnk{all:unset;cursor:pointer;color:var(--s1-deep);font-weight:650;text-decoration:underline;text-underline-offset:3px}
+footer{padding:22px 0 max(40px,env(safe-area-inset-bottom));border-top:1px solid var(--border);margin-top:36px}
+.copy{margin:14px 0 0;display:flex;justify-content:space-between;gap:6px 16px;flex-wrap:wrap;max-width:none}
+.lnk{all:unset;cursor:pointer;color:var(--s1);font-weight:650;text-decoration:underline;text-underline-offset:3px}
 .lnk:hover{color:var(--ink)} .lnk:focus-visible{outline:2px solid var(--s1);outline-offset:2px;border-radius:4px}
-.ins li>div{min-width:0}
 .idle{margin-top:10px;border:1px solid var(--grid);border-radius:12px;overflow:hidden;font-size:13px}
 .idle>div{display:grid;grid-template-columns:minmax(120px,180px) minmax(0,1fr);gap:4px 14px;padding:9px 12px;border-bottom:1px solid var(--grid)}
 .idle>div:last-child{border-bottom:0}
 .idle .mut{color:var(--muted);font-size:12px}
 .idle .who{color:var(--ink-2)}
 .idle .st{margin-top:5px}
-.copy{margin:14px 0 0;display:flex;justify-content:space-between;gap:6px 16px;flex-wrap:wrap;max-width:none}
-#upd{position:fixed;left:50%;transform:translateX(-50%);bottom:max(16px,env(safe-area-inset-bottom));z-index:90;display:flex;gap:10px 12px;align-items:center;justify-content:center;flex-wrap:wrap;width:max-content;max-width:calc(100vw - 24px);background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:10px 14px;font-size:13.5px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
-
-/* tablet + phone */
-button,select,[data-store],[data-day]{touch-action:manipulation}
-.filters{-webkit-backdrop-filter:blur(12px)}
-.tw{-webkit-overflow-scrolling:touch}
-@supports (padding:max(0px)){
-  .wrap{padding-left:max(24px,env(safe-area-inset-left));padding-right:max(24px,env(safe-area-inset-right))}
-  header.top{padding-top:env(safe-area-inset-top)}
-  footer{padding-bottom:max(40px,env(safe-area-inset-bottom))}
-}
-@media (pointer:coarse){
-  .chip{min-height:38px;padding:8px 14px}
-  .hbtn{min-height:40px;padding:9px 16px}
-  .btn{min-height:42px}
-  .seg button{min-height:36px}
-  select,input[type=date],input[type=search]{min-height:42px;font-size:16px}
-  .scope .sc-chip button{padding:6px 12px}
-  .sc:hover{transform:none}
-}
-@media (min-width:700px) and (max-width:1000px){.hpanels{grid-template-columns:repeat(3,minmax(0,1fr))}.hpv b{font-size:30px}}
-@media (max-width:900px){.scope{margin-left:0}}
-@media (max-width:640px){
-  .wrap{padding-left:16px;padding-right:16px}
-  .top .bar{gap:10px;padding:12px 0}
-  .top .sp{display:none}
-  .mark img{width:38px;height:38px} .mark .wm b{font-size:25px} .mark .wm span{font-size:6.5px}
-  .live{flex:1;min-width:0} .live span:last-child{overflow:hidden;text-overflow:ellipsis}
-  .hero{padding:12px 0 20px}
-  .hv{font-size:clamp(64px,22vw,96px)}
-  main{padding-top:18px} main section{margin-top:26px}
-  .sh h2{font-size:19px}
-  .card{padding:16px}
-  .tw{margin:0 -16px -4px;padding:0 16px 4px}
-  .fld{flex-wrap:wrap} .filters .fld{width:100%} .filters .fld input,.filters .fld select{flex:1;min-width:0}
-  .scope{width:100%}
-  #execQ{min-width:0!important;flex:1}
-  .idle>div{grid-template-columns:minmax(0,1fr)}
-  .pd .pr{font-size:84px}
-  #tip{max-width:min(260px,calc(100vw - 24px))}
-}
-@media (max-width:640px){@supports (padding:max(0px)){.wrap{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}}}
-@media (max-width:560px){
-  .rrow{grid-template-columns:24px minmax(0,1fr) auto auto;row-gap:5px}
-  .rrow .trk{grid-column:2/-1;grid-row:2}
-}
-@media print{#upd{display:none!important}#msgDlg{display:none!important}}
-.chs{display:inline-flex;gap:8px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.chs{display:inline-flex;gap:8px;white-space:nowrap}
 .chs i{font-style:normal;display:inline-flex;align-items:center;gap:4px}
 .chs i::before{content:"";width:7px;height:7px;border-radius:2px;background:var(--walk)}
 .chs i.p::before{background:var(--phone)}
-.mixbar{display:inline-flex;width:56px;height:6px;border-radius:999px;overflow:hidden;background:var(--surface-2);vertical-align:middle;margin-right:6px}
+.mixbar{display:inline-flex;gap:1px;width:56px;height:6px;border-radius:999px;overflow:hidden;background:var(--surface-2);vertical-align:middle;margin-right:6px}
 .mixbar i{background:var(--walk)} .mixbar b{background:var(--phone)}
 td.cw{color:var(--walk);font-weight:600} td.cp{color:var(--phone);font-weight:600}
-/* ───────── messages to showrooms ───────── */
-.hbtn.msg{background:var(--brand);border-color:var(--brand);font-weight:650;display:inline-flex;align-items:center;gap:7px}
-.hbtn.msg:hover{background:#a50d26}
-.hbtn.msg .n{background:#fff;color:var(--brand);border-radius:999px;font-size:11px;font-weight:700;padding:1px 7px;line-height:1.5}
-#msgDlg{border:0;padding:0;border-radius:20px;width:min(640px,calc(100vw - 32px));max-height:calc(100vh - 32px);background:var(--surface);color:var(--ink);box-shadow:0 30px 80px rgba(0,0,0,.35)}
-#msgDlg::backdrop{background:rgba(6,20,24,.55);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.export{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* load moment: bars grow, today's line draws */
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadein{from{opacity:0}}
+.first .rrow .bar{animation:grow .8s cubic-bezier(.2,.8,.2,1) both}
+.first #pace .today{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.2s .1s ease-out forwards}
+.first #pace .after{animation:fadein .4s 1.1s both}
+@media (prefers-reduced-motion:reduce){.dot.on,.first .rrow .bar,.first #pace .today,.first #pace .after{animation:none;stroke-dashoffset:0}}
+
+/* ───────── messages dialog ───────── */
+#msgDlg{border:0;padding:0;border-radius:22px;width:min(780px,calc(100vw - 24px));max-height:calc(100vh - 32px);overflow-x:hidden;background:var(--surface);color:var(--ink);box-shadow:0 30px 80px rgba(0,0,0,.35)}
+#msgDlg::backdrop{background:rgba(15,16,18,.5);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
 .mh{display:flex;align-items:center;gap:12px;padding:18px 22px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:1}
-.mh h2{margin:0;font:700 19px/1.2 var(--fd);flex:1}
-.mh p{margin:2px 0 0;font-size:12.5px;color:var(--muted)}
+.mh h2{margin:0;font:650 18px/1.2 var(--fd);flex:1}
+.mh p{margin:4px 0 0;font-size:12.5px;color:var(--muted)}
 .mx{border:0;background:var(--surface-2);border-radius:999px;width:34px;height:34px;cursor:pointer;font-size:18px;line-height:1}
 .mb{padding:18px 22px 22px}
 .mf{display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
@@ -403,43 +487,138 @@ td.cw{color:var(--walk);font-weight:600} td.cp{color:var(--phone);font-weight:60
 .mact .btn.pri:disabled{opacity:.55;cursor:not-allowed}
 .mmsg{font-size:12.5px;color:var(--muted)} .mmsg.err{color:var(--crit);font-weight:600} .mmsg.ok{color:var(--up);font-weight:600}
 .msent{margin-top:22px;border-top:1px solid var(--border);padding-top:16px}
-.msent h3{margin:0 0 10px;font:650 15px/1.3 var(--fd);display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.msent h3{margin:0 0 10px;font:650 15px/1.3 var(--fb);display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .msent h3 span{font:400 12.5px var(--fb);color:var(--muted)}
-.mi{border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.mi{border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:10px;background:var(--surface);overflow:hidden}
 .mi.off{opacity:.62}
 .mi .t{margin:0 0 6px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.5}
-.mi .m{font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center}
-.mi .tag{display:inline-block;font-size:11px;font-weight:700;border-radius:999px;padding:1px 8px;letter-spacing:.3px}
+.mi .m{font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}
+.mi .tag{display:inline-block;font-size:11px;font-weight:700;border-radius:999px;padding:1px 8px}
 .mi .tag.live{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--up)}
 .mi .tag.end{background:var(--surface-2);color:var(--ink-2)}
 .mi .tag.urg{background:color-mix(in srgb,var(--crit) 14%,transparent);color:var(--crit)}
-.mi .ack{margin-top:8px;display:flex;flex-wrap:wrap;gap:5px}
-.mi .ack span{font-size:11.5px;border-radius:999px;padding:2px 8px;background:var(--surface-2);color:var(--muted)}
-.mi .ack span.y{background:color-mix(in srgb,var(--s1) 16%,transparent);color:var(--ink)}
-.ackd{margin-top:10px}
-.ackd summary{cursor:pointer;font-size:12.5px;color:var(--ink-2);list-style-position:outside}
-.ackt{width:100%;border-collapse:collapse;margin-top:8px;font-size:12.5px}
-.ackt th{text-align:left;font-weight:650;white-space:nowrap;padding:6px 12px 6px 0;vertical-align:top;width:1%;color:var(--ink)}
-.ackt td{padding:4px 0;border-top:0}
-.ackt tr+tr th,.ackt tr+tr td{border-top:1px solid var(--border)}
-.ackt td span{display:inline-block;margin:2px 4px 2px 0;border-radius:999px;padding:2px 9px;font-size:12px}
-.ackt td span.y{background:color-mix(in srgb,var(--s1) 16%,transparent);color:var(--ink);font-weight:600}
-.ackt td span.y i{font-style:normal;font-weight:400;color:var(--muted);margin-left:3px}
-.ackt td span.n{background:var(--surface-2);color:var(--muted)}
-.ackt td em{color:var(--muted);font-style:normal}
 .mi .ia{margin-top:10px;display:flex;gap:8px}
 .mi .ia .btn{min-height:30px;padding:4px 12px;font-size:12.5px}
+.ackd{margin-top:10px}
+.ackd summary{cursor:pointer;font-size:12.5px;color:var(--ink-2);padding:6px 0}
+.ackd summary b{color:var(--ink)}
+.ackg{display:grid;align-items:start;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:8px;margin-top:8px}
+.acks{border:1px solid var(--border);border-radius:12px;padding:10px 12px;min-width:0;background:var(--surface-2)}
+.acks.done{background:color-mix(in srgb,var(--s1) 8%,var(--surface))}
+.acks-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:6px}
+.acks-h b{font:650 13.5px/1.25 var(--fb);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.acks-h span{font-size:12px;color:var(--muted);white-space:nowrap}
+.acks-bar{height:5px;border-radius:999px;background:var(--surface);overflow:hidden;margin-bottom:8px}
+.acks-bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--s1-deep),var(--s1))}
+.acks-n{display:flex;flex-wrap:wrap;gap:5px}
+.acks-n span{display:inline-flex;align-items:baseline;flex-wrap:wrap;gap:0 5px;max-width:100%;white-space:normal;overflow-wrap:anywhere;border-radius:9px;padding:3px 9px;font-size:12px;line-height:1.35}
+.acks-n span.y{background:color-mix(in srgb,var(--s1) 18%,transparent);color:var(--ink);font-weight:600}
+.acks-n span.y i{font-style:normal;font-weight:400;color:var(--muted);font-size:11px}
+.acks-n span.n{background:var(--surface);color:var(--muted);border:1px dashed var(--border)}
+.acks-n span.o{background:transparent;color:var(--muted);font-style:italic}
+.acks-n em{color:var(--muted);font-style:normal;font-size:12px}
+.ack-lg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:11.5px;color:var(--muted);margin-top:8px}
+.ack-lg i{display:inline-block;width:10px;height:10px;border-radius:3px;vertical-align:-1px;margin-right:5px}
+
+/* ───────── inactivity watch ───────── */
+.iwh{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap}
+.iwh .sp2{flex:1}
+.iwc{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:650;padding:4px 11px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
+.iwc.bad{background:color-mix(in srgb,var(--crit) 13%,transparent);color:var(--down)}
+.iwc.ok{background:color-mix(in srgb,var(--good) 14%,transparent);color:var(--up)}
+.iwg{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:10px;margin-top:14px}
+.iws{border:1px solid var(--border);border-left:4px solid var(--serious);border-radius:12px;padding:11px 13px;min-width:0;background:var(--surface)}
+.iws.all{border-left-color:var(--crit);background:color-mix(in srgb,var(--crit) 5%,var(--surface))}
+.iws-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:8px}
+.iws-h .lnk{font:650 14px/1.25 var(--fb);text-decoration:none}
+.iws-h span{font-size:12px;color:var(--muted);white-space:nowrap}
+.iws .st{margin-bottom:8px}
+.iwn{display:flex;flex-direction:column;gap:5px}
+.iwn div{display:flex;justify-content:space-between;gap:10px;font-size:13px;min-width:0}
+.iwn b{font-weight:600;overflow-wrap:anywhere;min-width:0}
+.iwn span{color:var(--down);font-weight:650;white-space:nowrap}
+.iwn small{display:block;color:var(--muted);font-size:11.5px;font-weight:400}
+.iwskip{margin:8px 0 0;font-size:12px;color:var(--muted)}
+.iwnote{margin:12px 0 0;font-size:12.5px;color:var(--muted)}
+
+/* ───────── install sheet + update bar ───────── */
+#installBar{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translate(-50%,170%);z-index:95;width:min(600px,calc(100vw - 20px));
+  display:flex;align-items:center;gap:12px;padding:12px 12px 12px 14px;border-radius:20px;color:var(--hero-ink);
+  background:var(--surface);box-shadow:0 22px 50px -12px rgba(15,20,25,.45);border:1px solid var(--border);transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+#installBar.show{transform:translate(-50%,0)}
+#installBar .ib-ic{width:46px;height:46px;border-radius:12px;flex:none;object-fit:cover;box-shadow:0 0 0 1px var(--border)}
+#installBar .ib-txt{flex:1 1 0;min-width:0;line-height:1.35}
+#installBar .ib-txt b{display:block;font:600 14px/1.3 var(--fd)}
+#installBar .ib-txt small{display:block;font-size:12.5px;opacity:.88;margin-top:2px}
+#installBar .ib-txt .sh{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:5px;background:var(--surface-2);vertical-align:-5px;margin:0 2px}
+#installBar .ib-go{border:0;border-radius:999px;padding:9px 18px;background:var(--primary);color:#fff;font-weight:700;cursor:pointer;white-space:nowrap;min-height:40px}
+#installBar .ib-x{border:0;background:var(--surface-2);color:var(--ink);width:34px;height:34px;border-radius:999px;cursor:pointer;font-size:16px;flex:none}
+@media (max-width:480px){#installBar{flex-wrap:wrap;align-items:flex-start}#installBar .ib-go{order:5;flex:1 1 100%}}
+#upd{position:fixed;left:50%;transform:translateX(-50%);bottom:max(16px,env(safe-area-inset-bottom));z-index:90;display:flex;gap:10px 12px;align-items:center;justify-content:center;flex-wrap:wrap;width:max-content;max-width:calc(100vw - 24px);background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:10px 14px;font-size:13.5px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+body.has-ib #upd{bottom:110px}
+/* installed app: no browser chrome, so leave room for the status bar */
+@media (display-mode:standalone){header.top{padding-top:max(8px,env(safe-area-inset-top))}}
+
+/* ───────── touch + small screens ───────── */
+@media (pointer:coarse){
+  .chip{min-height:38px;padding:8px 14px}
+  .hbtn{min-height:40px} .hbtn.ic{width:40px}
+  .btn{min-height:42px}
+  .seg button{min-height:36px}
+  select,input[type=date],input[type=search]{min-height:42px;font-size:16px}
+}
+@media (max-width:640px){
+  .top .bar{gap:8px;padding:12px 0 8px}
+  .top .sp{flex-basis:100%;height:0;order:3}
+  .live{order:4}
+  .top .bar .hbtn,.top .bar .apw{order:5}
+  .live{margin-right:auto}
+  .mark .logo{height:32px} .mark .ttl{font-size:12.5px}
+  .hbtn .tx{display:none} .hbtn.msg,.hbtn.inst{width:40px;padding:0} .hbtn.msg .n{position:absolute;transform:translate(14px,-12px)} .hbtn.msg{position:relative}
+  .hero{padding:10px 0 18px}
+  .hv{font-size:clamp(64px,21vw,96px)}
+  main{padding-top:18px} .pane>section+section{margin-top:24px}
+  .sh h2{font-size:17px}
+  .card{padding:16px}
+  .tw{margin:0 -16px -4px;padding:0 16px 4px}
+  .scope{margin-left:0;width:100%}
+  .filters .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;max-width:100%}
+  .filters .chips::-webkit-scrollbar{display:none}
+  #execQ{min-width:0!important;flex:1}
+  .idle>div{grid-template-columns:minmax(0,1fr)}
+  .pd .pr{font-size:80px}
+  .oddr{grid-template-columns:88px 1fr 56px;gap:8px}
+  #tip{max-width:min(270px,calc(100vw - 24px))}
+}
+@media print{
+  .filters,.tabs,.hbtn,.btn,#exportSec,#installBar,#upd,#msgDlg,#idleSec{display:none!important}
+  .pane[hidden]{display:block!important}
+  body{background:#fff}.card{box-shadow:none;break-inside:avoid}
+}
 </style>
 </head>
 <body>
 <header class="top"><div class="wrap">
   <div class="bar">
-    <div class="mark"><img src="https://rakretail.github.io/retail/rakwalkin.png" alt="" width="44" height="44" onerror="this.remove()"><span class="wm" aria-label="RAK Ceramics" data-keep><b>RAK</b><span>CERAMICS</span></span><span class="ttl" data-keep>UAE Retail<small>Walk-in analytics</small></span></div>
+    <div class="mark"><span class="logo" role="img" aria-label="RAK Ceramics"></span><span class="ttl" data-keep>UAE Retail<small>Walk-in analytics</small></span></div>
     <div class="sp"></div>
     <div class="live"><span class="dot" id="dot"></span><span id="liveTxt">Connecting…</span></div>
-    <button class="hbtn msg" id="btnMsg" type="button" data-keep>Message showrooms<span class="n" id="msgN" hidden>0</span></button>
-    <button class="hbtn" id="btnRefresh" type="button">Refresh</button>
-    <button class="hbtn" id="btnTheme" type="button" aria-label="Switch between light and dark theme">Theme</button>
+    <button class="hbtn idle" id="btnIdle" type="button" hidden data-keep><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/></svg><span><span id="idleN">0</span> idle</span></button>
+    <button class="hbtn msg" id="btnMsg" type="button" data-keep aria-label="Message showrooms"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="tx">Message showrooms</span><span class="n" id="msgN" hidden>0</span></button>
+    <button class="hbtn inst" id="btnInstall" type="button" hidden aria-label="Install app"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span class="tx">Install app</span></button>
+    <button class="hbtn ic" id="btnRefresh" type="button" aria-label="Refresh data" title="Refresh data"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36M21 3v6h-6"/></svg></button>
+    <div class="apw"><button class="hbtn ic" id="btnTheme" type="button" aria-label="Appearance: colours and light or dark" aria-expanded="false" aria-controls="appear" title="Appearance"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-.9-.7-1.3-.7-2.2 0-.9.7-1.6 1.6-1.6H17a4 4 0 0 0 4-4C21 6.6 17 3 12 3z"/><circle cx="7.5" cy="11" r="1.2"/><circle cx="10.5" cy="7" r="1.2"/><circle cx="15" cy="7.5" r="1.2"/></svg></button>
+      <div class="appear" id="appear" hidden role="dialog" aria-label="Appearance">
+        <p class="aph">Colours</p>
+        <div class="pals" id="pals">
+          <button type="button" data-pal="emerald" style="--a:#0a2b24;--b:#0f8a68;--c:#d9a53a"><i></i>Emerald</button>
+          <button type="button" data-pal="ocean" style="--a:#061c2b;--b:#1577ad;--c:#f2a024"><i></i>Ocean</button>
+          <button type="button" data-pal="aubergine" style="--a:#1c0f29;--b:#7246a8;--c:#ef6a4c"><i></i>Aubergine</button>
+          <button type="button" data-pal="charcoal" style="--a:#141619;--b:#3f5fb0;--c:#d3172f"><i></i>Charcoal</button>
+        </div>
+        <p class="aph">Mode</p>
+        <div class="seg" id="modes" role="group" aria-label="Light or dark"><button type="button" data-mode="light">Light</button><button type="button" data-mode="dark">Dark</button><button type="button" data-mode="auto">Auto</button></div>
+      </div></div>
   </div>
   <div class="hero" id="hero" hidden>
     <div>
@@ -463,40 +642,64 @@ td.cw{color:var(--walk);font-weight:600} td.cp{color:var(--phone);font-weight:60
     <button type="button" class="chip" data-ch="walkin" aria-pressed="false">Walk-ins</button>
     <button type="button" class="chip" data-ch="phone" aria-pressed="false">Phone</button>
   </div>
-  <div class="fld"><label for="dA">From</label><input type="date" id="dA"><label for="dB">to</label><input type="date" id="dB"></div>
-  <div class="fld"><label for="selCmp">Compare with</label><select id="selCmp">
-    <option value="auto">Automatic</option><option value="prev">Previous period</option><option value="month">Same dates, previous month</option><option value="custom">Custom range</option><option value="none">No comparison</option></select></div>
-  <div class="fld" id="cmpCustom" hidden><input type="date" id="cA" aria-label="Comparison from"><span>to</span><input type="date" id="cB" aria-label="Comparison to"></div>
+  <details class="more" id="moreDates"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18"/></svg><span id="rangeLbl">Dates &amp; comparison</span></summary>
+    <div class="pop">
+      <div class="fld"><label for="dA">From</label><input type="date" id="dA"></div>
+      <div class="fld"><label for="dB">To</label><input type="date" id="dB"></div>
+      <div class="fld"><label for="selCmp">Compare with</label><select id="selCmp">
+        <option value="auto">Automatic</option><option value="prev">Previous period</option><option value="month">Same dates, previous month</option><option value="custom">Custom range</option><option value="none">No comparison</option></select></div>
+      <div class="fld" id="cmpCustom" hidden><label for="cA">Compare</label><input type="date" id="cA" aria-label="Comparison from"><input type="date" id="cB" aria-label="Comparison to"></div>
+    </div>
+  </details>
   <div class="scope" id="scope"></div>
 </div></div>
+
+<nav class="tabs" aria-label="Sections"><div class="wrap">
+  <div class="tabl" role="tablist" id="tabs">
+    <button class="tab" role="tab" type="button" data-tab="overview" aria-selected="true">Overview</button>
+    <button class="tab" role="tab" type="button" data-tab="showrooms" aria-selected="false" id="tabShow">Showrooms</button>
+    <button class="tab" role="tab" type="button" data-tab="team" aria-selected="false">Team</button>
+    <button class="tab" role="tab" type="button" data-tab="timing" aria-selected="false">Timing</button>
+    <button class="tab" role="tab" type="button" data-tab="health" aria-selected="false"><span class="lgo">Data&nbsp;</span>Quality<span class="bd" id="tabIdle" hidden data-keep></span></button>
+  </div>
+  <span class="mini-scope" id="miniScope"></span>
+</div></nav>
 
 <main><div class="wrap">
   <div id="banner"></div>
   <div id="loading" class="load">Loading walk-in data…</div>
   <div id="app" hidden>
 
-    <section style="margin-top:0">
+  <!-- ═════════ OVERVIEW ═════════ -->
+  <div class="pane" data-pane="overview">
+    <section>
       <div class="sh"><h2>Selected period</h2><span id="periodSub"></span></div>
       <div class="grid g6" id="periodTiles"></div>
     </section>
-
     <section>
-      <div class="grid g2 g2b">
-        <div class="card"><h3>What stands out</h3><p class="sub">Generated automatically from the selected period and showroom</p><ul class="ins" id="insights"></ul></div>
+      <div class="grid g2b">
+        <div class="card"><h3>What stands out</h3><p class="sub">Written automatically from the selected period and showroom</p><ul class="ins" id="insights"></ul></div>
         <div class="card"><h3 id="pulseTitle">Today's pace by showroom</h3><p class="sub" id="pulseSub"></p><div class="tw"><table id="pulse" class="wrapth"></table></div></div>
       </div>
     </section>
-
     <section>
       <div class="sh"><h2>Traffic trend</h2><span id="trendSub"></span></div>
       <div class="card"><div id="trend"></div><div class="legend" id="trendLegend"></div></div>
     </section>
-
+    <section>
+      <div class="grid g2c">
+        <div class="card"><h3>Unusual days</h3><p class="sub" id="oddSub">Days that ran well above or below what that weekday normally brings</p><div class="odd" id="odd"></div><div class="legend" id="oddLegend"></div></div>
+        <div class="card"><h3>Records</h3><p class="sub" id="recSub">All-time highs for this selection</p><div class="recs" id="recs"></div></div>
+      </div>
+    </section>
     <section>
       <div class="sh"><h2>Every day at a glance</h2><span id="calSub"></span></div>
       <div class="card"><div class="tw"><div id="cal"></div></div><div class="scale"><span>Fewer</span><i></i><span>More</span><span style="margin-left:10px">Outlined days are the selected period</span></div></div>
     </section>
+  </div>
 
+  <!-- ═════════ SHOWROOMS ═════════ -->
+  <div class="pane" data-pane="showrooms" hidden>
     <section>
       <div class="sh"><h2 id="rankH">Showroom ranking</h2><span id="rankSub"></span></div>
       <div class="grid g2">
@@ -504,7 +707,14 @@ td.cw{color:var(--walk);font-weight:600} td.cp{color:var(--phone);font-weight:60
         <div class="card"><h3 id="mixTitle">Where the traffic is</h3><p class="sub" id="mixSub"></p><div id="mix"></div><div class="legend" id="mixLegend"></div></div>
       </div>
     </section>
-
+    <section>
+      <div class="sh"><h2 id="quadH">Momentum map</h2><span id="quadSub"></span></div>
+      <div class="card"><div id="quad"></div><div class="legend" id="quadLegend"></div></div>
+    </section>
+    <section>
+      <div class="sh"><h2 id="leagueH">Month by month</h2><span id="leagueSub"></span></div>
+      <div class="card"><div class="tw"><table id="league"></table></div><div class="scale"><span>Fewer</span><i></i><span>More</span><span style="margin-left:10px">Dashed cell = this month's forecast · colour is scaled within each row</span></div></div>
+    </section>
     <section>
       <div class="sh"><h2 id="hmH">Showroom × day</h2><span id="hmSub"></span></div>
       <div class="card">
@@ -514,7 +724,37 @@ td.cw{color:var(--walk);font-weight:600} td.cp{color:var(--phone);font-weight:60
         <div class="scale"><span>Fewer</span><i></i><span>More</span><span style="margin-left:10px">Grey = no entries logged</span></div>
       </div>
     </section>
+    <section id="cardsSec">
+      <div class="sh"><h2>Showroom scorecards</h2><span>Select a card to drill into that showroom</span></div>
+      <div class="grid gcards" id="cards"></div>
+    </section>
+    <section id="storeTblSec">
+      <div class="sh"><h2>Showroom performance table</h2><span>Select a column heading to sort</span></div>
+      <div class="card"><div class="tw"><table id="tblStore"></table></div></div>
+    </section>
+  </div>
 
+  <!-- ═════════ TEAM ═════════ -->
+  <div class="pane" data-pane="team" hidden>
+    <section>
+      <div class="sh"><h2>Executive performance</h2><span id="execSub"></span></div>
+      <div class="grid gp" id="podium"></div>
+    </section>
+    <section>
+      <div class="sh"><h2>Volume and consistency</h2><span id="exScSub"></span></div>
+      <div class="card"><div id="exSc"></div><div class="legend" id="exScLegend"></div></div>
+    </section>
+    <section>
+      <div class="card">
+        <div class="chead"><input type="search" id="execQ" placeholder="Search executive or showroom" aria-label="Search executives" style="min-width:260px">
+          <button class="btn" id="execMore" type="button"></button></div>
+        <div class="tw" style="margin-top:12px"><table id="tblExec"></table></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ═════════ TIMING ═════════ -->
+  <div class="pane" data-pane="timing" hidden>
     <section>
       <div class="sh"><h2>When customers come</h2><span id="whenSub"></span></div>
       <div class="grid g3">
@@ -522,43 +762,39 @@ td.cw{color:var(--walk);font-weight:600} td.cp{color:var(--phone);font-weight:60
         <div class="card"><h3>By hour of day</h3><p class="sub" id="hourSub"></p><div id="hourBars"></div></div>
         <div class="card"><h3>By weekday</h3><p class="sub">Average per day, so weekdays compare fairly</p><div id="dowBars"></div></div>
       </div>
-      <div class="card" style="margin-top:16px"><h3 id="ridgeTitle">Each showroom’s daily rhythm</h3><p class="sub">The shape of the day for each row, scaled to its own busiest hour, so quiet showrooms are as readable as busy ones · physical walk-ins</p><div id="ridge"></div></div>
     </section>
-
-    <section id="cardsSec">
-      <div class="sh"><h2>Showroom scorecards</h2><span>Select a card to drill into that showroom</span></div>
-      <div class="grid gcards" id="cards"></div>
-    </section>
-
-    <section id="storeTblSec">
-      <div class="sh"><h2>Showroom performance table</h2><span>Select a column heading to sort</span></div>
-      <div class="card"><div class="tw"><table id="tblStore"></table></div></div>
-    </section>
-
     <section>
-      <div class="sh"><h2>Executive performance</h2><span id="execSub"></span></div>
-      <div class="grid gp" id="podium" style="margin-bottom:16px"></div>
-      <div class="card">
-        <div class="chead"><input type="search" id="execQ" placeholder="Search executive or showroom" aria-label="Search executives" style="min-width:240px">
-          <button class="btn" id="execMore" type="button"></button></div>
-        <div class="tw" style="margin-top:10px"><table id="tblExec"></table></div>
+      <div class="grid g2">
+        <div class="card"><h3>Morning, afternoon, evening</h3><p class="sub" id="dpSub">Share of physical walk-ins by part of the day</p><div class="dp" id="dayparts"></div>
+          <div class="legend"><span><i class="lg" style="background:var(--seq-lo)"></i>Morning, before 12:00</span><span><i class="lg" style="background:color-mix(in oklab,var(--seq-hi) 50%,var(--seq-lo))"></i>Afternoon, 12:00–17:00</span><span><i class="lg" style="background:var(--seq-hi)"></i>Evening, after 17:00</span></div></div>
+        <div class="card"><h3 id="wdiH">Weekday strength</h3><p class="sub" id="wdiSub">Each weekday against the row's own daily average (100 = an average day)</p><div class="tw"><table class="hm wide" id="wdIndex"></table></div><div class="scale"><span>Quieter</span><i class="dv"></i><span>Busier</span></div></div>
       </div>
     </section>
+    <section>
+      <div class="card"><h3 id="ridgeTitle">Each showroom’s daily rhythm</h3><p class="sub">The shape of the day for each row, scaled to its own busiest hour, so quiet showrooms are as readable as busy ones · physical walk-ins</p><div id="ridge"></div></div>
+    </section>
+  </div>
 
+  <!-- ═════════ DATA QUALITY ═════════ -->
+  <div class="pane" data-pane="health" hidden>
+    <section id="idleSec" data-keep>
+      <div class="sh"><h2>Inactivity watch</h2><span id="idleSub"></span></div>
+      <div class="card" id="idleCard"></div>
+    </section>
     <section>
       <div class="sh"><h2>Reporting health</h2><span>Are the numbers complete enough to trust?</span></div>
       <div class="card"><div class="tw"><table id="tblHealth"></table></div></div>
     </section>
-
     <section id="exportSec">
       <div class="sh"><h2>Export</h2><span>Downloads the selected period and showroom</span></div>
-      <div class="card" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <div class="card export">
         <button class="btn pri" id="xXlsx" type="button">Download Excel report (.xlsx)</button>
         <button class="btn" id="xCsv" type="button">Raw entries (.csv)</button>
         <button class="btn" id="xPrint" type="button">Print / save as PDF</button>
-        <span class="note" data-keep>Excel report: summary, showrooms and executives (with walk-in and phone columns), daily matrix, daily walk-ins vs phone, hourly (physical walk-ins) and raw entries.</span>
+        <span class="note" data-keep>Excel report: summary, showrooms and executives (with walk-in and phone columns), daily matrix, daily walk-ins vs phone, hourly (physical walk-ins), month by month and raw entries.</span>
       </div>
     </section>
+  </div>
 
     <footer><p class="note" id="method"></p><p class="note copy"><span>© 2026 Hesper. All rights reserved.</span><span id="ver"></span></p></footer>
   </div>
@@ -585,6 +821,7 @@ td.cw{color:var(--walk);font-weight:600} td.cp{color:var(--phone);font-weight:60
     <div class="msent"><h3>Sent messages <span id="mSentSub"></span></h3><div id="mList"><p class="note">Loading…</p></div></div>
   </div>
 </dialog>
+<div id="installBar" hidden role="dialog" aria-label="Install the app"></div>
 <div id="tip" role="tooltip"></div>
 
 <script>
@@ -649,7 +886,7 @@ function niceMax(v){ if(v<=4)return 4; const p=Math.pow(10,Math.floor(Math.log10
 /* ───────── state ───────── */
 const S={raw:{},roster:{},stores:[],recs:[],lastKey:{},loaded:false,demo:false,updated:0,err:null,lastFull:0,
   store:'all',preset:'mtd',a:0,b:0,cmpMode:'auto',ca:null,cb:null,hmScale:'row',q:'',execAll:false,idleOpen:false,sort:{},
-  ch:'all'};
+  ch:'all',locks:{},cfg:{}};
 try{const v=localStorage.getItem('rakCh');if(v==='all'||v==='walkin'||v==='phone')S.ch=v}catch(_){}
 
 /* ───────── data ───────── */
@@ -658,7 +895,7 @@ function ingest(id,obj){
   const m=S.raw[id]||(S.raw[id]=new Map());
   if(!obj) return;
   for(const k in obj){const v=obj[k]; if(!v||typeof v!=='object')continue; const t=Number(v.timestamp); if(!isFinite(t)||t<=0)continue;
-    m.set(k,{k,s:id,e:String(v.executive||'Unknown').trim()||'Unknown',c:Number(v.count)||0,t,d:dn(t),h:Math.floor(todOf(t)/36e5),tod:todOf(t),ty:v.type==='phone'?'phone':'walkin'});
+    m.set(k,{k,s:id,e:String(v.executive||'Unknown').trim()||'Unknown',c:Number(v.count)||0,t,d:dn(t),h:Math.floor(todOf(t)/36e5),tod:todOf(t),ty:v.type==='phone'?'phone':'walkin',b:String(v.submittedBy||'')});
     if(!S.lastKey[id]||k>S.lastKey[id]) S.lastKey[id]=k;}
 }
 function rebuild(){S.recs=[];for(const id of S.stores){const m=S.raw[id];if(m)for(const r of m.values())S.recs.push(r)}S.recs.sort((x,y)=>x.t-y.t)}
@@ -666,15 +903,18 @@ async function loadFull(){
   const idx=await j(DB+'/stores.json?shallow=true'); const ids=Object.keys(idx||{}).sort();
   const raw={},roster={};
   await Promise.all(ids.map(async id=>{
-    const [w,r]=await Promise.all([j(`${DB}/stores/${id}/walkins.json`),j(`${DB}/stores/${id}/executiveList.json`).catch(()=>null)]);
+    const [w,r,lk,cf]=await Promise.all([j(`${DB}/stores/${id}/walkins.json`),j(`${DB}/stores/${id}/executiveList.json`).catch(()=>null),
+      j(`${DB}/stores/${id}/locks.json`).catch(()=>null),j(`${DB}/stores/${id}/settings.json`).catch(()=>null)]);
     raw[id]=w; roster[id]=r?[...new Set(Object.values(r).map(x=>String(x).trim()).filter(Boolean))]:[];
+    S.locks[id]=lk&&typeof lk==='object'?lk:{}; S.cfg[id]=cf&&typeof cf==='object'?cf:{};
   }));
   S.raw={};S.lastKey={};S.stores=ids;S.roster=roster; ids.forEach(id=>ingest(id,raw[id])); rebuild(); S.lastFull=Date.now();
 }
 async function loadNew(){
   await Promise.all(S.stores.map(async id=>{
     const q=S.lastKey[id]?`?orderBy=%22%24key%22&startAt=%22${encodeURIComponent(S.lastKey[id])}%22`:'';
-    ingest(id,await j(`${DB}/stores/${id}/walkins.json${q}`));
+    const [w,lk,cf]=await Promise.all([j(`${DB}/stores/${id}/walkins.json${q}`),j(`${DB}/stores/${id}/locks.json`).catch(()=>undefined),j(`${DB}/stores/${id}/settings.json`).catch(()=>undefined)]);
+    ingest(id,w); if(lk!==undefined)S.locks[id]=lk||{}; if(cf!==undefined)S.cfg[id]=cf||{};
   })); rebuild();
 }
 let busy=false;
@@ -790,7 +1030,7 @@ function barChart(el,o){
   let lines=''; (o.lines||[]).forEach(l=>{ let d='',pen=false; l.vals.forEach((v,i)=>{ if(v==null){pen=false;return} d+=(pen?'L':'M')+x(i).toFixed(1)+','+y(v).toFixed(1)+' ';pen=true });
     lines+=`<path d="${d}" fill="none" stroke="${l.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`; });
   const li=o.lab!=null?o.lab:o.hi; let dl=''; if(li!=null&&li>=0&&o.vals[li]>0) dl=`<text class="lab" x="${Math.min(W-m.r-14,Math.max(m.l+14,x(li)))}" y="${y(o.vals[li])-6}" text-anchor="middle">${fmt1(o.vals[li])}</text>`;
-  el.innerHTML=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(o.aria||'Bar chart')}"><defs><linearGradient id="gs-${el.id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--s1-soft)"/><stop offset="1" stop-color="var(--s1-soft)" stop-opacity=".5"/></linearGradient><linearGradient id="gh-${el.id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--s1)"/><stop offset="1" stop-color="var(--s1-deep)"/></linearGradient></defs>${bands}${g}${bars}${ref}${lines}${dl}${labs}${hits}</svg>`;
+  el.innerHTML=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(o.aria||'Bar chart')}"><defs><linearGradient id="gs-${el.id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--s1-soft)"/><stop offset="1" stop-color="var(--s1-soft)" stop-opacity=".5"/></linearGradient><linearGradient id="gh-${el.id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--hl)"/><stop offset="1" stop-color="var(--hl-deep)"/></linearGradient></defs>${bands}${g}${bars}${ref}${lines}${dl}${labs}${hits}</svg>`;
 }
 
 /* ───────── sections ───────── */
@@ -830,13 +1070,13 @@ function renderLive(c){
   const el=$('#pace'), W=Math.max(280,el.clientWidth||700), H=W<520?190:230, m={l:34,r:16,t:20,b:24}, pw=W-m.l-m.r, ph=H-m.t-m.b;
   const mx=niceMax(Math.max(1,tNow,cY[nb],cE[nb])), x=b=>m.l+(b-h0)/nb*pw, y=v=>m.t+ph-(v/mx)*ph, P=(a,n=a.length)=>a.slice(0,n).map((v,i)=>x(h0+i).toFixed(1)+','+y(v).toFixed(1));
   let s=`<defs><linearGradient id="gT" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--hero-line)" stop-opacity=".34"/><stop offset="1" stop-color="var(--hero-line)" stop-opacity="0"/></linearGradient></defs>`;
-  for(let i=0;i<=2;i++){const v=mx*i/2,yy=y(v);s+=`<line x1="${m.l}" x2="${W-m.r}" y1="${yy}" y2="${yy}" stroke="rgba(255,255,255,${i?.09:.22})"/><text x="${m.l-7}" y="${yy+4}" text-anchor="end">${fmt1(v)}</text>`}
+  for(let i=0;i<=2;i++){const v=mx*i/2,yy=y(v);s+=`<line x1="${m.l}" x2="${W-m.r}" y1="${yy}" y2="${yy}" stroke="currentColor" stroke-opacity="${i?.1:.25}"/><text x="${m.l-7}" y="${yy+4}" text-anchor="end">${fmt1(v)}</text>`}
   const stp=W<520?3:W<800?2:1; for(let b=h0;b<=h1+1;b++) if((b-h0)%stp===0) s+=`<text x="${x(b)}" y="${H-6}" text-anchor="middle">${String(b%24).padStart(2,'0')}</text>`;
-  s+=`<path d="M${x(h0)},${y(0)} L${P(cE).join(' L')} L${x(h1+1)},${y(0)} Z" fill="rgba(255,255,255,.085)"/><polyline points="${P(cE).join(' ')}" fill="none" stroke="rgba(255,255,255,.34)" stroke-width="1.5"/>`;
-  s+=`<polyline points="${P(cY).join(' ')}" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2.4" stroke-dasharray="0.1 6.5" stroke-linecap="round"/>`;
+  s+=`<path d="M${x(h0)},${y(0)} L${P(cE).join(' L')} L${x(h1+1)},${y(0)} Z" fill="currentColor" fill-opacity=".07"/><polyline points="${P(cE).join(' ')}" fill="none" stroke="currentColor" stroke-opacity=".32" stroke-width="1.5"/>`;
+  s+=`<polyline points="${P(cY).join(' ')}" fill="none" stroke="currentColor" stroke-opacity=".6" stroke-width="2.4" stroke-dasharray="0.1 6.5" stroke-linecap="round"/>`;
   const nfull=Math.min(nb,Math.floor(nowX)-h0)+1, tp=P(cT,nfull); if(nowX>h0+nfull-1) tp.push(x(nowX).toFixed(1)+','+y(tNow).toFixed(1));
   const lx=x(nowX), ly=y(tNow);
-  s+=`<path class="after" d="M${x(h0)},${y(0)} L${tp.join(' L')} L${lx},${y(0)} Z" fill="url(#gT)"/><line class="after" x1="${lx}" x2="${lx}" y1="${m.t}" y2="${y(0)}" stroke="rgba(255,255,255,.28)"/>`;
+  s+=`<path class="after" d="M${x(h0)},${y(0)} L${tp.join(' L')} L${lx},${y(0)} Z" fill="url(#gT)"/><line class="after" x1="${lx}" x2="${lx}" y1="${m.t}" y2="${y(0)}" stroke="currentColor" stroke-opacity=".25"/>`;
   s+=`<path class="today" pathLength="1" d="M${tp.join(' L')}" fill="none" stroke="var(--hero-line)" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>`;
   s+=`<g class="after"><circle cx="${lx}" cy="${ly}" r="9" fill="var(--hero-line)" opacity=".25"/><circle cx="${lx}" cy="${ly}" r="5" fill="var(--hero-line)" stroke="var(--hero-a)" stroke-width="2"/><text class="now" x="${lx>W-70?lx-12:lx+12}" y="${Math.max(m.t+2,ly-9)}" text-anchor="${lx>W-70?'end':'start'}">${fmt(tNow)} at ${at}</text></g>`;
   for(let i=0;i<nb;i++){const h=h0+i, fut=h*36e5>nowTod;
@@ -854,13 +1094,13 @@ function renderLive(c){
   const lw=[],tw=[]; for(let i=0;i<7;i++){lw.push(g(ws-7+i));tw.push(ws+i<=today?g(ws+i):null)}
   const wmx=Math.max(1,...lw,...tw.map(v=>v||0)); let wsv='';
   for(let i=0;i<7;i++){ const gh=lw[i]/wmx*58, th=(tw[i]||0)/wmx*58;
-    wsv+=`<rect x="${i*40+5}" y="${62-gh}" width="30" height="${gh}" rx="3" fill="rgba(255,255,255,.14)"/>`+(tw[i]!=null?`<rect x="${i*40+12}" y="${62-th}" width="16" height="${Math.max(th,1.5)}" rx="2.5" fill="var(--hero-line)"/>`:'')+
+    wsv+=`<rect x="${i*40+5}" y="${62-gh}" width="30" height="${gh}" rx="3" fill="currentColor" fill-opacity=".13"/>`+(tw[i]!=null?`<rect x="${i*40+12}" y="${62-th}" width="16" height="${Math.max(th,1.5)}" rx="2.5" fill="var(--hero-line)"/>`:'')+
       `<rect class="hit" x="${i*40}" y="0" width="40" height="64" data-tip="${esc(`<b>${DOWL[i]}</b><br>This week: ${tw[i]==null?'not yet':fmt(tw[i])}<br>Last week: ${fmt(lw[i])}`)}"/>`; }
   /* month + forecast */
   const f=forecast(c), ms=monthStart(today), me=monthEnd(today), pms=addMonths(ms,-1), pme=ms-1, pSame=Math.min(pme,pms+(today-ms)), mPrev=sum(pms,pSame,true);
   const n=Math.max(me-ms,pme-pms)+1, cl=[],ct=[]; let a1=0,a2=0; for(let d=pms;d<=pme;d++){a1+=g(d);cl.push(a1)} for(let d=ms;d<=today;d++){a2+=g(d);ct.push(a2)}
   const mmx=Math.max(1,f.last,f.proj), X=i=>4+i/(Math.max(1,n-1))*272, Y=v=>60-v/mmx*54, L=a=>a.map((v,i)=>X(i).toFixed(1)+','+Y(v).toFixed(1)).join(' ');
-  const msv=`<polyline points="${L(cl)}" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="2" vector-effect="non-scaling-stroke"/>`+
+  const msv=`<polyline points="${L(cl)}" fill="none" stroke="currentColor" stroke-opacity=".35" stroke-width="2" vector-effect="non-scaling-stroke"/>`+
     `<line x1="${X(ct.length-1)}" y1="${Y(f.mtd)}" x2="${X(me-ms)}" y2="${Y(f.proj)}" stroke="var(--hero-line)" stroke-width="2" stroke-dasharray="3 5" opacity=".75" vector-effect="non-scaling-stroke"/>`+
     `<polyline points="${L(ct)}" fill="none" stroke="var(--hero-line)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>`;
   const fmx=Math.max(f.proj,f.last,1)*1.04, pp=v=>Math.min(100,v/fmx*100), lp=pp(f.last);
@@ -888,7 +1128,7 @@ function renderPeriod(c){
   if(isAll){ const act=cur.store.size, tot=S.stores.length;
     h+=mini('Active showrooms',`${act} / ${tot}`,act<tot?`${tot-act} logged nothing`:'All reported')+
        mini('Top showroom',ts?esc(short(ts.k)):'–',ts?`${fmt(ts.v)} · ${pct(ts.v/cur.total)} of total`:'');
-  } else { const order=[...c.net.store.entries()].sort((x,y)=>y[1]-x[1]).map(x=>x[0]), rk=order.indexOf(S.store)+1, ros=(S.roster[S.store]||[]).length, act=cur.exec.size;
+  } else { const order=[...c.net.store.entries()].sort((x,y)=>y[1]-x[1]).map(x=>x[0]), rk=order.indexOf(S.store)+1, ros=(S.roster[S.store]||[]).filter(e=>!isOff(S.store,e)).length, act=cur.exec.size;
     h+=mini('Network rank',rk?`#${rk} of ${S.stores.length}`:'–',c.net.total?`${pct(cur.total/c.net.total)} of all walk-ins`:'')+
        mini('Active executives',ros?`${act} / ${Math.max(ros,act)}`:String(act),ros>act?`${ros-act} on the roster logged nothing`:'Everyone logged');
   }
@@ -925,10 +1165,10 @@ function renderInsights(c){
   if(days>=7){ const da=Array(7).fill(0),dc=Array(7).fill(0); for(let d=c.a;d<=Math.min(c.b,c.today);d++){dc[dow(d)]++;da[dow(d)]+=cur.day.get(d)||0}
     const av=da.map((v,i)=>dc[i]?v/dc[i]:null), ok=av.map((v,i)=>({v,i})).filter(x=>x.v!=null).sort((x,y)=>y.v-x.v);
     if(ok.length>=5&&ok[ok.length-1].v>=0) add('inf',`<b>${DOWL[ok[0].i]}</b> is the busiest day (${fmt1(ok[0].v)} a day on average) and <b>${DOWL[ok[ok.length-1].i]}</b> the quietest (${fmt1(ok[ok.length-1].v)}).`); }
-  const idleBy=[]; let idle=0; for(const id of (isAll?S.stores:[S.store])){ const names=(S.roster[id]||[]).filter(e=>!cur.exec.has(ek(id,e))).sort((x,y)=>x.localeCompare(y)); if(names.length){idleBy.push({id,names,dead:!cur.store.get(id)});idle+=names.length} }
+  const idleBy=[]; let idle=0; for(const id of (isAll?S.stores:[S.store])){ const names=(S.roster[id]||[]).filter(e=>!cur.exec.has(ek(id,e))&&!isOff(id,e)).sort((x,y)=>x.localeCompare(y)); if(names.length){idleBy.push({id,names,dead:!cur.store.get(id)});idle+=names.length} }
   idleBy.sort((x,y)=>(y.dead-x.dead)||y.names.length-x.names.length);
-  if(idle) add('wrn',`<b>${idle} rostered executive${idle===1?'':'s'}</b> ${isAll?`across ${idleBy.length} showroom${idleBy.length===1?'':'s'} `:''}logged no walk-ins in this period. <button type="button" class="lnk" data-idle aria-expanded="${S.idleOpen}">${S.idleOpen?'Hide names':'Show names'}</button>`+
-    (S.idleOpen?`<div class="idle">${idleBy.map(x=>`<div><span>${isAll?`<button type="button" class="lnk" data-store="${esc(x.id)}">${esc(short(x.id))}</button>`:`<b>${esc(short(x.id))}</b>`} <span class="mut">${x.names.length} of ${(S.roster[x.id]||[]).length}</span>${x.dead?'<br><span class="st crit">Showroom logged nothing</span>':''}</span><span class="who">${x.names.map(esc).join(', ')}</span></div>`).join('')}</div>`:''));
+  if(idle) add('wrn',`<b>${idle} rostered executive${idle===1?'':'s'}</b> ${isAll?`across ${idleBy.length} showroom${idleBy.length===1?'':'s'} `:''}logged no walk-ins in this period (off-duty staff skipped). <button type="button" class="lnk" data-idle aria-expanded="${S.idleOpen}">${S.idleOpen?'Hide names':'Show names'}</button>`+
+    (S.idleOpen?`<div class="idle">${idleBy.map(x=>`<div><span>${isAll?`<button type="button" class="lnk" data-store="${esc(x.id)}">${esc(short(x.id))}</button>`:`<b>${esc(short(x.id))}</b>`} <span class="mut">${x.names.length} of ${(S.roster[x.id]||[]).filter(e=>!isOff(x.id,e)).length} on duty</span>${x.dead?'<br><span class="st crit">Showroom logged nothing</span>':''}</span><span class="who">${x.names.map(esc).join(', ')}</span></div>`).join('')}</div>`:''));
   if(isAll){ const dep=[]; for(const [id,m] of cur.sExec){ const tot=cur.store.get(id); const t=topOf(m); if(tot>=10&&m.size>1&&t.v/tot>.6) dep.push(`${esc(short(id))} (${esc(t.k)}, ${pct(t.v/tot,0)})`); }
     if(dep.length) add('wrn',`One person logs most of the walk-ins at ${dep.join('; ')}.`); }
   if(S.ch==='all'){ const w=P0(c.spl.t.walkin), p=P0(c.spl.t.phone);
@@ -965,7 +1205,7 @@ function renderPulse(c){
     $('#pulseTitle').textContent="Today by executive";
     $('#pulseSub').textContent=sname(S.store)+' · roster plus anyone who has logged entries';
     $('#pulse').innerHTML=`<thead><tr><th>Executive</th><th class="n">Today</th><th class="n">Yesterday</th><th class="n">Avg / day, last 7</th><th>Last entry</th></tr></thead><tbody>`+
-      (rows.length?rows.map(x=>`<tr><td><span class="nm">${esc(x.e)}</span></td><td class="n"><b>${fmt(x.t)}</b></td><td class="n">${fmt(x.y)}</td><td class="n">${fmt1(x.w/7)}</td><td class="mut">${x.last?ago(x.last):'never'}</td></tr>`).join(''):'<tr><td colspan="5" class="empty">No executives found</td></tr>')+'</tbody>';
+      (rows.length?rows.map(x=>`<tr><td><span class="nm">${esc(x.e)}</span>${isOff(S.store,x.e)?' <span class="st">Off duty</span>':''}</td><td class="n"><b>${fmt(x.t)}</b></td><td class="n">${fmt(x.y)}</td><td class="n">${fmt1(x.w/7)}</td><td class="mut">${x.last?ago(x.last):'never'}</td></tr>`).join(''):'<tr><td colspan="5" class="empty">No executives found</td></tr>')+'</tbody>';
   }
 }
 
@@ -1048,7 +1288,7 @@ function renderEntHeat(c,rows){
   t.innerHTML=`<thead><tr><th></th>${cols.map(cl=>`<th class="${cl.wk?'wk':''}">${cl.h}</th>`).join('')}<th></th></tr></thead><tbody>`+
     (list.length?list.map((r,i)=>{ const mx=S.hmScale==='row'?Math.max(1,...grid[i]):gmx;
       return `<tr><th scope="row" title="${esc(r.name)}">${esc(c.isAll?short(r.k):r.name)}</th>`+grid[i].map((v,jx)=>{ const cl=cols[jx], fut=cl.a>today, p=Math.round(v/mx*100);
-        return `<td class="c${fut?' fut':v?(p>40?' hi':''):' z'}" style="--v:${p}" data-tip="${esc(`<b>${esc(r.name)}</b><br>${cl.t}: ${fut?'not yet':fmt(v)+' walk-ins'}`)}">${v&&!fut?v:''}</td>`}).join('')+`<td class="tot">${fmt(r.v)}</td></tr>`}).join(''):`<tr><td class="empty" colspan="${cols.length+2}">Nothing logged in this period</td></tr>`)+'</tbody>';
+        return `<td class="c${fut?' fut':v?(p>36?' hi':''):' z'}" style="--v:${p}" data-tip="${esc(`<b>${esc(r.name)}</b><br>${cl.t}: ${fut?'not yet':fmt(v)+' walk-ins'}`)}">${v&&!fut?v:''}</td>`}).join('')+`<td class="tot">${fmt(r.v)}</td></tr>`}).join(''):`<tr><td class="empty" colspan="${cols.length+2}">Nothing logged in this period</td></tr>`)+'</tbody>';
 }
 
 function renderWhen(c){
@@ -1058,7 +1298,7 @@ function renderWhen(c){
   const av=cur.dh.map((r,w)=>r.map(v=>dc[w]?v/dc[w]:0)), mx=Math.max(.0001,...av.flat());
   $('#hmHour').innerHTML=`<thead><tr><th></th>${hrs.map(h=>`<th>${String(h).padStart(2,'0')}</th>`).join('')}</tr></thead><tbody>`+
     DOW.map((nm,w)=>`<tr><th scope="row">${nm}</th>`+hrs.map(h=>{const v=av[w][h],p=Math.round(v/mx*100);
-      return `<td class="c${v?(p>40?' hi':''):' z'}" style="--v:${p}" data-tip="${esc(`<b>${DOWL[w]} ${hh(h)}–${hh((h+1)%24)}</b><br>${fmt1(v)} per ${nm} on average<br><span class="tm">${fmt(cur.dh[w][h])} in total over ${dc[w]} ${nm}${dc[w]===1?'':'s'}</span>`)}">${v>=.95?Math.round(v):''}</td>`}).join('')+'</tr>').join('')+'</tbody>';
+      return `<td class="c${v?(p>36?' hi':''):' z'}" style="--v:${p}" data-tip="${esc(`<b>${DOWL[w]} ${hh(h)}–${hh((h+1)%24)}</b><br>${fmt1(v)} per ${nm} on average<br><span class="tm">${fmt(cur.dh[w][h])} in total over ${dc[w]} ${nm}${dc[w]===1?'':'s'}</span>`)}">${v>=.95?Math.round(v):''}</td>`}).join('')+'</tr>').join('')+'</tbody>';
   const pk=peakOf(cur.hour), hv=hrs.map(h=>cur.hour[h]);
   barChart($('#hourBars'),{vals:hv,labels:hrs.map(h=>String(h).padStart(2,'0')),hi:pk.i>=0?hrs.indexOf(pk.i):null,h:230,labW:26,aria:'Physical walk-ins by hour of day',
     tips:hrs.map(h=>`<b>${hh(h)}–${hh((h+1)%24)}</b><br>${fmt(cur.hour[h])} physical walk-ins · ${cur.wTotal?pct(cur.hour[h]/cur.wTotal):'0%'}<br><span class="tm">${fmt1(cur.hour[h]/days)} per day</span>`)});
@@ -1075,14 +1315,15 @@ function storeStats(c){
     const all=c.sDayAll.get(id); let last=0; const lm=S.raw[id]; if(lm)for(const r of lm.values())if(r.t<=c.now&&r.t>last)last=r.t;
     const sp=[], s0=days>=7?a:today-13, s1=days>=7?Math.min(b,today):today; for(let d=s0;d<=s1;d++)sp.push(all?(all.get(d)||0):0);
     const ch=p?(v-p)/p:null, status=!cmp?['','–']:!v?['crit','Silent']:!p?['good','New']:ch>=.1?['good','Growing']:ch<=-.1?['ser','Declining']:['','Steady'];
-    return{id,name:sname(id),v,p,ch,share:cur.total?v/cur.total:0,avg:v/days,activeDays:dm.size,execs:em.size,roster:(S.roster[id]||[]).length,te,pk,bd,last,sp,status,prevRank:prevOrder.indexOf(id)+1};
+    const perActive=dm.size?v/dm.size:0, every=perActive?(CLOSE_H-OPEN_H)*60/perActive:null;
+    return{id,name:sname(id),v,p,ch,share:cur.total?v/cur.total:0,avg:v/days,activeDays:dm.size,execs:em.size,every,perExec:em.size?v/em.size:0,roster:(S.roster[id]||[]).length,te,pk,bd,last,sp,status,prevRank:prevOrder.indexOf(id)+1};
   }).sort((x,y)=>y.v-x.v); rows.forEach((r,i)=>r.rank=i+1); return rows;
 }
 const ring=(p,txt)=>`<svg width="50" height="50" viewBox="0 0 50 50" style="flex:none" data-tip="${esc(pct(p)+' of all walk-ins')}"><circle cx="25" cy="25" r="20" fill="none" stroke="var(--surface-2)" stroke-width="6"/><circle cx="25" cy="25" r="20" fill="none" stroke="var(--s1)" stroke-width="6" stroke-linecap="round" stroke-dasharray="${Math.max(.01,p)*125.66} 125.66" transform="rotate(-90 25 25)"/><text x="25" y="29" text-anchor="middle" class="lab" style="stroke:none;font-size:12px">${txt}</text></svg>`;
 function renderCards(c,st){
   $('#cards').innerHTML=st.map(r=>`<button type="button" class="card sc" data-store="${esc(r.id)}"><div class="t"><div style="min-width:0"><b>${esc(short(r.id))}</b><div class="v"><b>${fmt(r.v)}</b>${delta(r.v,r.p)}</div></div>${ring(r.share,'#'+r.rank)}</div>
     ${spark(r.sp,220,40)}
-    <dl>${S.ch==='all'?`<dt data-keep>Walk-ins · phone</dt><dd>${chs(c.spl.store.get(r.id))}</dd>`:''}<dt>Share of network</dt><dd>${pct(r.share)}</dd><dt>Per day</dt><dd>${fmt1(r.avg)}</dd><dt>Top executive</dt><dd>${r.te?esc(r.te.k)+' · '+pct(r.te.v/r.v,0):'–'}</dd><dt>Peak hour</dt><dd>${r.pk.i>=0?hh(r.pk.i):'–'}</dd><dt>Last entry</dt><dd>${r.last?ago(r.last):'never'}</dd></dl></button>`).join('');
+    <dl>${S.ch==='all'?`<dt data-keep>Walk-ins · phone</dt><dd>${chs(c.spl.store.get(r.id))}</dd>`:''}<dt>Share of network</dt><dd>${pct(r.share)}</dd><dt>Per day</dt><dd>${fmt1(r.avg)}</dd><dt>One walk-in every</dt><dd data-tip="${esc('On days it logged anything, spread across opening hours '+hh(OPEN_H)+'–'+hh(CLOSE_H))}">${fEvery(r.every)}</dd><dt>Top executive</dt><dd>${r.te?esc(r.te.k)+' · '+pct(r.te.v/r.v,0):'–'}</dd><dt>Peak hour</dt><dd>${r.pk.i>=0?hh(r.pk.i):'–'}</dd><dt>Last entry</dt><dd>${r.last?ago(r.last):'never'}</dd></dl></button>`).join('');
 }
 function table(sel,id,cols,rows,o={}){
   const st=S.sort[id]||(S.sort[id]={k:o.k,dir:o.dir||-1}), col=cols.find(x=>x.k===st.k)||cols[0];
@@ -1108,6 +1349,8 @@ function renderStoreTable(c,st){
     {k:'avg',l:'Per day',n:1,val:r=>r.avg,h:r=>fmt1(r.avg)},
     {k:'ad',l:'Days reported',n:1,val:r=>r.activeDays,h:r=>`${r.activeDays} / ${c.days}`},
     {k:'ex',l:'Active execs',n:1,val:r=>r.execs,h:r=>r.roster?`${r.execs} / ${Math.max(r.roster,r.execs)}`:r.execs},
+    {k:'pe',l:'Per executive',n:1,val:r=>r.perExec,h:r=>r.execs?fmt1(r.perExec):'–'},
+    {k:'ev',l:'One every',n:1,val:r=>r.every==null?null:-r.every,h:r=>fEvery(r.every)},
     {k:'te',l:'Top executive',val:r=>r.te?r.te.v:0,h:r=>r.te?`${esc(r.te.k)} <span class="mut">${pct(r.te.v/r.v,0)}</span>`:'–'},
     {k:'pk',l:'Peak hour',val:r=>r.pk.i,h:r=>r.pk.i>=0?hh(r.pk.i):'–'},
     {k:'bd',l:'Best day',val:r=>r.bd.i,h:r=>r.bd.i>=0?DOW[r.bd.i]:'–'},
@@ -1212,6 +1455,170 @@ function renderRidge(c){
   el.innerHTML=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Hourly shape of walk-ins per ${c.isAll?'showroom':'weekday'}">${s}${hits}</svg>`;
 }
 
+/* ═════════════════ v4 · new analysis ═════════════════ */
+const fEvery=m=>m==null||!isFinite(m)?'–':m>=120?fmt1(m/60)+' h':Math.round(m)+' min';
+const median=a=>{if(!a.length)return 0;const s=[...a].sort((x,y)=>x-y),k=s.length>>1;return s.length%2?s[k]:(s[k-1]+s[k])/2};
+const firstDay=c=>c.scope.length?c.scope[0].d:c.today;
+
+/* expected value for a day = mean of the same weekday over up to 8 earlier weeks with data */
+function baseline(get,d,first){ const xs=[]; for(let k=1;k<=8;k++){const e=d-7*k; if(e<first)break; xs.push(get(e))}
+  if(xs.length<4) return null; const m=xs.reduce((a,b)=>a+b,0)/xs.length, sd=Math.sqrt(xs.reduce((a,b)=>a+(b-m)*(b-m),0)/xs.length);
+  return{m,sd:Math.max(sd,Math.sqrt(Math.max(m,1)),1),n:xs.length} }
+
+function renderOdd(c){
+  const el=$('#odd'), g=d=>c.scopeDay.get(d)||0, first=firstDay(c), end=Math.min(c.b,c.today-1), out=[];
+  for(let d=c.a;d<=end;d++){ const bl=baseline(g,d,first); if(!bl)continue; const v=g(d), z=(v-bl.m)/bl.sd, diff=v-bl.m;
+    if(Math.abs(z)>=1.8&&Math.abs(diff)>=Math.max(3,bl.m*.25)) out.push({d,v,m:bl.m,z,diff}); }
+  /* who drove it: the showroom (or executive) furthest from its own normal that day */
+  for(const o of out){ let best=null;
+    if(c.isAll){ for(const [id,m] of c.sDayAll){ const gg=d=>m.get(d)||0, bl=baseline(gg,o.d,first); if(!bl)continue; const df=gg(o.d)-bl.m; if(Math.sign(df)===Math.sign(o.diff)&&(!best||Math.abs(df)>Math.abs(best.df))) best={n:short(id),df} } }
+    else { const em=new Map; for(const r of c.scope) if(r.d===o.d) em.set(r.e,(em.get(r.e)||0)+r.c); const t=topOf(em); if(t&&o.diff>0) best={n:t.k,df:t.v,top:1} }
+    o.by=best; }
+  out.sort((x,y)=>Math.abs(y.z)-Math.abs(x.z)); const rows=out.slice(0,7);
+  $('#oddSub').textContent=`Days in ${fRange(c.a,Math.max(c.a,end))} that ran well above or below what that weekday normally brings`;
+  if(!rows.length){ const ok=end>=c.a&&baseline(g,end,first);
+    el.innerHTML=`<div class="empty">${ok?'Nothing unusual. Every day stayed within its weekday’s normal range.':end<c.a?'Pick a period that includes finished days to check for unusual ones.':'Needs at least four earlier weeks of history for the same weekday.'}</div>`; $('#oddLegend').innerHTML=''; return }
+  const mx=Math.max(1,...rows.map(r=>Math.max(r.v,r.m)))*1.05;
+  el.innerHTML=rows.map(r=>{ const up=r.diff>0, p=r.m?r.diff/r.m:1;
+    const tipT=`<b>${fDayL(r.d)} ${UD(r.d).getUTCFullYear()}</b><br>${fmt(r.v)} walk-ins · a normal ${DOWL[dow(r.d)]} brings ${fmt1(r.m)}<br>${up?'+':''}${fmt1(r.diff)} (${up?'+':''}${(p*100).toFixed(0)}%)${r.by?`<br><span class="tm">${r.by.top?'Top logger':'Mostly'}: ${esc(r.by.n)}${r.by.top?' with '+fmt(r.by.df):` (${r.by.df>0?'+':''}${fmt1(r.by.df)})`}</span>`:''}<br><span class="tm">Select to open this day</span>`;
+    return `<button type="button" class="oddr" data-day="${r.d}" data-tip="${esc(tipT)}"><span class="dt">${fDay(r.d)}<small>${DOWL[dow(r.d)]}${r.by&&!r.by.top?' · '+esc(r.by.n):''}</small></span>
+      <span class="bx"><span class="ac ${up?'up':'down'}" style="left:0;width:${r.v/mx*100}%"></span><span class="ex" style="left:calc(${r.m/mx*100}% - 1px)"></span></span>
+      <span class="vv">${fmt(r.v)}<small class="${up?'up':'down'}">${up?'+':''}${(p*100).toFixed(0)}%</small></span></button>`}).join('');
+  $('#oddLegend').innerHTML='<span><i class="lg" style="background:var(--div-up)"></i>Busier than normal</span><span><i class="lg" style="background:var(--div-down)"></i>Quieter than normal</span><span><i class="lgt"></i>Normal for that weekday (8-week average)</span>';
+}
+
+function renderRecords(c){
+  const g=d=>c.scopeDay.get(d)||0, first=firstDay(c), T=c.today; let bd=null,bw=null,bm=null;
+  for(const [d,v] of c.scopeDay) if(!bd||v>bd.v) bd={d,v};
+  const wk=new Map, mo=new Map; for(const [d,v] of c.scopeDay){ const w=d-dow(d), m=monthStart(d); wk.set(w,(wk.get(w)||0)+v); mo.set(m,(mo.get(m)||0)+v) }
+  for(const [w,v] of wk) if(!bw||v>bw.v) bw={w,v}; for(const [m,v] of mo) if(!bm||v>bm.v) bm={m,v};
+  let streak=0; for(let d=g(T)?T:T-1;d>=first&&g(d)>0;d--) streak++;
+  let longest=0,run=0; for(let d=first;d<=T;d++){ if(g(d)>0){run++;longest=Math.max(longest,run)} else run=0 }
+  const same=[]; for(let d=T-7;d>=first;d-=7) same.push(g(d)); const tNow=g(T), beat=same.filter(v=>tNow>v).length;
+  const hr=new Map; for(const r of c.scope) if(r.ty==='walkin'){ const k=r.d*24+r.h; hr.set(k,(hr.get(k)||0)+r.c) } const bh=topOf(hr);
+  const inP=x=>x>=c.a&&x<=c.b, R=(k,v,s,hl,tip)=>`<div class="rec${hl?' hl':''}"${tip?` data-tip="${esc(tip)}"`:''}><div class="k">${k}</div><div class="v">${v}</div><div class="s">${s}</div></div>`;
+  $('#recSub').textContent=`All-time highs for ${c.isAll?'the whole network':sname(S.store)} · highlighted when set in the selected period`;
+  if(!bd){ $('#recs').innerHTML='<div class="empty" style="grid-column:1/-1">No entries yet</div>'; return }
+  $('#recs').innerHTML=
+    R('Best day ever',fmt(bd.v),fDayL(bd.d)+' '+UD(bd.d).getUTCFullYear(),inP(bd.d))+
+    R('Best week ever',fmt(bw.v),'Week of '+fDayY(bw.w),bw.w+6>=c.a&&bw.w<=c.b,'Weeks run Sunday to Saturday')+
+    R('Best month ever',fmt(bm.v),MON[UD(bm.m).getUTCMonth()]+' '+UD(bm.m).getUTCFullYear(),bm.m<=c.b&&monthEnd(bm.m)>=c.a)+
+    R(`Today against past ${DOWL[dow(T)]}s`,same.length?`#${same.length-beat+1} of ${same.length+1}`:'–',same.length?`${fmt(tNow)} so far beats ${beat} of ${same.length}`:'No earlier '+DOWL[dow(T)]+'s yet',same.length&&beat===same.length&&tNow>0,'Ranks today’s count so far against every earlier '+DOWL[dow(T)])+
+    R('Reporting streak',`${streak} day${streak===1?'':'s'}`,`Longest ever: ${longest} days in a row`,streak>0&&streak===longest,'Days in a row with at least one entry')+
+    R('Busiest single hour',bh?fmt(bh.v):'–',bh?`${fDayL(Math.floor(bh.k/24))} ${UD(Math.floor(bh.k/24)).getUTCFullYear()}, ${hh(bh.k%24)}`:'',bh&&inP(Math.floor(bh.k/24)),'Physical walk-ins logged within one clock hour');
+}
+
+/* direct labels for scatter dots: try above, below, right, left; skip if every spot collides with a label or a dot */
+function placeLabel(cx,cy,w,placed,dots,xmin,xmax){
+  for(const [dx,dy,a] of [[0,-12,'middle'],[0,19,'middle'],[11,4,'start'],[-11,4,'end'],[0,-26,'middle'],[0,33,'middle']]){
+    const x=cx+dx, y=cy+dy, l=a==='start'?x:a==='end'?x-w:x-w/2, r=l+w, box={l,r,t:y-10,b:y+3};
+    if(l<xmin-30||r>xmax+10) continue;
+    if(placed.some(q=>!(box.r<q.l||box.l>q.r||box.b<q.t||box.t>q.b))) continue;
+    if(dots.some(d=>(d.x!==cx||d.y!==cy)&&d.x>box.l-7&&d.x<box.r+7&&d.y>box.t-7&&d.y<box.b+7)) continue;
+    placed.push(box); return{x,y,a} }
+  return null }
+/* momentum map: volume (log scale) against change, one dot per showroom or executive */
+function renderQuad(c,rows){
+  const el=$('#quad'); $('#quadH').textContent=c.isAll?'Momentum map':'Executive momentum';
+  if(!c.cmp){ $('#quadSub').textContent=''; el.innerHTML='<div class="empty">Choose a comparison in “Dates &amp; comparison” to see who is gaining and who is slipping.</div>'; $('#quadLegend').innerHTML=''; return }
+  const pts=rows.filter(r=>r.v>0||(r.p||0)>0).map(r=>({...r,ch:r.p?(r.v-r.p)/r.p:null}));
+  $('#quadSub').textContent=`Size of traffic against change versus ${fRange(c.cr.a,c.cr.b)}`;
+  if(pts.length<2){ el.innerHTML='<div class="empty">Not enough activity to compare yet.</div>'; $('#quadLegend').innerHTML=''; return }
+  const W=Math.max(300,el.clientWidth||900), H=W<560?330:400, m={l:52,r:24,t:26,b:40}, pw=W-m.l-m.r, ph=H-m.t-m.b;
+  const chs=pts.filter(p=>p.ch!=null).map(p=>p.ch), cap=Math.min(2,Math.max(.3,...chs.map(Math.abs)))*1.12, yl=-Math.min(1,cap), yh=cap;
+  const lx=v=>Math.log10(Math.max(1,v)+1), x0=lx(Math.min(...pts.map(p=>p.v)))*.92, x1=lx(Math.max(...pts.map(p=>p.v)))*1.04||1;
+  const X=v=>m.l+(lx(v)-x0)/Math.max(.1,x1-x0)*pw, Y=ch=>m.t+(yh-Math.max(yl,Math.min(yh,ch)))/(yh-yl)*ph;
+  const mv=median(pts.map(p=>p.v)), qx=X(mv), qy=Y(0);
+  let s=`<rect x="${qx}" y="${m.t}" width="${W-m.r-qx}" height="${qy-m.t}" fill="color-mix(in srgb,var(--div-up) 7%,transparent)"/><rect x="${qx}" y="${qy}" width="${W-m.r-qx}" height="${m.t+ph-qy}" fill="color-mix(in srgb,var(--div-down) 6%,transparent)"/>`;
+  const step=cap>1.2?.5:cap>.6?.25:.1;
+  for(let v=Math.ceil(yl/step)*step;v<=yh+1e-9;v+=step){ const yy=Y(v); s+=`<line x1="${m.l}" x2="${W-m.r}" y1="${yy}" y2="${yy}" stroke="${Math.abs(v)<1e-9?'var(--axis)':'var(--grid)'}" ${Math.abs(v)<1e-9?'stroke-width="1.5"':''}/><text x="${m.l-8}" y="${yy+4}" text-anchor="end">${v>0?'+':''}${Math.round(v*100)}%</text>` }
+  for(const t of [1,2,5,10,20,50,100,200,500,1000,2000,5000,10000]){ const xx=X(t); if(xx<m.l-1||xx>W-m.r+1)continue; s+=`<line x1="${xx}" x2="${xx}" y1="${m.t+ph}" y2="${m.t+ph+5}" stroke="var(--axis)"/><text x="${xx}" y="${m.t+ph+18}" text-anchor="middle">${fmt(t)}</text>` }
+  s+=`<line x1="${qx}" x2="${qx}" y1="${m.t}" y2="${m.t+ph}" stroke="var(--axis)" stroke-dasharray="4 4"/>`;
+  s+=`<text class="qlab" x="${W-m.r-8}" y="${m.t+16}" text-anchor="end">Big and growing</text><text class="qlab" x="${W-m.r-8}" y="${m.t+ph-10}" text-anchor="end">Big but slipping</text><text class="qlab" x="${m.l+8}" y="${m.t+16}">Smaller but rising</text><text class="qlab" x="${m.l+8}" y="${m.t+ph-10}">Smaller and slipping</text>`;
+  s+=`<text x="${m.l+pw/2}" y="${H-4}" text-anchor="middle" style="fill:var(--ink-2)">Walk-ins in the period (log scale)</text>`;
+  const lab=new Set(c.isAll?pts.map(p=>p.k):[...pts].sort((a,b)=>b.v-a.v).slice(0,8).map(p=>p.k)), placed=[], allDots=pts.map(p=>({x:X(p.v),y:p.ch==null?Y(yh):Y(p.ch)}));
+  const dots=[...pts].sort((a,b)=>a.v-b.v).map(p=>{ const cx=X(p.v), cy=p.ch==null?Y(yh):Y(p.ch), up=p.ch==null||p.ch>=0, nm=c.isAll?short(p.k):p.name;
+    let lb=''; if(lab.has(p.k)){ const r=placeLabel(cx,cy,nm.length*6.6,placed,allDots,m.l,W-m.r); if(r) lb=`<text class="lab" x="${r.x}" y="${r.y}" text-anchor="${r.a}" style="font-size:11.5px;font-weight:650">${esc(nm)}</text>` }
+    const tp=`<b>${esc(p.name)}</b><br>${fmt(p.v)} walk-ins (was ${fmt(p.p||0)})<br>${p.ch==null?'New in this period':`${p.ch>0?'+':''}${(p.ch*100).toFixed(0)}% change`}${p.ch!=null&&(p.ch>yh||p.ch<yl)?' · drawn at the edge':''}`;
+    return `<circle class="dotm" ${c.isAll?`data-store="${esc(p.k)}"`:''} cx="${cx}" cy="${cy}" r="7" fill="${p.ch==null?'var(--surface)':up?'var(--div-up)':'var(--div-down)'}" stroke="${p.ch==null?'var(--div-up)':'var(--surface)'}" stroke-width="2" data-tip="${esc(tp)}"/>${lb}` }).join('');
+  el.innerHTML=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Volume against change for each ${c.isAll?'showroom':'executive'}">${s}${dots}</svg>`;
+  $('#quadLegend').innerHTML=`<span><i class="lg" style="background:var(--div-up);border-radius:50%"></i>Up on the comparison</span><span><i class="lg" style="background:var(--div-down);border-radius:50%"></i>Down</span><span><i class="lg" style="border:2px solid var(--div-up);border-radius:50%"></i>New, nothing before</span><span><i class="lgt" style="opacity:.4"></i>Dashed line: median volume (${fmt1(mv)})</span>${c.isAll?'<span style="color:var(--muted)">Select a dot to open that showroom</span>':''}`;
+}
+
+/* month-by-month league: last six months per showroom (or executive), with this month's forecast */
+function leagueData(c){
+  const T=c.today, ms=monthStart(T), months=[]; for(let k=5;k>=0;k--){ const a=addMonths(ms,-k); months.push({a,b:monthEnd(a),cur:k===0}) }
+  const frac=Math.min(1,Math.max(0,(c.nowTod/36e5-OPEN_H)/(CLOSE_H-OPEN_H))), elapsed=(T-ms)+frac, mlen=monthEnd(T)-ms+1;
+  let src; if(c.isAll) src=S.stores.map(id=>({k:id,name:sname(id),day:c.sDayAll.get(id)||new Map}));
+  else { const em=new Map; (S.roster[S.store]||[]).forEach(e=>em.set(e,new Map)); for(const r of c.scope){ let m=em.get(r.e); if(!m)em.set(r.e,m=new Map); m.set(r.d,(m.get(r.d)||0)+r.c) } src=[...em].map(([e,day])=>({k:e,name:e,day})) }
+  const tot={k:null,name:c.isAll?'Network':'Whole showroom',day:c.scopeDay,total:true};
+  const rows=[tot,...src].map(r=>{ const v=months.map(mo=>{let t=0;for(let d=mo.a;d<=Math.min(mo.b,T);d++)t+=r.day.get(d)||0;return t});
+    const mtd=v[5], fc=elapsed>.25?mtd/elapsed*mlen:null; return{...r,v,fc,last:v[4]} });
+  const body=rows.slice(1).filter(r=>r.v.some(x=>x>0)).sort((x,y)=>(y.fc??y.v[5])-(x.fc??x.v[5])||y.last-x.last);
+  return{months,rows:[rows[0],...body]};
+}
+function renderLeague(c){
+  const L=leagueData(c), M=L.months;
+  $('#leagueH').textContent=c.isAll?'Month by month':'Month by month, per executive';
+  $('#leagueSub').textContent='Last six months · forecast = this month’s run-rate carried to month end';
+  const cell=(v,mx,cls='')=>{const p=Math.round(v/mx*100);return `<span class="hcell${cls}${!v?' z':p>42?' hi':''}" style="--v:${p}">${v?fmt(v):'–'}</span>`};
+  $('#league').innerHTML=`<thead><tr><th>${c.isAll?'Showroom':'Executive'}</th>${M.map(m=>`<th class="n">${MON[UD(m.a).getUTCMonth()]}${m.cur?' so far':''}</th>`).join('')}<th class="n">Forecast</th><th class="n">vs ${MON[UD(M[4].a).getUTCMonth()]}</th><th>Trend</th></tr></thead><tbody>`+
+    L.rows.map(r=>{ const mx=Math.max(1,...r.v.slice(0,5),r.fc||0);
+      return `<tr${r.total?' style="font-weight:700"':c.isAll?` class="click" data-store="${esc(r.k)}"`:''}><td><span class="nm">${esc(r.total?r.name:c.isAll?short(r.k):r.name)}</span></td>${r.v.map((v,i)=>`<td class="n">${cell(v,mx)}</td>`).join('')}
+        <td class="n">${r.fc!=null?`<span class="hcell proj" style="--v:0">${fmt(r.fc)}</span>`:'–'}</td><td class="n">${r.fc!=null?delta(r.fc,r.last)||'–':'–'}</td><td>${spark([...r.v.slice(0,5),r.fc??r.v[5]],90,22)}</td></tr>` }).join('')+'</tbody>';
+}
+
+/* executives: how often they log against how much they log on the days they do */
+function renderExecScatter(c,ex){
+  const el=$('#exSc'), pts=ex.filter(r=>r.v>0);
+  $('#exScSub').textContent=`${pts.length} executive${pts.length===1?'':'s'} with entries · ${fRange(c.a,c.b)}`;
+  if(pts.length<2||c.days<3){ el.innerHTML=`<div class="empty">${c.days<3?'Pick a period of at least three days to compare consistency.':'Not enough executives with entries in this period.'}</div>`; $('#exScLegend').innerHTML=''; return }
+  const W=Math.max(300,el.clientWidth||900), H=W<560?320:380, m={l:46,r:22,t:24,b:40}, pw=W-m.l-m.r, ph=H-m.t-m.b;
+  const ymx=niceMax(Math.max(1,...pts.map(p=>p.avg))*1.08), X=v=>m.l+v*pw, Y=v=>m.t+ph-v/ymx*ph, top3=new Set(pts.slice(0,3).map(p=>p.k));
+  const mx=median(pts.map(p=>p.cons)), my=median(pts.map(p=>p.avg));
+  let s='';
+  for(let i=0;i<=4;i++){ const v=ymx*i/4,yy=Y(v); s+=`<line x1="${m.l}" x2="${W-m.r}" y1="${yy}" y2="${yy}" stroke="${i?'var(--grid)':'var(--axis)'}"/><text x="${m.l-8}" y="${yy+4}" text-anchor="end">${fmt1(v)}</text>` }
+  for(let i=0;i<=4;i++){ const xx=X(i/4); s+=`<text x="${xx}" y="${m.t+ph+18}" text-anchor="${i===0?'start':i===4?'end':'middle'}">${i*25}%</text>` }
+  s+=`<line x1="${X(mx)}" x2="${X(mx)}" y1="${m.t}" y2="${m.t+ph}" stroke="var(--axis)" stroke-dasharray="4 4"/><line x1="${m.l}" x2="${W-m.r}" y1="${Y(my)}" y2="${Y(my)}" stroke="var(--axis)" stroke-dasharray="4 4"/>`;
+  s+=`<text class="qlab" x="${W-m.r-8}" y="${m.t+14}" text-anchor="end">Every day, high volume</text><text class="qlab" x="${m.l+8}" y="${m.t+14}">Busy on the days they log</text><text class="qlab" x="${W-m.r-8}" y="${m.t+ph-10}" text-anchor="end">Every day, lighter volume</text><text class="qlab" x="${m.l+8}" y="${m.t+ph-10}">Occasional and light</text>`;
+  s+=`<text x="${m.l+pw/2}" y="${H-4}" text-anchor="middle" style="fill:var(--ink-2)">Share of days with at least one entry</text><text transform="translate(12 ${m.t+ph/2}) rotate(-90)" text-anchor="middle" style="fill:var(--ink-2)">Walk-ins per active day</text>`;
+  const lab=new Set([...pts].sort((a,b)=>b.v-a.v).slice(0,6).map(p=>p.k)), placed=[], allDots=pts.map(p=>({x:X(p.cons),y:Y(p.avg)}));
+  const dots=[...pts].reverse().map(p=>{ const cx=X(p.cons), cy=Y(p.avg), t3=top3.has(p.k); let lb='';
+    if(lab.has(p.k)){ const r=placeLabel(cx,cy,p.e.length*6.6,placed,allDots,m.l,W-m.r); if(r) lb=`<text class="lab" x="${r.x}" y="${r.y}" text-anchor="${r.a}" style="font-size:11.5px;font-weight:650">${esc(p.e)}</text>` }
+    return `<circle class="dotm" cx="${cx}" cy="${cy}" r="${t3?8:6}" fill="${t3?'var(--brand)':'var(--s1)'}" fill-opacity="${t3?1:.78}" stroke="var(--surface)" stroke-width="2" data-tip="${esc(`<b>${esc(p.e)}</b> · ${esc(short(p.s))}<br>${fmt(p.v)} walk-ins · rank #${p.rank}<br>Active ${p.ad} of ${c.days} days (${pct(p.cons,0)})<br>${fmt1(p.avg)} per active day`)}"/>${lb}` }).join('');
+  el.innerHTML=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Executives: consistency against walk-ins per active day">${s}${dots}</svg>`;
+  $('#exScLegend').innerHTML=`<span><i class="lg" style="background:var(--brand);border-radius:50%"></i>Top three by walk-ins</span><span><i class="lg" style="background:var(--s1);border-radius:50%"></i>Everyone else</span><span><i class="lgt" style="opacity:.4"></i>Dashed lines: the team’s medians</span>`;
+}
+
+/* day-part split of physical walk-ins */
+function renderDayparts(c){
+  const parts=h=>{let m=0,a=0,e=0;h.forEach((v,i)=>{if(i<12)m+=v;else if(i<17)a+=v;else e+=v});return[m,a,e]};
+  let rows=[{name:c.isAll?'Network':'Whole showroom',h:c.cur.hour,tot:true}];
+  if(c.isAll) rows.push(...S.stores.map(id=>({k:id,name:short(id),h:c.cur.sHour.get(id)||Array(24).fill(0)})));
+  else rows.push(...DOWL.map((n,w)=>({name:n,h:c.cur.dh[w]})));
+  rows=rows.map(r=>({...r,p:parts(r.h)})).map(r=>({...r,t:r.p[0]+r.p[1]+r.p[2]})).filter(r=>r.t>0);
+  const body=rows.slice(1); if(c.isAll) body.sort((x,y)=>y.p[2]/y.t-x.p[2]/x.t);
+  $('#dpSub').textContent=c.isAll?'Share of physical walk-ins by part of the day · most evening-heavy first':'Share of physical walk-ins by part of the day, for each weekday';
+  if(!rows.length||!rows[0].t){ $('#dayparts').innerHTML='<div class="empty">No physical walk-ins in this period</div>'; return }
+  const L=['Morning','Afternoon','Evening'];
+  $('#dayparts').innerHTML=[rows[0],...body].map(r=>{ const tag=r.k?'button':'div';
+    return `<${tag} class="dpr"${r.k?` type="button" data-store="${esc(r.k)}"`:''} data-tip="${esc(`<b>${esc(r.name)}</b><br>${L.map((l,i)=>`${l}: ${fmt(r.p[i])} (${pct(r.p[i]/r.t,0)})`).join('<br>')}`)}"><span class="nm"${r.tot?' style="font-weight:750"':''}>${esc(r.name)}</span><span class="dpb">${['m','a','e'].map((k,i)=>{const w=r.p[i]/r.t*100;return w>0?`<i class="${k}" style="width:${w}%">${w>=13?Math.round(w)+'%':''}</i>`:''}).join('')}</span></${tag}>`}).join('');
+}
+
+/* weekday index: each weekday against the row's own average day */
+function renderWdIndex(c){
+  const el=$('#wdIndex'), dc=Array(7).fill(0); for(let d=c.a;d<=Math.min(c.b,c.today);d++) dc[dow(d)]++;
+  $('#wdiH').textContent=c.isAll?'Weekday strength by showroom':'Weekday strength by executive';
+  if(c.days<14){ el.innerHTML='<tbody><tr><td class="empty">Pick a period of at least two weeks so every weekday appears twice.</td></tr></tbody>'; return }
+  const idx=dm=>{ const t=Array(7).fill(0); for(const [d,v] of dm) t[dow(d)]+=v; const per=t.map((v,w)=>dc[w]?v/dc[w]:null), tot=t.reduce((a,b)=>a+b,0), avg=tot/c.days; return{per,avg,tot,ix:per.map(v=>v==null||!avg?null:v/avg*100)} };
+  let rows=[{name:c.isAll?'Network':'Whole showroom',...idx(c.cur.day),tot:true}];
+  if(c.isAll) rows.push(...S.stores.map(id=>({k:id,name:short(id),...idx(c.cur.sDay.get(id)||new Map)})).filter(r=>r.tot>=10).sort((x,y)=>y.tot-x.tot));
+  else rows.push(...[...c.cur.eDay].map(([k,dm])=>({name:k.split('\u0001')[1],...idx(dm)})).filter(r=>r.tot>=10).sort((x,y)=>y.tot-x.tot).slice(0,15));
+  el.innerHTML=`<thead><tr><th></th>${DOW.map(d=>`<th>${d}</th>`).join('')}</tr></thead><tbody>`+rows.map(r=>`<tr><th scope="row"${r.tot===true?' style="font-weight:750"':''}>${esc(r.name)}</th>`+r.ix.map((v,w)=>{
+    if(v==null) return '<td class="c z"></td>'; const t=Math.round(Math.min(1,Math.abs(v-100)/60)*100), pole=v>=100?'var(--div-up)':'var(--div-down)';
+    return `<td class="c dv${t>55?' hi':''}" style="--v:${t};--pole:${pole}" data-tip="${esc(`<b>${esc(r.name)} · ${DOWL[w]}</b><br>${fmt1(r.per[w])} a day against an average day of ${fmt1(r.avg)}<br>Index ${Math.round(v)}`)}">${Math.round(v)}</td>` }).join('')+'</tr>').join('')+'</tbody>';
+}
+
 /* ───────── render ───────── */
 let CTX=null;
 function render(){
@@ -1225,15 +1632,43 @@ function render(){
   document.querySelectorAll('#presets .chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.p===S.preset));
   $('#dA').value=iso(c.a); $('#dB').value=iso(c.b); $('#selStore').value=S.store; $('#selCmp').value=S.cmpMode; $('#cmpCustom').hidden=S.cmpMode!=='custom';
   if(S.cmpMode==='custom'&&S.ca!=null){$('#cA').value=iso(S.ca);$('#cB').value=iso(S.cb)}
-  $('#scope').innerHTML=(c.isAll?'':`<span class="sc-chip">${esc(sname(S.store))}<button type="button" data-store="all">Show all</button></span>`)+`<span><b>${fmt(c.cur.total)}</b> walk-ins from ${fmt(c.cur.n)} entries</span>`;
+  $('#scope').innerHTML=c.isAll?'':`<span class="sc-chip">${esc(sname(S.store))}<button type="button" data-store="all">Show all</button></span>`;
   if(FIRST){document.body.classList.add('first');setTimeout(()=>document.body.classList.remove('first'),2200)}
   document.querySelectorAll('#chans .chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.ch===S.ch));
-  renderLive(c); renderPeriod(c); renderInsights(c); renderPulse(c); renderTrend(c);
-  const rows=entityRows(c); renderRank(c,rows); renderEntHeat(c,rows); renderWhen(c); renderCal(c); renderRidge(c);
-  $('#cardsSec').hidden=$('#storeTblSec').hidden=!c.isAll;
-  if(c.isAll){const st=storeStats(c); renderCards(c,st); renderStoreTable(c,st)}
-  renderExecTable(c,execStats(c)); renderHealth(c); FIRST=false; relabelDom();
+  const pl=PRESETS.find(p=>p[0]===S.preset); $('#rangeLbl').textContent=pl?'Dates & comparison':fRange(c.a,c.b);
+  $('#miniScope').innerHTML=`${esc(c.isAll?'All showrooms':short(S.store))} · ${esc(pl?pl[1]:fRange(c.a,c.b))} · <b>${fmt(c.cur.total)}</b> walk-ins`;
+  $('#tabShow').textContent=c.isAll?'Showrooms':'Showroom';
+  showTab();
+  /* the hero, the idle watch and the footer notes always run; each tab only draws its own charts (they measure their width) */
+  renderIdle(c); renderLive(c); renderPeriod(c); renderHealth(c);
+  const T=S.tab;
+  if(T==='overview'){ renderInsights(c); renderPulse(c); renderTrend(c); renderOdd(c); renderRecords(c); renderCal(c); }
+  else if(T==='showrooms'){ const rows=entityRows(c); renderRank(c,rows); renderQuad(c,rows); renderLeague(c); renderEntHeat(c,rows);
+    $('#cardsSec').hidden=$('#storeTblSec').hidden=!c.isAll;
+    if(c.isAll){const st=storeStats(c); renderCards(c,st); renderStoreTable(c,st)} }
+  else if(T==='team'){ const ex=execStats(c); renderExecTable(c,ex); renderExecScatter(c,ex); }
+  else if(T==='timing'){ renderWhen(c); renderDayparts(c); renderWdIndex(c); renderRidge(c); }
+  FIRST=false; relabelDom();
 }
+/* ───────── tabs ───────── */
+const TABS=['overview','showrooms','team','timing','health'];
+S.tab='overview';
+try{ const h=location.hash.slice(1), t=localStorage.getItem('rakTab'); S.tab=TABS.includes(h)?h:TABS.includes(t)?t:'overview' }catch(_){}
+function showTab(){
+  document.querySelectorAll('#tabs .tab').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===S.tab));
+  document.querySelectorAll('.pane').forEach(p=>p.hidden=p.dataset.pane!==S.tab);
+}
+function setTab(t,toTop){
+  if(!TABS.includes(t)) return; const changed=t!==S.tab; S.tab=t;
+  try{localStorage.setItem('rakTab',t); history.replaceState(null,'','#'+t)}catch(_){}
+  if(changed) render(); else showTab();
+  const nav=document.querySelector('.tabs'), y=nav.getBoundingClientRect().top+scrollY;
+  if(toTop||scrollY>y) window.scrollTo({top:y,behavior:'smooth'});
+}
+$('#tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]'); if(b) setTab(b.dataset.tab)});
+$('#tabs').addEventListener('keydown',e=>{ if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return; const i=TABS.indexOf(S.tab)+(e.key==='ArrowRight'?1:-1), t=TABS[(i+TABS.length)%TABS.length];
+  setTab(t); const b=document.querySelector(`#tabs [data-tab="${t}"]`); if(b)b.focus() });
+window.addEventListener('hashchange',()=>{const h=location.hash.slice(1); if(TABS.includes(h)&&h!==S.tab) setTab(h)});
 function tick(){ $('#liveTxt').textContent=S.demo?'Sample data':S.err?(S.loaded?'Offline · last update '+ago(S.updated):'Not connected'):S.loaded?'Live · updated '+ago(S.updated):'Connecting…' }
 function fillStores(){ const s=$('#selStore'); const want=['all',...S.stores].join(); if(s.dataset.k===want)return; s.dataset.k=want;
   s.innerHTML='<option value="all">all showrooms</option>'+[...S.stores].sort((x,y)=>sname(x).localeCompare(sname(y))).map(id=>`<option value="${esc(id)}">${esc(sname(id))}</option>`).join('');
@@ -1284,8 +1719,10 @@ function exportXlsx(){
   for(let d=c.a;d<=Math.min(c.b,c.today);d++){const o=c.spl.day.get(d)||{},w=P0(o.walkin),p=P0(o.phone);byCh.push([iso(d),DOWL[dow(d)],w,p,w+p,w+p?r1(p/(w+p)*100):''])}
   byCh.push(['TOTAL','',P0(c.spl.t.walkin),P0(c.spl.t.phone),P0(c.spl.t.walkin)+P0(c.spl.t.phone),ph(c.spl.t)]);
   const hourly=[['Hour (physical walk-ins)',...DOWL,'Total']]; for(let h=0;h<24;h++)hourly.push([hh(h),...c.cur.dh.map(r=>r[h]),c.cur.hour[h]]);
+  const LG=leagueData(c), monthly=[[c.isAll?'Showroom':'Executive',...LG.months.map(m=>MON[UD(m.a).getUTCMonth()]+' '+UD(m.a).getUTCFullYear()+(m.cur?' (so far)':'')),'Forecast this month'],
+    ...LG.rows.map(r=>[r.total?r.name:r.name,...r.v,r.fc==null?'':Math.round(r.fc)])];
   const rl=rows=>rows.map((r,i)=>i===0?r.map(relabelText):r), rl0=rows=>rows.map(r=>[relabelText(r[0]),...r.slice(1)]);
-  save(xlsx([{name:'Summary',rows:rl0(sum)},{name:'Showrooms',rows:rl(sh)},{name:'Executives',rows:rl(exs)},{name:'Daily',rows:daily},{name:'Walk-ins vs phone',rows:byCh},{name:'Hourly',rows:hourly},{name:'Raw entries',rows:[['Date','Time','Weekday','Showroom','Executive','Type','Count'],...rawRows(c)]}]),
+  save(xlsx([{name:'Summary',rows:rl0(sum)},{name:'Showrooms',rows:rl(sh)},{name:'Executives',rows:rl(exs)},{name:'Daily',rows:daily},{name:'Walk-ins vs phone',rows:byCh},{name:'Hourly',rows:hourly},{name:'Month by month',rows:monthly},{name:'Raw entries',rows:[['Date','Time','Weekday','Showroom','Executive','Type','Count'],...rawRows(c)]}]),
     `rak-walkins_${iso(c.a)}_${iso(c.b)}${c.isAll?'':'_'+S.store}.xlsx`);
 }
 function exportCsv(){ const c=CTX; if(!c)return; const q=v=>/[",\n]/.test(String(v))?'"'+String(v).replace(/"/g,'""')+'"':v;
@@ -1327,8 +1764,26 @@ document.addEventListener('mousemove',e=>{ if(Date.now()-touchAt<1200)return; co
 /* touch and pen: a tap shows the tooltip above the finger, a tap elsewhere or a scroll hides it */
 document.addEventListener('pointerdown',e=>{ if(e.pointerType==='mouse')return; touchAt=Date.now(); const t=e.target.closest&&e.target.closest('[data-tip]'); if(!t){tip.className='';tip._el=null;return} showTip(t,e.clientX,e.clientY,true)},{passive:true});
 document.addEventListener('mouseleave',()=>{tip.className=''}); window.addEventListener('scroll',()=>{tip.className='';tip._el=null},{passive:true,capture:true});
-$('#btnTheme').addEventListener('click',()=>{const r=document.documentElement,cur=r.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'),nx=cur==='dark'?'light':'dark';r.dataset.theme=nx;try{localStorage.setItem('rakTheme',nx)}catch(_){}});
-try{const t=localStorage.getItem('rakTheme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(_){}
+/* appearance: colour palette + light / dark / auto, remembered on this device */
+const PALS=['emerald','ocean','aubergine','charcoal'], HERO={emerald:'#0a2b24',ocean:'#061c2b',aubergine:'#1c0f29',charcoal:'#141619'};
+function applyLook(){
+  const r=document.documentElement; let pal='emerald',mode='auto';
+  try{ pal=localStorage.getItem('rakPal')||pal; mode=localStorage.getItem('rakTheme')||mode }catch(_){}
+  if(!PALS.includes(pal))pal='emerald'; r.dataset.palette=pal;
+  if(mode==='dark'||mode==='light') r.dataset.theme=mode; else delete r.dataset.theme;
+  const m=document.querySelector('meta[name=theme-color]'); if(m) m.content=HERO[pal];
+  document.querySelectorAll('#pals [data-pal]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.pal===pal));
+  document.querySelectorAll('#modes [data-mode]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===(mode==='dark'||mode==='light'?mode:'auto')));
+}
+applyLook();
+const apBtn=$('#btnTheme'), apBox=$('#appear');
+const apShow=on=>{apBox.hidden=!on;apBtn.setAttribute('aria-expanded',on)};
+apBtn.addEventListener('click',e=>{e.stopPropagation();apShow(apBox.hidden)});
+apBox.addEventListener('click',e=>{ e.stopPropagation(); const p=e.target.closest('[data-pal]'), md=e.target.closest('[data-mode]');
+  try{ if(p)localStorage.setItem('rakPal',p.dataset.pal); if(md)localStorage.setItem('rakTheme',md.dataset.mode) }catch(_){}
+  if(p||md){ applyLook(); if(S.loaded) render() } });
+document.addEventListener('click',()=>{ if(!apBox.hidden) apShow(false) });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!apBox.hidden){apShow(false);apBtn.focus()} });
 let rz,lastW=innerWidth;window.addEventListener('resize',()=>{if(innerWidth===lastW)return;lastW=innerWidth;clearTimeout(rz);rz=setTimeout(()=>{if(S.loaded)render()},160)});   // phones fire resize while scrolling; only a width change needs a redraw
 setInterval(()=>{ if(!document.hidden) refresh(false) },POLL);
 setInterval(tick,20e3);
@@ -1386,8 +1841,9 @@ function mRenderList(failed){
       <div class="m">${b.urgent?'<span class="tag urg">Urgent</span>':''}<span class="tag ${on?'live':'end'}">${on?'Live':'Ended'}</span>
         <span>${esc(b.from||'Head office')} · ${esc(mWhen(b.ts))}</span><span>${on?'until':'ended'} ${esc(mWhen(b.until))}</span>
         <span><b>${acked.length}</b> of ${b.stores.length} showroom${b.stores.length===1?'':'s'} acknowledged</span></div>
-      <details class="ackd"${i===0?' open':''}><summary><b>${ppl}</b>${tot?` of ${tot}`:''} ${(tot||ppl)===1?'person':'people'} acknowledged · see names</summary>
-        <table class="ackt"><tbody>${rows.map(r=>r.html).join('')}</tbody></table></details>
+      <details class="ackd"${i===0?' open':''}><summary><b>${ppl}</b>${tot?` of ${tot}`:''} ${(tot||ppl)===1?'person':'people'} read it · ${i===0?'read report':'see read report'}</summary>
+        <div class="ackg">${rows.map(r=>r.html).join('')}</div>
+        <div class="ack-lg"><span><i style="background:color-mix(in srgb,var(--s1) 30%,transparent)"></i>Read (tapped “Got it”)</span><span><i style="border:1px dashed var(--muted)"></i>Not yet</span><span><i></i><em style="font-style:italic">Off duty — not counted</em></span></div></details>
       <div class="ia">${on?`<button class="btn" type="button" data-stop="${esc(b.id)}">Stop showing</button>`:''}<button class="btn" type="button" data-del="${esc(b.id)}">Delete</button></div>
     </div>`}).join('')+(failed?`<p class="note">${failed} showroom${failed===1?'':'s'} could not be read just now.</p>`:'');
 }
@@ -1396,9 +1852,12 @@ function mAckRow(id,seen){
   const key=n=>String(n).replace(/[.#$\[\]\/]/g,'_');
   const yes=Object.entries(seen).filter(([,ts])=>+ts>0).sort((x,y)=>x[1]-y[1]);
   const done=new Set(yes.map(([n])=>n));
-  const no=(S.roster[id]||[]).filter(n=>!done.has(key(n))).sort((x,y)=>x.localeCompare(y));
-  const html=`<tr><th>${esc(short(id))}</th><td>${yes.length?yes.map(([n,ts])=>`<span class="y">✓ ${esc(n==='Screen'?'Shared screen':n)} <i>${esc(mWhen(+ts))}</i></span>`).join(''):''}${
-    no.map(n=>`<span class="n">${esc(n)}</span>`).join('')}${!yes.length&&!no.length?'<em>No one yet</em>':''}</td></tr>`;
+  const pend=(S.roster[id]||[]).filter(n=>!done.has(key(n))).sort((x,y)=>x.localeCompare(y));
+  const no=pend.filter(n=>!isOff(id,n)), off=pend.filter(n=>isOff(id,n)), all=yes.length+no.length;
+  const html=`<div class="acks${all&&!no.length?' done':''}"><div class="acks-h"><b title="${esc(sname(id))}">${esc(short(id))}</b><span>${yes.length} / ${all} read</span></div>
+    <div class="acks-bar"><i style="width:${all?yes.length/all*100:0}%"></i></div>
+    <div class="acks-n">${yes.map(([n,ts])=>`<span class="y">✓ ${esc(n==='Screen'?'Shared screen':n)} <i>${esc(mWhen(+ts))}</i></span>`).join('')}${
+    no.map(n=>`<span class="n">${esc(n)}</span>`).join('')}${off.map(n=>`<span class="o">${esc(n)} · off duty</span>`).join('')}${!yes.length&&!no.length&&!off.length?'<em>No one yet</em>':''}</div></div>`;
   return {html,yes:yes.length,no:no.length};
 }
 async function mPatch(body){
@@ -1449,10 +1908,116 @@ $('#mList').addEventListener('click',e=>{ const s=e.target.closest('[data-stop]'
   if(s) mAct(s.dataset.stop,false); else if(d) mAct(d.dataset.del,true) });
 mLoad().catch(()=>{});                                               // fills the live-count badge on the button
 setInterval(()=>{ if(!document.hidden) mLoad().catch(()=>{}) },2*60e3);
+/* ───────── v3 · alerts (system notifications, like an email alert) ───────── */
+const APP_ICON=new URL('retail-icon-192.png',location.href).href;
+const notifSupported=()=>'Notification' in window, notifOK=()=>notifSupported()&&Notification.permission==='granted';
+const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches||navigator.standalone===true}catch(_){return false}};
+async function sysNotify(title,body,tag,sticky){
+  if(!notifOK()) return false;
+  const o={body:String(body||'').slice(0,300),tag,icon:APP_ICON,badge:APP_ICON,renotify:true,requireInteraction:!!sticky,data:{url:location.href}};
+  try{ const n=new Notification(title,o); n.onclick=()=>{try{window.focus()}catch(_){} n.close(); setTab('health',true)}; return true }catch(_){}
+  try{ const reg=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration(); if(reg){ await reg.showNotification(title,o); return true } }catch(_){}
+  return false;
+}
+function askNotif(){
+  if(!notifSupported()){ alert(isIOS?'On iPhone/iPad, add this dashboard to the Home Screen first (Share → Add to Home Screen), then turn alerts on inside it.':'This browser cannot show notifications.'); return }
+  Promise.resolve(Notification.requestPermission()).then(p=>{ if(CTX) renderIdle(CTX); if(p==='granted') sysNotify('🔔 Alerts are on','You will be notified when on-duty executives go quiet for too long.','alerts-on') }).catch(()=>{});
+}
+
+/* ───────── v3 · inactivity watch ─────────
+   An ON-DUTY executive with no entry for N opening hours (per showroom setting, default 7) is flagged.
+   Off-duty executives (stores/{id}/locks/{name}) are skipped entirely, and their clock restarts when a
+   manager switches them back on duty (stores/{id}/settings/dutyTs/{name}). */
+const IDLE_DEFAULT=7;
+const keyOf=n=>String(n).replace(/[.#$\[\]\/]/g,'_');
+const isOff=(id,n)=>!!((S.locks[id]||{})[n]);
+const idleLimit=id=>{const v=(S.cfg[id]||{}).idleHours; if(v===0||v==='0')return 0; return +v>0?+v:IDLE_DEFAULT};
+function bizMs(from,to){ if(!(to>from))return 0; let t=0;
+  for(let d=dn(from);d<=dn(to);d++){ const o=d*DAY-OFF+OPEN_H*36e5, c=d*DAY-OFF+CLOSE_H*36e5, a=Math.max(from,o), b=Math.min(to,c); if(b>a)t+=b-a }
+  return t }
+function fIdle(ms){ const day=(CLOSE_H-OPEN_H)*36e5; if(ms>=day*1.5){const d=Math.round(ms/day);return d+' opening day'+(d===1?'':'s')}
+  const h=Math.floor(ms/36e5), m=Math.floor(ms%36e5/6e4); return h?`${h}h ${String(m).padStart(2,'0')}m`:`${m}m` }
+function idleData(){
+  const now=Date.now(), ids=S.store==='all'?S.stores:[S.store], out=[];
+  for(const id of ids){ const lim=idleLimit(id)*36e5, ros=S.roster[id]||[]; if(!ros.length)continue;
+    const last={}; const m=S.raw[id]; if(m) for(const r of m.values()){ if(r.t>now)continue; for(const n of [r.e,r.b]) if(n&&(!last[n]||r.t>last[n]))last[n]=r.t }
+    const duty=((S.cfg[id]||{}).dutyTs)||{};
+    const rows=ros.map(n=>{ const off=isOff(id,n), since=Math.max(last[n]||0,+duty[keyOf(n)]||0,now-30*DAY), idle=bizMs(since,now);
+      return{n,off,since,idle,last:last[n]||0,bad:!off&&lim>0&&idle>=lim} });
+    const on=rows.filter(r=>!r.off), bad=rows.filter(r=>r.bad).sort((x,y)=>y.idle-x.idle);
+    out.push({id,lim,rows,on,bad,off:rows.filter(r=>r.off),all:on.length>0&&bad.length===on.length});
+  }
+  return out;
+}
+function renderIdle(c){
+  const el=$('#idleCard'); if(!el) return;
+  const D=idleData(), bad=D.filter(x=>x.bad.length), nBad=bad.reduce((a,x)=>a+x.bad.length,0), nOff=D.reduce((a,x)=>a+x.off.length,0), nOn=D.reduce((a,x)=>a+x.on.length,0);
+  const hs=[...new Set(D.map(x=>x.lim/36e5))], hTxt=hs.length===1?(hs[0]?hs[0]+'+ opening hours':'(alerts off)'):'their showroom’s limit';
+  $('#idleSub').textContent=`On-duty executives with no entry for ${hTxt} (${hh(OPEN_H)}–${hh(CLOSE_H)}) · off-duty staff are skipped`;
+  const btn=$('#btnIdle'); btn.hidden=!nBad; $('#idleN').textContent=nBad; btn.classList.toggle('crit',bad.some(x=>x.all));
+  const tb=$('#tabIdle'); tb.hidden=!nBad; tb.textContent=nBad; tb.setAttribute('aria-label',nBad+' idle');
+  const perm=!notifSupported()?'':Notification.permission==='granted'?'<span class="iwc ok">🔔 Alerts on</span>':Notification.permission==='denied'?'<span class="iwc">🔕 Alerts blocked in browser settings</span>':'<button class="btn pri" type="button" id="bAlerts">🔔 Turn on alerts</button>';
+  const head=`<div class="iwh"><span class="iwc ${nBad?'bad':'ok'}">${nBad?`${nBad} idle`:'✓ All active'}</span><span class="iwc">${nOn-nBad} active</span><span class="iwc">${nOff} off duty · skipped</span><span class="sp2"></span>${perm}</div>`;
+  if(!nBad){ el.innerHTML=head+`<p class="iwnote">✓ Every on-duty executive${c.isAll?` across ${D.length} showrooms`:''} has logged within the limit.</p>`; return }
+  el.innerHTML=head+`<div class="iwg">${bad.sort((x,y)=>(y.all-x.all)||y.bad.length-x.bad.length).map(x=>`<div class="iws${x.all?' all':''}">
+      <div class="iws-h">${c.isAll?`<button type="button" class="lnk" data-store="${esc(x.id)}">${esc(short(x.id))}</button>`:`<b>${esc(short(x.id))}</b>`}<span>${x.bad.length} of ${x.on.length} on duty idle</span></div>
+      ${x.all?'<span class="st crit">Nobody on duty has logged anything</span>':''}
+      <div class="iwn">${x.bad.map(r=>`<div><b>${esc(r.n)}<small>${r.last?'last entry '+esc(mWhen(r.last)):'no entries yet'}</small></b><span>${fIdle(r.idle)}</span></div>`).join('')}</div>
+      ${x.off.length?`<p class="iwskip">Skipped (off duty): ${x.off.map(r=>esc(r.n)).join(', ')}</p>`:''}</div>`).join('')}</div>`;
+  idleNotify(D);
+}
+function idleNotify(D){
+  if(S.demo||!S.loaded||!notifOK()) return;
+  let done={}; try{done=JSON.parse(localStorage.getItem('rakIdleNote')||'{}')||{}}catch(_){}
+  const fresh=[]; for(const x of D) for(const r of x.bad){ const k=x.id+'|'+r.n; if(done[k]!==r.since){ fresh.push({x,r}); done[k]=r.since } }
+  if(!fresh.length) return;
+  const by={}; fresh.forEach(({x,r})=>{(by[x.id]=by[x.id]||{x,n:[]}).n.push(r.n)});
+  const body=Object.values(by).map(g=>`${short(g.x.id)}: ${g.n.join(', ')}${g.x.all?' (nobody active)':''}`).join('\n')+'\nOff-duty staff are not included.';
+  sysNotify(`⏱ ${fresh.length} executive${fresh.length===1?'':'s'} inactive ${idleLimit(fresh[0].x.id)}h+`,body,'rak-idle',true);
+  try{localStorage.setItem('rakIdleNote',JSON.stringify(done))}catch(_){}
+}
+document.addEventListener('click',e=>{ if(e.target.closest&&e.target.closest('#bAlerts')) askNotif(); if(e.target.closest&&e.target.closest('#btnIdle')) setTab('health',true) });
+setInterval(()=>{ if(CTX&&!document.hidden) renderIdle(CTX) },60e3);   // the idle clock keeps moving between data refreshes
+
+/* ───────── v3 · install the app ───────── */
+(function installPrompt(){
+  /* Install the dashboard as an app.
+     · Chrome / Edge / Android: the browser's own install dialog (beforeinstallprompt), from the header button or the sheet.
+     · iPhone / iPad and Safari on Mac: there is no install API, so the button opens step-by-step instructions.
+     The sheet shows itself once; after "Not now" it stays away for a week, but the header button is always there. */
+  const bar=$('#installBar'), btn=$('#btnInstall'); if(!bar||!btn) return;
+  const ua=navigator.userAgent, safariMac=!isIOS&&/safari/i.test(ua)&&!/chrome|chromium|crios|fxios|edg|android/i.test(ua), iosOther=isIOS&&/crios|fxios|edgios/i.test(ua);
+  let deferred=null, open=false;
+  const snoozed=()=>{try{return Date.now()-(+localStorage.getItem('rakInstallSnooze')||0)<7*DAY}catch(_){return false}};
+  const share='<span class="sh"><svg width="12" height="14" viewBox="0 0 12 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V1M3 3.5 6 1l3 2.5M2 6.5H1v6.5h10V6.5h-1"/></svg></span>';
+  const B=t=>`<b style="display:inline;font:inherit;font-weight:700">${t}</b>`;
+  function show(mode){
+    const t=mode==='native'?'Opens from your home screen or desktop like any app, full screen, with inactivity alerts.'
+      :mode==='ios'?(iosOther?`Open this page in ${B('Safari')}, tap ${share} ${B('Share')}, then ${B('Add to Home Screen')}.`:`Tap ${share} ${B('Share')} in the toolbar, then ${B('Add to Home Screen')}. Needed for alerts on iPhone.`)
+      :mode==='mac'?`In Safari choose ${B('File → Add to Dock')}.`
+      :`Open the browser menu and choose ${B('Install app')} or ${B('Add to Home screen')}.`;
+    bar.innerHTML=`<img class="ib-ic" src="retail-icon-192.png" alt="" onerror="this.src='${APP_ICON}'"><div class="ib-txt"><b>Install RAK Retail</b><small>${t}</small></div>${mode==='native'?'<button class="ib-go" type="button" data-ib="go">Install</button>':''}<button class="ib-x" type="button" data-ib="x" aria-label="Not now">✕</button>`;
+    bar.hidden=false; open=true; document.body.classList.add('has-ib'); requestAnimationFrame(()=>requestAnimationFrame(()=>bar.classList.add('show')));
+  }
+  function hide(snooze){ open=false; bar.classList.remove('show'); document.body.classList.remove('has-ib'); setTimeout(()=>{if(!open)bar.hidden=true},400); if(snooze)try{localStorage.setItem('rakInstallSnooze',Date.now())}catch(_){} }
+  async function install(){
+    if(!deferred){ show(isIOS?'ios':safariMac?'mac':'menu'); return }
+    const d=deferred; deferred=null; d.prompt();
+    try{ const ch=await d.userChoice; if(ch&&ch.outcome==='accepted'){ hide(false); btn.hidden=true } }catch(_){}
+  }
+  bar.addEventListener('click',e=>{ const b=e.target.closest('[data-ib]'); if(!b)return; if(b.dataset.ib==='x') return hide(true); install() });
+  btn.addEventListener('click',install);
+  if(isStandalone()) return;                                            // already running as the app
+  window.addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); deferred=e; btn.hidden=false; if(!snoozed()) setTimeout(()=>show('native'),2500) });
+  window.addEventListener('appinstalled',()=>{ hide(false); btn.hidden=true; deferred=null });
+  if(isIOS||safariMac){ btn.hidden=false; if(!snoozed()) setTimeout(()=>show(isIOS?'ios':'mac'),2500) }
+})();
+
 /* ───────── self-update ─────────
    On open, on return to the foreground and every few minutes, the page downloads itself past every cache.
    If the copy on the server differs from the one running, it refreshes the cached copies and reloads. */
-const BUILD='2026.10.17-6';   // shown in the footer, so you can see which version a device is running
+const BUILD='3.0';   // shown in the footer, so you can see which version a device is running
 const SELF_JS=document.currentScript?document.currentScript.textContent:'', SELF_CSS=(document.querySelector('style')||{}).textContent||'';
 $('#ver').textContent='Version '+BUILD;
 const bust=()=>{const u=new URL(location.href);u.searchParams.set('v',Date.now());location.replace(u)};
@@ -1492,6 +2057,9 @@ if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)) navigator.
 setInterval(()=>{ if(!document.hidden) checkUpdate() },5*60e3);
 document.addEventListener('visibilitychange',()=>{ if(!document.hidden) checkUpdate() });
 window.addEventListener('pageshow',e=>{ if(e.persisted) checkUpdate() });
+/* close the dates pop-over on an outside click or Escape */
+document.addEventListener('click',e=>{ const d=$('#moreDates'); if(d.open&&!d.contains(e.target)) d.open=false });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ const d=$('#moreDates'); if(d.open){d.open=false;d.querySelector('summary').focus()} } });
 checkUpdate();
 if(new URLSearchParams(location.search).has('demo')) useDemo(); else refresh(true);
 </script>
