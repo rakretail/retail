@@ -913,8 +913,17 @@ th{background:var(--surface-2)}
 .tabs{display:block!important;position:sticky;top:0;z-index:31}
 .filters{position:static!important}
 .tabs .wrap{gap:16px}
-.tab{padding:15px 14px 13px;font-size:13px;font-weight:600}
-@media (max-width:640px){.tab{padding:13px 10px 11px;font-size:12px}.tabl{justify-content:flex-start}}
+/* section tabs: clear pill buttons, the active one in deep teal (as on the showroom pages) */
+.tabs{background:color-mix(in srgb,var(--page) 92%,transparent)}
+.tabl{gap:8px;padding:10px 0}
+.tab{padding:0 18px;min-height:40px;border-radius:12px;font-size:13.5px;font-weight:700;color:var(--ink-2);background:var(--surface);
+  border:1px solid var(--border);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 4px 12px -10px rgba(0,60,60,.35)}
+.tab:hover{color:var(--ink);border-color:color-mix(in srgb,var(--p1) 40%,transparent)}
+.tab[aria-selected=true]{color:#fff;border-color:transparent;background:linear-gradient(180deg,#127a77,#0a5f5e);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 8px 16px -10px rgba(6,85,90,.7)}
+.tab[aria-selected=true]::after{display:none}
+.tab .bd{margin-left:2px}
+@media (max-width:640px){.tab{padding:0 13px;min-height:36px;font-size:12.5px}.tabl{justify-content:flex-start}}
 </style>
 </head>
 <body>
@@ -948,7 +957,7 @@ th{background:var(--surface-2)}
 <aside class="side" aria-label="Main navigation">
   <div class="side-h">Sections</div>
   <nav class="side-nav" id="sideNav">
-    <button type="button" data-tab="overview"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Executive Overview</span></button>
+    <button type="button" data-tab="overview"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Overview</span></button>
     <button type="button" data-tab="showrooms"><svg viewBox="0 0 24 24"><path d="M3 9l1.5-5h15L21 9"/><path d="M4 9v11h16V9"/><path d="M9 20v-6h6v6"/></svg><span>Showroom Performance</span></button>
     <button type="button" data-tab="team"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Executive Performance</span></button>
     <button type="button" data-tab="timing"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg><span>Traffic Intelligence</span></button>
@@ -984,7 +993,7 @@ th{background:var(--surface-2)}
 
 <nav class="tabs" aria-label="Sections"><div class="wrap">
   <div class="tabl" role="tablist" id="tabs">
-    <button class="tab" role="tab" type="button" data-tab="overview" aria-selected="true">Executive Overview</button>
+    <button class="tab" role="tab" type="button" data-tab="overview" aria-selected="true">Overview</button>
     <button class="tab" role="tab" type="button" data-tab="showrooms" aria-selected="false" id="tabShow">Showroom Performance</button>
     <button class="tab" role="tab" type="button" data-tab="team" aria-selected="false">Executive Performance</button>
     <button class="tab" role="tab" type="button" data-tab="timing" aria-selected="false">Traffic Intelligence</button>
@@ -1001,7 +1010,7 @@ th{background:var(--surface-2)}
   <!-- ═════════ OVERVIEW ═════════ -->
   <div class="pane" data-pane="overview">
     <section>
-      <div class="sh"><h2>Executive overview</h2><span id="eoSub"></span></div>
+      <div class="sh"><h2>Overview</h2><span id="eoSub"></span></div>
       <div class="grid eok" id="eoKpis" data-keep></div>
     </section>
     <section class="top livebox" id="liveBox">
@@ -2689,7 +2698,7 @@ function renderFeed(c){
   const html=T.join('<span class="fsep">✦</span>')+'<span class="fsep">✦</span>';
   const el=$('#ticker');
   if(!el.querySelector('#feedTk')){ el.innerHTML='<span class="tl2"><i class="ld"></i>Live feed</span><div class="fwrap"><div class="ftk" id="feedTk"></div></div>';
-    const tk=$('#feedTk'); tk.addEventListener('animationiteration',()=>{ if(feedNext!=null){ tk.innerHTML=feedNext; feedHtml=feedNext; feedNext=null; tk.style.animationDuration=Math.max(50,Math.round(tk.scrollWidth/35))+'s' } });
+    const tk=$('#feedTk'); tk.addEventListener('animationiteration',()=>{ if(feedNext!=null){ tk.innerHTML=feedNext; feedHtml=feedNext; feedNext=null; tk.style.animationDuration=Math.max(55,Math.round(tk.scrollWidth/35))+'s' } });
     tk.addEventListener('click',()=>tk.classList.toggle('paused')) }
   const tk=$('#feedTk');
   if(!feedHtml){ tk.innerHTML=html; feedHtml=html; tk.style.animationDuration=Math.max(60,Math.round(tk.scrollWidth/35))+'s' }
