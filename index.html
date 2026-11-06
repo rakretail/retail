@@ -2342,7 +2342,7 @@ function renderIdle(c){
   idleNotify(D);
 }
 function idleNotify(D){
-  if(S.demo||!S.loaded||!notifOK()||!document.hidden) return;   // in the foreground the Notification Centre shows it
+  if(S.demo||!S.loaded||!notifOK()||!document.hidden||pushOn) return;   // device alerts handle it once switched on   // in the foreground the Notification Centre shows it
   let done={}; try{done=JSON.parse(localStorage.getItem('rakIdleNote')||'{}')||{}}catch(_){}
   const fresh=[]; for(const x of D) for(const r of x.bad){ const k=x.id+'|'+r.n; if(done[k]!==r.since){ fresh.push({x,r}); done[k]=r.since } }
   if(!fresh.length) return;
@@ -2643,10 +2643,16 @@ function pushSend(stores,id){
   if(!pushReady()) return;
   fetch(PUSH_SENDER_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({stores,id})}).catch(()=>{});
 }
+function pushTest(){
+  let id=null; try{id=localStorage.getItem('rakPushId')}catch(_){}
+  if(!id) return;
+  fetch(PUSH_SENDER_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({test:true,stores:['_hq'],tid:id})}).catch(()=>{});
+  ncToast({title:'Test sent',text:'Close the dashboard now — the alert arrives in about 20 seconds.',icon:'bell',pri:'normal'});
+}
 function renderPushCard(){
   const el=$('#pushCard'); if(!el) return;
   el.innerHTML=`<p>${pushOn?'<b>On for this device.</b>':'Inactivity and reporting alerts on this phone or computer, even when the dashboard is closed.'}${pushErr?`<br><span style="color:var(--crit)">${esc(pushErr)}</span>`:''}</p>
-    ${pushOn?'<button class="btn" type="button" id="pushOff">Turn off</button>':'<button class="btn gold" type="button" id="pushOnB">Turn on</button>'}`;
+    ${pushOn?'<button class="btn gold" type="button" onclick="pushTest()">Send test</button> <button class="btn" type="button" id="pushOff">Turn off</button>':'<button class="btn gold" type="button" id="pushOnB">Turn on</button>'}`;
   const b=$('#pushOnB')||$('#pushOff'); b.onclick=pushOn?pushDisable:()=>pushEnable(false);
 }
 renderPushCard();
