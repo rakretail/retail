@@ -953,14 +953,14 @@ th{background:var(--surface-2)}
 :root{--ab-bg:rgba(255,255,255,.9);--ab-line:rgba(0,70,70,.10);--ab-ink:#0f2727;--ab-mute:#5f7979;--ab-sh:0 18px 44px -18px rgba(4,50,52,.38),0 2px 6px -2px rgba(4,50,52,.10)}
 :root[data-theme="dark"]{--ab-bg:rgba(18,36,38,.92);--ab-line:rgba(255,255,255,.09);--ab-ink:#e8f6f4;--ab-mute:#93b3b0;--ab-sh:0 18px 44px -16px rgba(0,0,0,.7)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ab-bg:rgba(18,36,38,.92);--ab-line:rgba(255,255,255,.09);--ab-ink:#e8f6f4;--ab-mute:#93b3b0;--ab-sh:0 18px 44px -16px rgba(0,0,0,.7)}}
-.nct-wrap{top:calc(env(safe-area-inset-top) + 12px)!important;right:16px;width:min(400px,calc(100vw - 20px))!important;z-index:120!important}
+.nct-wrap{top:auto!important;bottom:calc(env(safe-area-inset-bottom) + 16px)!important;right:16px;flex-direction:column;width:min(400px,calc(100vw - 20px))!important;z-index:120!important}
 @media (max-width:640px){.nct-wrap{right:auto!important;left:50%!important;transform:translateX(-50%)}}
 .nct.ab{display:grid!important;grid-template-columns:40px minmax(0,1fr)!important;gap:4px 12px!important;padding:12px 14px 12px 12px!important;border-radius:20px!important;
   background:var(--ab-bg)!important;color:var(--ab-ink)!important;border:1px solid var(--ab-line)!important;box-shadow:var(--ab-sh)!important;position:relative;overflow:hidden;cursor:pointer;
   -webkit-backdrop-filter:blur(20px) saturate(1.7);backdrop-filter:blur(20px) saturate(1.7);animation:abIn .5s cubic-bezier(.2,1.25,.3,1) both;--ab-tone:#0b6b6b;--ab-tone2:#16807c}
 .nct.ab.u{--ab-tone:#c0283f;--ab-tone2:#ef5a6f;box-shadow:0 0 0 1.5px rgba(224,66,90,.35),var(--ab-sh)!important}
 .nct.ab.out{animation:abOut .3s ease forwards}
-.ab-logo{flex:none;display:inline-grid;place-items:center;width:20px;height:20px;border-radius:6px;background:linear-gradient(160deg,#16807c,#06555a);color:#fff;font:800 7px/1 var(--fb);letter-spacing:.3px}
+.ab-logo{flex:none;display:inline-block;height:23px;aspect-ratio:300/174;margin-right:4px;background:var(--ab-ink);-webkit-mask:var(--logo) center/contain no-repeat;mask:var(--logo) center/contain no-repeat}
 .ab-top{grid-column:1/-1;display:flex;align-items:center;gap:7px;font:700 10.5px/1 var(--fb);letter-spacing:.5px;text-transform:uppercase;color:var(--ab-mute);margin-bottom:4px}
 .ab-top .ab-k{color:var(--ab-tone)} .ab-top time{margin-left:auto;text-transform:none;letter-spacing:0;font-weight:600}
 .nct .ab-av{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;color:#fff;background:linear-gradient(160deg,var(--ab-tone2),var(--ab-tone))}
@@ -973,9 +973,58 @@ th{background:var(--surface-2)}
 .nct .ab-act button.pri{background:linear-gradient(180deg,color-mix(in srgb,var(--ab-tone) 82%,#fff),var(--ab-tone));color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.22)}
 .nct .ab-bar{position:absolute;left:0;bottom:0;height:2px;width:100%;background:linear-gradient(90deg,var(--ab-tone),transparent);transform-origin:left;animation:tbar var(--ab-ms,8000ms) linear forwards}
 @keyframes tbar{from{transform:scaleX(1)}to{transform:scaleX(0)}}
-@keyframes abIn{from{opacity:0;transform:translateY(-26px) scale(.96)}to{opacity:1;transform:none}}
-@keyframes abOut{to{opacity:0;transform:translateY(-22px) scale(.97)}}
+@keyframes abIn{from{opacity:0;transform:translateY(30px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes abOut{to{opacity:0;transform:translateY(26px) scale(.97)}}
 @media (prefers-reduced-motion:reduce){.nct.ab{animation:none!important}.nct .ab-bar{display:none}}
+
+/* ================= v3.3 · refreshed look ================= */
+:root[data-palette="teal"] body{background:
+  radial-gradient(900px 620px at -8% -12%,rgba(20,160,150,.14),transparent 62%),
+  radial-gradient(820px 600px at 108% -4%,rgba(29,108,134,.12),transparent 60%),
+  radial-gradient(1000px 700px at 50% 112%,rgba(201,166,70,.09),transparent 62%),var(--page)!important;background-attachment:fixed!important}
+:root[data-palette="teal"]:not([data-theme="dark"]) .card:not(.nct){
+  background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,.80)) padding-box,
+             linear-gradient(145deg,rgba(255,255,255,.95),rgba(11,107,107,.20) 48%,rgba(201,166,70,.38)) border-box!important;
+  border:1px solid transparent!important;box-shadow:inset 0 1px 0 #fff,0 14px 32px -20px rgba(4,60,64,.40),0 2px 6px -3px rgba(4,60,64,.10)!important}
+:root[data-palette="teal"][data-theme="dark"] .card:not(.nct){
+  background:linear-gradient(180deg,rgba(24,46,48,.92),rgba(14,30,32,.88)) padding-box,
+             linear-gradient(145deg,rgba(255,255,255,.14),rgba(45,212,191,.16) 48%,rgba(230,201,118,.30)) border-box!important;
+  border:1px solid transparent!important}
+@media (hover:hover){.card.eo{transition:transform .25s cubic-bezier(.2,.8,.3,1),box-shadow .25s}.card.eo:hover{transform:translateY(-3px)}}
+:root:not([data-theme="dark"]) .eo .ev{background:linear-gradient(180deg,#0f3d3d 10%,#0b6b6b 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
+:root[data-theme="dark"] .eo .ev{background:linear-gradient(180deg,#f2fffd,#7ff0dc);-webkit-background-clip:text;background-clip:text;color:transparent}
+.eo .ev small{-webkit-text-fill-color:var(--muted)}
+.eo .ei{box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 6px 14px -8px rgba(6,85,90,.5)}
+.sh h2::before{transform:rotate(45deg);border-radius:3px!important;background:linear-gradient(135deg,#E6C976,#b8892b)!important;box-shadow:0 0 0 3px rgba(201,166,70,.16)}
+.sh::after{background:linear-gradient(90deg,rgba(11,107,107,.28),rgba(201,166,70,.22) 40%,transparent)!important}
+.tn{background:linear-gradient(180deg,#fff,#f1f8f7)}
+:root[data-theme="dark"] .tn{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.03))}
+.tn.lv{background:linear-gradient(180deg,#fff8e6,#fdf0cf);border-color:rgba(201,166,70,.4)}
+:root[data-theme="dark"] .tn.lv{background:rgba(230,201,118,.12)}
+.rv{opacity:0;transform:translateY(18px)} .rv.rv-in{opacity:1;transform:none;transition:opacity .6s ease,transform .7s cubic-bezier(.2,.8,.3,1)}
+/* leave calendar */
+.lvc{padding:16px 16px 12px!important}
+.lvc-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+.lvc-grid{display:grid;grid-template-columns:minmax(150px,1.3fr) repeat(var(--n),minmax(34px,1fr));gap:4px 3px;align-items:center;min-width:660px}
+.lvc-h{font:700 10.5px/1 var(--fb);letter-spacing:1.2px;text-transform:uppercase;color:var(--muted)}
+.lvc-d{display:flex;flex-direction:column;align-items:center;gap:2px;font:700 12.5px/1 var(--fb);color:var(--ink-2);padding:6px 0;border-radius:10px}
+.lvc-d small{font-size:9.5px;color:var(--muted);font-weight:700}
+.lvc-d.t{background:linear-gradient(180deg,#127a77,#0a5f5e);color:#fff}.lvc-d.t small{color:#cdeeea}
+.lvc-n{display:flex;flex-direction:column;gap:2px;min-width:0;padding-right:8px}
+@media (max-width:760px){.lvc-n,.lvc-h{position:sticky;left:0;z-index:2;background:var(--surface);align-self:stretch;justify-content:center}}
+.lvc-n b{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lvc-n small{font-size:11.5px;color:var(--muted)}
+.lvc-c{display:block;height:30px;border-radius:8px;background:var(--surface-2)}
+.lvc-c.off{background:repeating-linear-gradient(135deg,rgba(224,66,90,.10) 0 5px,transparent 5px 10px),var(--surface-2)}
+.lvc-c.t{box-shadow:inset 0 0 0 1.5px rgba(11,107,107,.45)}
+.lvc-bar{z-index:1;height:26px;margin:0 2px;border-radius:9px;display:flex;align-items:center;padding:0 10px;font:700 11.5px/1 var(--fb);white-space:nowrap;overflow:hidden;
+  color:#5b3a00;background:linear-gradient(180deg,#fde68a,#f5b942);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 6px 12px -8px rgba(180,120,0,.7)}
+.lvc-bar.now{background:linear-gradient(180deg,#fcd34d,#f59e0b)}
+.lvc-empty{margin:4px 0;color:var(--muted);font-weight:600}
+.lvc-key{display:flex;align-items:center;gap:8px;margin:10px 0 0;font-size:11.5px;color:var(--muted)}
+.lvc-key span{width:14px;height:10px;border-radius:3px;display:inline-block}
+.lvc-key .k1{background:linear-gradient(180deg,#fde68a,#f5b942)} .lvc-key .k2{margin-left:10px;background:repeating-linear-gradient(135deg,rgba(224,66,90,.25) 0 3px,transparent 3px 6px)}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}}
 </style>
 </head>
 <body>
@@ -1204,6 +1253,10 @@ th{background:var(--surface-2)}
     <section id="idleSec" data-keep>
       <div class="sh"><h2>Inactivity watch</h2><span id="idleSub"></span></div>
       <div class="card" id="idleCard"></div>
+    </section>
+    <section id="leaveSec" data-keep>
+      <div class="sh"><h2>Annual leave · next 14 days</h2><span id="leaveSub"></span></div>
+      <div class="card lvc" id="leaveCal"></div>
     </section>
     <section>
       <div class="sh"><h2>Reporting health</h2></div>
@@ -2380,7 +2433,7 @@ const isoOf=d=>new Date(d*DAY).toISOString().slice(0,10);            // d = UAE 
 function hrsOf(id){ const w=((S.cfg[id]||{}).workHours)||{}; let o=parseInt(w.open,10),c=parseInt(w.close,10);
   if(!(o>=0&&o<=23))o=9; if(!(c>o&&c<=24))c=Math.max(o+1,21); return{o,c} }
 const offDay=(id,d)=>!!((((S.cfg[id]||{}).offDays)||{})[DK[new Date(d*DAY).getUTCDay()]]);
-const leaveOf=(id,n)=>{ const v=(S.leave[id]||{})[keyOf(n)]; return v&&v.from&&v.to?v:null };
+const leaveOf=(id,n)=>{ const L=S.leave[id]||{}, v=L[keyOf(n)]||Object.values(L).find(x=>x&&x.name===n); return v&&v.from&&v.to?v:null };
 const onLeave=(id,n)=>{ const v=leaveOf(id,n), t=isoOf(dn(Date.now())); return !!(v&&v.from<=t&&t<=v.to) };
 const leaveBack=(id,n)=>{ const v=leaveOf(id,n); if(!v)return 0; const t=Date.parse(v.to+'T00:00:00+04:00')+DAY; return t<=Date.now()?t:0 };
 const backOn=v=>new Date(Date.parse(v.to+'T00:00:00+04:00')+DAY+OFF).toLocaleDateString('en-GB',{day:'numeric',month:'short',timeZone:'UTC'});
@@ -2406,7 +2459,7 @@ function idleData(){
 function renderIdle(c){
   const el=$('#idleCard'); if(!el) return;
   const D=idleData(), bad=D.filter(x=>x.bad.length), nBad=bad.reduce((a,x)=>a+x.bad.length,0), nOff=D.reduce((a,x)=>a+x.off.length,0), nOn=D.reduce((a,x)=>a+x.on.length,0), nLv=D.reduce((a,x)=>a+x.leave.length,0), nCl=D.filter(x=>x.closed).length;
-  renderTeamNow(D,nOn,nBad,nOff,nLv,nCl);
+  renderTeamNow(D,nOn,nBad,nOff,nLv,nCl); renderLeaveCal();
   const hs=[...new Set(D.map(x=>x.lim/36e5))], hTxt=hs.length===1?(hs[0]?hs[0]+'+ opening hours':'(alerts off)'):'their showroom’s limit';
   $('#idleSub').textContent=`On-duty executives with no entry for ${hTxt} (each showroom’s own hours and working days) · off-duty and on-leave staff are skipped`;
   const btn=$('#btnIdle'); btn.hidden=!nBad; $('#idleN').textContent=nBad; btn.classList.toggle('crit',bad.some(x=>x.all));
@@ -2429,10 +2482,31 @@ function renderTeamNow(D,nOn,nBad,nOff,nLv,nCl){
     <button type="button" class="tn ok" data-go="health"><b>${nOn-nBad}</b>active</button>
     <button type="button" class="tn ${nBad?'bad':''}" data-go="health"><b>${nBad}</b>inactive</button>
     <button type="button" class="tn" data-go="health"><b>${nOff-nLv}</b>off duty</button>
-    <button type="button" class="tn lv" data-go="health"><b>${nLv}</b>🌴 annual leave</button>
+    <button type="button" class="tn lv" data-go="leave"><b>${nLv}</b>🌴 annual leave</button>
     ${nCl?`<span class="tn"><b>${nCl}</b>closed today</span>`:''}`;
 }
-document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('#teamNow [data-go]'); if(b) setTab(b.dataset.go,true) });
+document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('#teamNow [data-go]'); if(!b) return;
+  if(b.dataset.go==='leave'){ setTab('health',false); setTimeout(()=>{ const s=$('#leaveSec'); if(s) s.scrollIntoView({behavior:'smooth',block:'start'}) },120) } else setTab(b.dataset.go,true) });
+/* v3.3 · who is on annual leave across the showrooms, next 14 days */
+function renderLeaveCal(){
+  const el=$('#leaveCal'); if(!el) return;
+  const ids=S.store==='all'?S.stores:[S.store], d0=dn(Date.now()), N=14, d1=d0+N-1, iso0=isoOf(d0), iso1=isoOf(d1), rows=[];
+  for(const id of ids){ const L=S.leave[id]||{}; for(const k in L){ const v=L[k]; if(!v||!v.from||!v.to||v.to<iso0||v.from>iso1) continue;
+    const a=Math.max(0,Math.round((Date.parse(v.from+'T00:00:00Z')/DAY)-d0)), b=Math.min(N-1,Math.round((Date.parse(v.to+'T00:00:00Z')/DAY)-d0));
+    rows.push({id,n:v.name||k,a,b,v,now:v.from<=iso0}) } }
+  rows.sort((x,y)=>x.a-y.a||x.n.localeCompare(y.n));
+  const nNow=rows.filter(r=>r.now).length;
+  $('#leaveSub').textContent=rows.length?`${nNow} on leave today · ${rows.length-nNow} starting soon`:'';
+  if(!rows.length){ el.innerHTML='<p class="lvc-empty">🌴 Nobody has annual leave booked in the next 14 days.</p>'; return }
+  const fD=v=>new Date(Date.parse(v+'T00:00:00Z')).toLocaleDateString('en-GB',{day:'numeric',month:'short',timeZone:'UTC'});
+  const head=Array.from({length:N},(_,i)=>{ const dt=new Date((d0+i)*DAY); return `<span class="lvc-d${i===0?' t':''}" style="grid-row:1;grid-column:${i+2}"><small>${'SMTWTFS'[dt.getUTCDay()]}</small>${dt.getUTCDate()}</span>` }).join('');
+  el.innerHTML=`<div class="lvc-scroll"><div class="lvc-grid" style="--n:${N}">
+    <span class="lvc-h" style="grid-row:1;grid-column:1">${S.store==='all'?'Executive · showroom':'Executive'}</span>${head}
+    ${rows.map((r,ri)=>`<span class="lvc-n" style="grid-row:${ri+2};grid-column:1"><b>${esc(r.n)}</b>${S.store==='all'?`<small>${esc(short(r.id))}</small>`:''}</span>
+      ${Array.from({length:N},(_,i)=>`<i class="lvc-c${offDay(r.id,d0+i)?' off':''}${i===0?' t':''}" style="grid-row:${ri+2};grid-column:${i+2}"></i>`).join('')}
+      <span class="lvc-bar${r.now?' now':''}" style="grid-row:${ri+2};grid-column:${r.a+2}/${r.b+3}" title="${esc(r.n)} · ${fD(r.v.from)} – ${fD(r.v.to)}">${fD(r.v.from)} – ${fD(r.v.to)}</span>`).join('')}
+  </div></div><p class="lvc-key"><span class="k1"></span>On leave <span class="k2"></span>Showroom off day</p>`;
+}
 function idleNotify(D){
   if(S.demo||!S.loaded||!notifOK()||!document.hidden||pushOn) return;   // device alerts handle it once switched on   // in the foreground the Notification Centre shows it
   let done={}; try{done=JSON.parse(localStorage.getItem('rakIdleNote')||'{}')||{}}catch(_){}
@@ -2662,14 +2736,14 @@ function ncToast(i){
   const box=$('#nct'), d=document.createElement('div'), ms=i.pri==='urgent'?14000:8000, u=i.pri==='urgent';
   while(box.children.length>=3) box.firstChild.remove();
   d.className='nct ab'+(u?' u':''); d.style.setProperty('--ab-ms',ms+'ms');
-  d.innerHTML=`<div class="ab-top"><span class="ab-logo">RAK</span><span>UAE Retail</span>·<span class="ab-k">${esc(i.who||'Alert')}</span><time>${i.ts?esc(fTime(i.ts)):'now'}</time></div>
+  d.innerHTML=`<div class="ab-top"><span class="ab-logo" role="img" aria-label="RAK Ceramics"></span><span class="ab-k">${esc(i.who||'Alert')}</span><time>${i.ts?esc(fTime(i.ts)):'now'}</time></div>
     <span class="ab-av">${svgI(i.icon)}</span>
     <div class="ab-b"><b>${esc(i.title)}</b><p>${esc(i.text)}</p></div>
     <div class="ab-act"><button type="button" class="pri nv">View</button><button type="button" class="nx">Later</button></div><i class="ab-bar"></i>`;
   const close=()=>{ d.classList.add('out'); setTimeout(()=>d.remove(),320) };
   d.querySelector('.nv').onclick=e=>{ e.stopPropagation(); d.remove(); ncAct(i) }; d.querySelector('.nx').onclick=e=>{ e.stopPropagation(); close() };
   d.onclick=()=>{ d.remove(); ncAct(i) };
-  let y0=null; d.addEventListener('touchstart',e=>{y0=e.touches[0].clientY},{passive:true}); d.addEventListener('touchmove',e=>{ if(y0!==null&&e.touches[0].clientY-y0<-24){y0=null;close()} },{passive:true});
+  let y0=null; d.addEventListener('touchstart',e=>{y0=e.touches[0].clientY},{passive:true}); d.addEventListener('touchmove',e=>{ if(y0!==null&&e.touches[0].clientY-y0>24){y0=null;close()} },{passive:true});
   box.appendChild(d); setTimeout(close,ms); playTone(u?'urgent':'message');
 }
 /* sound: a soft ping for alerts, a brighter call for urgent ones (browsers stay silent until the page is tapped once) */
@@ -2814,6 +2888,25 @@ if(new URLSearchParams(location.search).has('demo')) useDemo(); else refresh(tru
 (function shine(){ if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const f=document.createElement('div'); f.className='bg-flash'; f.setAttribute('aria-hidden','true'); document.body.appendChild(f);
   ['header.top','#liveBox'].forEach(q=>{ const h=document.querySelector(q); if(h){ const s=document.createElement('i'); s.className='hd-sheen'; s.setAttribute('aria-hidden','true'); h.prepend(s) } });
+})();
+</script>
+<script>
+(function(){
+  const RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches; if(RM) return;
+  let first=true;
+  const numNode=el=>{ const t=el&&el.firstChild; return t&&t.nodeType===3&&/^\s*[\d,]+\s*$/.test(t.data)?t:null };
+  function run(t,from,to){ const t0=performance.now(), dur=first?1100:650;
+    (function f(now){ const p=Math.min(1,(now-t0)/dur), e=1-Math.pow(1-p,3); t.data=Math.round(from+(to-from)*e).toLocaleString('en-US'); if(p<1) requestAnimationFrame(f) })(t0) }
+  const all=()=>{ document.querySelectorAll('#eoKpis .ev,#hToday').forEach(el=>{ const t=numNode(el); if(!t) return; const to=+t.data.replace(/[,\s]/g,''); if(to>0) run(t,0,to) }); first=false };
+  const orig=render;
+  render=function(){ const r=orig.apply(this,arguments); if(S.loaded&&first) all(); return r };
+  if(S.loaded) all();
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('rv-in'); io.unobserve(e.target) } }),{rootMargin:'0px 0px -6% 0px'});
+    const scan=()=>document.querySelectorAll('.pane:not([hidden]) section, .pane:not([hidden]) .card').forEach(el=>{ if(el._rv) return; el._rv=1;
+      const b=el.getBoundingClientRect(); if(b.top<innerHeight&&b.bottom>0) return; el.classList.add('rv'); io.observe(el) });
+    setTimeout(scan,1500); document.addEventListener('click',()=>setTimeout(scan,300));
+  }
 })();
 </script>
 </body>
