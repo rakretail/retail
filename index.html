@@ -908,6 +908,13 @@ th{background:var(--surface-2)}
 .fsep{margin:0 16px;opacity:.5;font-size:11px}
 @media (prefers-reduced-motion:reduce){.ftk{animation-duration:400s!important}}
 #btnIdle{display:none!important}
+.side{display:none!important}
+.shell{display:block!important}
+.tabs{display:block!important;position:sticky;top:0;z-index:31}
+.filters{position:static!important}
+.tabs .wrap{gap:16px}
+.tab{padding:15px 14px 13px;font-size:13px;font-weight:600}
+@media (max-width:640px){.tab{padding:13px 10px 11px;font-size:12px}.tabl{justify-content:flex-start}}
 </style>
 </head>
 <body>
@@ -977,11 +984,11 @@ th{background:var(--surface-2)}
 
 <nav class="tabs" aria-label="Sections"><div class="wrap">
   <div class="tabl" role="tablist" id="tabs">
-    <button class="tab" role="tab" type="button" data-tab="overview" aria-selected="true">Overview</button>
-    <button class="tab" role="tab" type="button" data-tab="showrooms" aria-selected="false" id="tabShow">Showrooms</button>
-    <button class="tab" role="tab" type="button" data-tab="team" aria-selected="false">Executives</button>
-    <button class="tab" role="tab" type="button" data-tab="timing" aria-selected="false">Traffic</button>
-    <button class="tab" role="tab" type="button" data-tab="health" aria-selected="false">Admin<span class="bd" id="tabIdle" hidden data-keep></span></button>
+    <button class="tab" role="tab" type="button" data-tab="overview" aria-selected="true">Executive Overview</button>
+    <button class="tab" role="tab" type="button" data-tab="showrooms" aria-selected="false" id="tabShow">Showroom Performance</button>
+    <button class="tab" role="tab" type="button" data-tab="team" aria-selected="false">Executive Performance</button>
+    <button class="tab" role="tab" type="button" data-tab="timing" aria-selected="false">Traffic Intelligence</button>
+    <button class="tab" role="tab" type="button" data-tab="health" aria-selected="false">Management &amp; Admin<span class="bd" id="tabIdle" hidden data-keep></span></button>
   </div>
   <span class="mini-scope" id="miniScope"></span>
 </div></nav>
@@ -2004,7 +2011,7 @@ function render(){
   document.querySelectorAll('#chans .chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.ch===S.ch));
   const pl=PRESETS.find(p=>p[0]===S.preset); $('#rangeLbl').textContent=pl?'Dates & comparison':fRange(c.a,c.b);
   $('#miniScope').innerHTML=`${esc(c.isAll?'All showrooms':short(S.store))} · ${esc(pl?pl[1]:fRange(c.a,c.b))} · <b>${fmt(c.cur.total)}</b> walk-ins`;
-  $('#tabShow').textContent=c.isAll?'Showrooms':'Showroom';
+  
   showTab();
   /* the hero, the idle watch and the footer notes always run; each tab only draws its own charts (they measure their width) */
   renderIdle(c); renderLive(c); renderPeriod(c); renderHealth(c);
@@ -2391,7 +2398,7 @@ setInterval(()=>{ if(!CTX)return; if(document.hidden) idleNotify(idleData()); el
 /* ───────── self-update ─────────
    On open, on return to the foreground and every few minutes, the page downloads itself past every cache.
    If the copy on the server differs from the one running, it refreshes the cached copies and reloads. */
-const BUILD='3.0';   // shown in the footer, so you can see which version a device is running
+const BUILD='3.1';   // shown in the footer, so you can see which version a device is running
 const SELF_JS=document.currentScript?document.currentScript.textContent:'', SELF_CSS=(document.querySelector('style')||{}).textContent||'';
 $('#ver').textContent='Version '+BUILD;
 const bust=()=>{const u=new URL(location.href);u.searchParams.set('v',Date.now());location.replace(u)};
@@ -2682,7 +2689,7 @@ function renderFeed(c){
   const html=T.join('<span class="fsep">✦</span>')+'<span class="fsep">✦</span>';
   const el=$('#ticker');
   if(!el.querySelector('#feedTk')){ el.innerHTML='<span class="tl2"><i class="ld"></i>Live feed</span><div class="fwrap"><div class="ftk" id="feedTk"></div></div>';
-    const tk=$('#feedTk'); tk.addEventListener('animationiteration',()=>{ if(feedNext!=null){ tk.innerHTML=feedNext; feedHtml=feedNext; feedNext=null; tk.style.animationDuration=Math.max(60,Math.round(tk.scrollWidth/35))+'s' } });
+    const tk=$('#feedTk'); tk.addEventListener('animationiteration',()=>{ if(feedNext!=null){ tk.innerHTML=feedNext; feedHtml=feedNext; feedNext=null; tk.style.animationDuration=Math.max(50,Math.round(tk.scrollWidth/35))+'s' } });
     tk.addEventListener('click',()=>tk.classList.toggle('paused')) }
   const tk=$('#feedTk');
   if(!feedHtml){ tk.innerHTML=html; feedHtml=html; tk.style.animationDuration=Math.max(60,Math.round(tk.scrollWidth/35))+'s' }
