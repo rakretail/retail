@@ -19,9 +19,9 @@ firebase.messaging().onBackgroundMessage(p => {
     silent: false,
     timestamp: +d.ts || Date.now(),
     icon: d.icon || 'rakwalkin.png',
-    badge: 'rakwalkin.png',
-    vibrate: urgent ? [200, 80, 200, 80, 200] : [90, 50, 90],
-    actions: msg ? [{ action: 'ack', title: 'Got it' }, { action: 'open', title: 'Open' }] : [{ action: 'open', title: 'Open' }],
+    badge: 'notif-badge.png',                         // small white icon in the status bar
+    vibrate: urgent ? [160, 70, 160, 70, 160] : [60, 40, 60],   // the phone's own notification sound plays as well
+    actions: msg ? [{ action: 'ack', title: '✓ Got it' }, { action: 'open', title: 'Open app' }] : [{ action: 'open', title: 'Open app' }],
     data: { url: d.url || './', store: d.store || '', id: d.id || '', who: d.who || '' }
   });
 });
