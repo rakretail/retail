@@ -924,6 +924,58 @@ th{background:var(--surface-2)}
 .tab[aria-selected=true]::after{display:none}
 .tab .bd{margin-left:2px}
 @media (max-width:640px){.tab{padding:0 13px;min-height:36px;font-size:12.5px}.tabl{justify-content:flex-start}}
+
+/* v3.2 · team now strip, leave chips */
+.teamnow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:-2px 0 14px}
+.tn-h{font:800 10.5px/1 var(--fb);letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.tn{display:inline-flex;align-items:baseline;gap:6px;padding:7px 13px;border-radius:999px;border:1px solid var(--border);background:var(--surface);
+  color:var(--ink-2);font:600 12.5px/1 var(--fb);cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 4px 12px -10px rgba(0,60,60,.35)}
+.tn b{font-size:15px;font-weight:800;color:var(--ink)}
+.tn.ok b{color:var(--up)} .tn.bad{border-color:color-mix(in srgb,var(--crit) 40%,transparent);background:color-mix(in srgb,var(--crit) 8%,var(--surface))} .tn.bad b{color:var(--down)}
+.tn.lv b{color:#c27803} span.tn{cursor:default}
+.iwc.lv{background:rgba(245,158,11,.14);color:#a15c00}
+:root[data-theme="dark"] .iwc.lv,:root[data-theme="dark"] .tn.lv b{color:#fbbf24}
+.iwlv{margin:10px 0 0}
+/* v3.2 · a light strike across the page + header sheen */
+.bg-flash{position:fixed;inset:0;pointer-events:none;z-index:2;overflow:hidden}
+.bg-flash::before{content:"";position:absolute;top:-30%;bottom:-30%;left:-40%;width:22%;transform:skewX(-24deg);opacity:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0) 20%,rgba(255,255,255,.42) 50%,rgba(255,255,255,0) 80%,transparent);
+  mix-blend-mode:soft-light;animation:strike 11s cubic-bezier(.6,0,.3,1) 2.5s infinite}
+.bg-flash::after{content:"";position:absolute;inset:0;opacity:0;background:radial-gradient(1200px 500px at 60% 0%,rgba(94,234,212,.10),transparent 70%);animation:flashGlow 11s ease-out 2.5s infinite}
+@keyframes strike{0%{left:-40%;opacity:0}2%{opacity:1}13%{left:130%;opacity:1}14%,100%{left:130%;opacity:0}}
+@keyframes flashGlow{0%,1%{opacity:0}4%{opacity:1}16%,100%{opacity:0}}
+.hd-sheen{position:absolute;inset:0;overflow:hidden;pointer-events:none;border-radius:inherit}
+.hd-sheen::before{content:"";position:absolute;top:0;bottom:0;left:-50%;width:30%;transform:skewX(-20deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.16),transparent);animation:sweepH 8s ease-in-out 1.5s infinite}
+@keyframes sweepH{0%{left:-50%}45%,100%{left:130%}}
+@media (prefers-reduced-motion:reduce){.bg-flash,.hd-sheen{display:none!important}}
+
+/* v3.3 · notification banners: clean glass cards like the app */
+:root{--ab-bg:rgba(255,255,255,.9);--ab-line:rgba(0,70,70,.10);--ab-ink:#0f2727;--ab-mute:#5f7979;--ab-sh:0 18px 44px -18px rgba(4,50,52,.38),0 2px 6px -2px rgba(4,50,52,.10)}
+:root[data-theme="dark"]{--ab-bg:rgba(18,36,38,.92);--ab-line:rgba(255,255,255,.09);--ab-ink:#e8f6f4;--ab-mute:#93b3b0;--ab-sh:0 18px 44px -16px rgba(0,0,0,.7)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ab-bg:rgba(18,36,38,.92);--ab-line:rgba(255,255,255,.09);--ab-ink:#e8f6f4;--ab-mute:#93b3b0;--ab-sh:0 18px 44px -16px rgba(0,0,0,.7)}}
+.nct-wrap{top:calc(env(safe-area-inset-top) + 12px)!important;right:16px;width:min(400px,calc(100vw - 20px))!important;z-index:120!important}
+@media (max-width:640px){.nct-wrap{right:auto!important;left:50%!important;transform:translateX(-50%)}}
+.nct.ab{display:grid!important;grid-template-columns:40px minmax(0,1fr)!important;gap:4px 12px!important;padding:12px 14px 12px 12px!important;border-radius:20px!important;
+  background:var(--ab-bg)!important;color:var(--ab-ink)!important;border:1px solid var(--ab-line)!important;box-shadow:var(--ab-sh)!important;position:relative;overflow:hidden;cursor:pointer;
+  -webkit-backdrop-filter:blur(20px) saturate(1.7);backdrop-filter:blur(20px) saturate(1.7);animation:abIn .5s cubic-bezier(.2,1.25,.3,1) both;--ab-tone:#0b6b6b;--ab-tone2:#16807c}
+.nct.ab.u{--ab-tone:#c0283f;--ab-tone2:#ef5a6f;box-shadow:0 0 0 1.5px rgba(224,66,90,.35),var(--ab-sh)!important}
+.nct.ab.out{animation:abOut .3s ease forwards}
+.ab-logo{flex:none;display:inline-grid;place-items:center;width:20px;height:20px;border-radius:6px;background:linear-gradient(160deg,#16807c,#06555a);color:#fff;font:800 7px/1 var(--fb);letter-spacing:.3px}
+.ab-top{grid-column:1/-1;display:flex;align-items:center;gap:7px;font:700 10.5px/1 var(--fb);letter-spacing:.5px;text-transform:uppercase;color:var(--ab-mute);margin-bottom:4px}
+.ab-top .ab-k{color:var(--ab-tone)} .ab-top time{margin-left:auto;text-transform:none;letter-spacing:0;font-weight:600}
+.nct .ab-av{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;color:#fff;background:linear-gradient(160deg,var(--ab-tone2),var(--ab-tone))}
+.nct .ab-av svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.nct .ab-b{min-width:0}
+.nct .ab-b b{display:block;font-size:14px;font-weight:800;line-height:1.25;color:var(--ab-ink)}
+.nct .ab-b p{margin:2px 0 0;font-size:13px;line-height:1.4;color:var(--ab-ink);opacity:.82;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.nct .ab-act{grid-column:2;display:flex;gap:8px;margin-top:8px}
+.nct .ab-act button{all:unset;cursor:pointer;border-radius:10px;padding:7px 14px;font:800 12px/1 var(--fb);background:color-mix(in srgb,var(--ab-tone) 12%,transparent);color:var(--ab-tone)}
+.nct .ab-act button.pri{background:linear-gradient(180deg,color-mix(in srgb,var(--ab-tone) 82%,#fff),var(--ab-tone));color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.22)}
+.nct .ab-bar{position:absolute;left:0;bottom:0;height:2px;width:100%;background:linear-gradient(90deg,var(--ab-tone),transparent);transform-origin:left;animation:tbar var(--ab-ms,8000ms) linear forwards}
+@keyframes tbar{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+@keyframes abIn{from{opacity:0;transform:translateY(-26px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes abOut{to{opacity:0;transform:translateY(-22px) scale(.97)}}
+@media (prefers-reduced-motion:reduce){.nct.ab{animation:none!important}.nct .ab-bar{display:none}}
 </style>
 </head>
 <body>
@@ -1011,6 +1063,7 @@ th{background:var(--surface-2)}
   <div class="pane" data-pane="overview">
     <section>
       <div class="sh"><h2>Overview</h2><span id="eoSub"></span></div>
+      <div class="teamnow" id="teamNow" hidden></div>
       <div class="grid eok" id="eoKpis" data-keep></div>
     </section>
     <section class="top livebox" id="liveBox">
@@ -1173,7 +1226,7 @@ th{background:var(--surface-2)}
 <div class="nc-scrim" id="ncScrim" hidden></div>
 <aside class="nc" id="nc" hidden aria-label="Notification centre" data-keep>
   <div class="nc-h"><div class="nc-t"><span class="nc-ic"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span><div><b>Notification Centre</b><small id="ncSub">—</small></div></div>
-    <button type="button" class="nc-a" id="ncAll">Mark all read</button><button class="mx" type="button" id="ncX" aria-label="Close">×</button></div>
+    <button type="button" class="nc-a" id="ncSnd" aria-pressed="true">🔊 Sound on</button><button type="button" class="nc-a" id="ncAll">Mark all read</button><button class="mx" type="button" id="ncX" aria-label="Close">×</button></div>
   <div class="nc-f" id="ncF" role="group" aria-label="Filter"><button type="button" data-f="all" aria-pressed="true">All</button><button type="button" data-f="urgent" aria-pressed="false">Urgent</button><button type="button" data-f="alert" aria-pressed="false">Alerts</button><button type="button" data-f="msg" aria-pressed="false">Messages</button></div>
   <div class="nc-l" id="ncL"></div>
   <div class="nc-foot"><span id="ncPerm"></span><button type="button" class="btn pri" id="ncCompose">Message showrooms</button></div>
@@ -1266,7 +1319,7 @@ function niceMax(v){ if(v<=4)return 4; const p=Math.pow(10,Math.floor(Math.log10
 /* ───────── state ───────── */
 const S={raw:{},roster:{},stores:[],recs:[],lastKey:{},loaded:false,demo:false,updated:0,err:null,lastFull:0,
   store:'all',preset:'mtd',a:0,b:0,cmpMode:'auto',ca:null,cb:null,hmScale:'row',q:'',execAll:false,idleOpen:false,sort:{},
-  ch:'all',locks:{},cfg:{}};
+  ch:'all',locks:{},cfg:{},leave:{}};
 try{const v=localStorage.getItem('rakCh');if(v==='all'||v==='walkin'||v==='phone')S.ch=v}catch(_){}
 
 /* ───────── data ───────── */
@@ -1283,18 +1336,18 @@ async function loadFull(){
   const idx=await j(DB+'/stores.json?shallow=true'); const ids=Object.keys(idx||{}).sort();
   const raw={},roster={};
   await Promise.all(ids.map(async id=>{
-    const [w,r,lk,cf]=await Promise.all([j(`${DB}/stores/${id}/walkins.json`),j(`${DB}/stores/${id}/executiveList.json`).catch(()=>null),
-      j(`${DB}/stores/${id}/locks.json`).catch(()=>null),j(`${DB}/stores/${id}/settings.json`).catch(()=>null)]);
+    const [w,r,lk,cf,lv]=await Promise.all([j(`${DB}/stores/${id}/walkins.json`),j(`${DB}/stores/${id}/executiveList.json`).catch(()=>null),
+      j(`${DB}/stores/${id}/locks.json`).catch(()=>null),j(`${DB}/stores/${id}/settings.json`).catch(()=>null),j(`${DB}/stores/${id}/leave.json`).catch(()=>null)]);
     raw[id]=w; roster[id]=r?[...new Set(Object.values(r).map(x=>String(x).trim()).filter(Boolean))]:[];
-    S.locks[id]=lk&&typeof lk==='object'?lk:{}; S.cfg[id]=cf&&typeof cf==='object'?cf:{};
+    S.locks[id]=lk&&typeof lk==='object'?lk:{}; S.cfg[id]=cf&&typeof cf==='object'?cf:{}; S.leave[id]=lv&&typeof lv==='object'?lv:{};
   }));
   S.raw={};S.lastKey={};S.stores=ids;S.roster=roster; ids.forEach(id=>ingest(id,raw[id])); rebuild(); S.lastFull=Date.now();
 }
 async function loadNew(){
   await Promise.all(S.stores.map(async id=>{
     const q=S.lastKey[id]?`?orderBy=%22%24key%22&startAt=%22${encodeURIComponent(S.lastKey[id])}%22`:'';
-    const [w,lk,cf]=await Promise.all([j(`${DB}/stores/${id}/walkins.json${q}`),j(`${DB}/stores/${id}/locks.json`).catch(()=>undefined),j(`${DB}/stores/${id}/settings.json`).catch(()=>undefined)]);
-    ingest(id,w); if(lk!==undefined)S.locks[id]=lk||{}; if(cf!==undefined)S.cfg[id]=cf||{};
+    const [w,lk,cf,lv]=await Promise.all([j(`${DB}/stores/${id}/walkins.json${q}`),j(`${DB}/stores/${id}/locks.json`).catch(()=>undefined),j(`${DB}/stores/${id}/settings.json`).catch(()=>undefined),j(`${DB}/stores/${id}/leave.json`).catch(()=>undefined)]);
+    ingest(id,w); if(lk!==undefined)S.locks[id]=lk||{}; if(cf!==undefined)S.cfg[id]=cf||{}; if(lv!==undefined)S.leave[id]=lv||{};
   })); rebuild();
 }
 let busy=false;
@@ -2305,7 +2358,7 @@ const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches||navigator.standalone===true}catch(_){return false}};
 async function sysNotify(title,body,tag,sticky){
   if(!notifOK()) return false;
-  const o={body:String(body||'').slice(0,300),tag,icon:APP_ICON,badge:APP_ICON,renotify:true,requireInteraction:!!sticky,data:{url:location.href}};
+  const o={body:String(body||'').slice(0,300),tag,icon:APP_ICON,badge:new URL('notif-badge.png',location.href).href,renotify:true,silent:false,timestamp:Date.now(),requireInteraction:!!sticky,data:{url:location.href}};
   try{ const n=new Notification(title,o); n.onclick=()=>{try{window.focus()}catch(_){} n.close(); setTab('health',true); ncOpen(true)}; return true }catch(_){}
   try{ const reg=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration(); if(reg){ await reg.showNotification(title,o); return true } }catch(_){}
   return false;
@@ -2321,10 +2374,20 @@ function askNotif(){
    manager switches them back on duty (stores/{id}/settings/dutyTs/{name}). */
 const IDLE_DEFAULT=7;
 const keyOf=n=>String(n).replace(/[.#$\[\]\/]/g,'_');
-const isOff=(id,n)=>!!((S.locks[id]||{})[n]);
+/* v3.2 · each showroom's own hours (settings/workHours), off days (settings/offDays) and annual leave (leave/{name}) */
+const DK=['sun','mon','tue','wed','thu','fri','sat'];
+const isoOf=d=>new Date(d*DAY).toISOString().slice(0,10);            // d = UAE day number
+function hrsOf(id){ const w=((S.cfg[id]||{}).workHours)||{}; let o=parseInt(w.open,10),c=parseInt(w.close,10);
+  if(!(o>=0&&o<=23))o=9; if(!(c>o&&c<=24))c=Math.max(o+1,21); return{o,c} }
+const offDay=(id,d)=>!!((((S.cfg[id]||{}).offDays)||{})[DK[new Date(d*DAY).getUTCDay()]]);
+const leaveOf=(id,n)=>{ const v=(S.leave[id]||{})[keyOf(n)]; return v&&v.from&&v.to?v:null };
+const onLeave=(id,n)=>{ const v=leaveOf(id,n), t=isoOf(dn(Date.now())); return !!(v&&v.from<=t&&t<=v.to) };
+const leaveBack=(id,n)=>{ const v=leaveOf(id,n); if(!v)return 0; const t=Date.parse(v.to+'T00:00:00+04:00')+DAY; return t<=Date.now()?t:0 };
+const backOn=v=>new Date(Date.parse(v.to+'T00:00:00+04:00')+DAY+OFF).toLocaleDateString('en-GB',{day:'numeric',month:'short',timeZone:'UTC'});
+const isOff=(id,n)=>!!((S.locks[id]||{})[n])||onLeave(id,n);
 const idleLimit=id=>{const v=(S.cfg[id]||{}).idleHours; if(v===0||v==='0')return 0; return +v>0?+v:IDLE_DEFAULT};
-function bizMs(from,to){ if(!(to>from))return 0; let t=0;
-  for(let d=dn(from);d<=dn(to);d++){ const o=d*DAY-OFF+OPEN_H*36e5, c=d*DAY-OFF+CLOSE_H*36e5, a=Math.max(from,o), b=Math.min(to,c); if(b>a)t+=b-a }
+function bizMs(from,to,id){ if(!(to>from))return 0; let t=0; const h=hrsOf(id);
+  for(let d=dn(from);d<=dn(to);d++){ if(id&&offDay(id,d))continue; const o=d*DAY-OFF+h.o*36e5, c=d*DAY-OFF+h.c*36e5, a=Math.max(from,o), b=Math.min(to,c); if(b>a)t+=b-a }
   return t }
 function fIdle(ms){ const day=(CLOSE_H-OPEN_H)*36e5; if(ms>=day*1.5){const d=Math.round(ms/day);return d+' opening day'+(d===1?'':'s')}
   const h=Math.floor(ms/36e5), m=Math.floor(ms%36e5/6e4); return h?`${h}h ${String(m).padStart(2,'0')}m`:`${m}m` }
@@ -2333,30 +2396,43 @@ function idleData(){
   for(const id of ids){ const lim=idleLimit(id)*36e5, ros=S.roster[id]||[]; if(!ros.length)continue;
     const last={}; const m=S.raw[id]; if(m) for(const r of m.values()){ if(r.t>now)continue; for(const n of [r.e,r.b]) if(n&&(!last[n]||r.t>last[n]))last[n]=r.t }
     const duty=((S.cfg[id]||{}).dutyTs)||{};
-    const rows=ros.map(n=>{ const off=isOff(id,n), since=Math.max(last[n]||0,+duty[keyOf(n)]||0,now-30*DAY), idle=bizMs(since,now);
-      return{n,off,since,idle,last:last[n]||0,bad:!off&&lim>0&&idle>=lim} });
+    const rows=ros.map(n=>{ const lv=onLeave(id,n), off=isOff(id,n), since=Math.max(last[n]||0,+duty[keyOf(n)]||0,leaveBack(id,n),now-30*DAY), idle=bizMs(since,now,id);
+      return{n,off,lv,since,idle,last:last[n]||0,bad:!off&&lim>0&&idle>=lim} });
     const on=rows.filter(r=>!r.off), bad=rows.filter(r=>r.bad).sort((x,y)=>y.idle-x.idle);
-    out.push({id,lim,rows,on,bad,off:rows.filter(r=>r.off),all:on.length>0&&bad.length===on.length});
+    out.push({id,lim,rows,on,bad,off:rows.filter(r=>r.off),leave:rows.filter(r=>r.lv),closed:offDay(id,dn(now)),all:on.length>0&&bad.length===on.length});
   }
   return out;
 }
 function renderIdle(c){
   const el=$('#idleCard'); if(!el) return;
-  const D=idleData(), bad=D.filter(x=>x.bad.length), nBad=bad.reduce((a,x)=>a+x.bad.length,0), nOff=D.reduce((a,x)=>a+x.off.length,0), nOn=D.reduce((a,x)=>a+x.on.length,0);
+  const D=idleData(), bad=D.filter(x=>x.bad.length), nBad=bad.reduce((a,x)=>a+x.bad.length,0), nOff=D.reduce((a,x)=>a+x.off.length,0), nOn=D.reduce((a,x)=>a+x.on.length,0), nLv=D.reduce((a,x)=>a+x.leave.length,0), nCl=D.filter(x=>x.closed).length;
+  renderTeamNow(D,nOn,nBad,nOff,nLv,nCl);
   const hs=[...new Set(D.map(x=>x.lim/36e5))], hTxt=hs.length===1?(hs[0]?hs[0]+'+ opening hours':'(alerts off)'):'their showroom’s limit';
-  $('#idleSub').textContent=`On-duty executives with no entry for ${hTxt} (${hh(OPEN_H)}–${hh(CLOSE_H)}) · off-duty staff are skipped`;
+  $('#idleSub').textContent=`On-duty executives with no entry for ${hTxt} (each showroom’s own hours and working days) · off-duty and on-leave staff are skipped`;
   const btn=$('#btnIdle'); btn.hidden=!nBad; $('#idleN').textContent=nBad; btn.classList.toggle('crit',bad.some(x=>x.all));
   const tb=$('#tabIdle'); tb.hidden=!nBad; tb.textContent=nBad; tb.setAttribute('aria-label',nBad+' idle');
   const perm=!notifSupported()?'':Notification.permission==='granted'?'<span class="iwc ok">🔔 Alerts on</span>':Notification.permission==='denied'?'<span class="iwc">🔕 Alerts blocked in browser settings</span>':'<button class="btn pri" type="button" id="bAlerts">🔔 Turn on alerts</button>';
-  const head=`<div class="iwh"><span class="iwc ${nBad?'bad':'ok'}">${nBad?`${nBad} idle`:'✓ All active'}</span><span class="iwc">${nOn-nBad} active</span><span class="iwc">${nOff} off duty · skipped</span><span class="sp2"></span>${perm}</div>`;
-  if(!nBad){ el.innerHTML=head+`<p class="iwnote">✓ Every on-duty executive${c.isAll?` across ${D.length} showrooms`:''} has logged within the limit.</p>`; return }
+  const head=`<div class="iwh"><span class="iwc ${nBad?'bad':'ok'}">${nBad?`${nBad} idle`:'✓ All active'}</span><span class="iwc">${nOn-nBad} active</span><span class="iwc">${nOff-nLv} off duty</span><span class="iwc lv">🌴 ${nLv} on annual leave</span>${nCl?`<span class="iwc">${nCl} closed today</span>`:''}<span class="sp2"></span>${perm}</div>`;
+  const lvList=nLv?`<p class="iwskip iwlv">🌴 On annual leave: ${D.flatMap(x=>x.leave.map(r=>`<b>${esc(r.n)}</b>${c.isAll?` · ${esc(short(x.id))}`:''} (back ${backOn(leaveOf(x.id,r.n))})`)).join(', ')}</p>`:'';
+  if(!nBad){ el.innerHTML=head+lvList+`<p class="iwnote">✓ Every on-duty executive${c.isAll?` across ${D.length} showrooms`:''} has logged within the limit.</p>`; return }
   el.innerHTML=head+`<div class="iwg">${bad.sort((x,y)=>(y.all-x.all)||y.bad.length-x.bad.length).map(x=>`<div class="iws${x.all?' all':''}">
       <div class="iws-h">${c.isAll?`<button type="button" class="lnk" data-store="${esc(x.id)}">${esc(short(x.id))}</button>`:`<b>${esc(short(x.id))}</b>`}<span>${x.bad.length} of ${x.on.length} on duty idle</span></div>
       ${x.all?'<span class="st crit">Nobody on duty has logged anything</span>':''}
       <div class="iwn">${x.bad.map(r=>`<div><b>${esc(r.n)}<small>${r.last?'last entry '+esc(mWhen(r.last)):'no entries yet'}</small></b><span>${fIdle(r.idle)}</span></div>`).join('')}</div>
-      ${x.off.length?`<p class="iwskip">Skipped (off duty): ${x.off.map(r=>esc(r.n)).join(', ')}</p>`:''}</div>`).join('')}</div>`;
+      ${x.off.filter(r=>!r.lv).length?`<p class="iwskip">Skipped (off duty): ${x.off.filter(r=>!r.lv).map(r=>esc(r.n)).join(', ')}</p>`:''}</div>`).join('')}</div>`+lvList;
   idleNotify(D);
 }
+function renderTeamNow(D,nOn,nBad,nOff,nLv,nCl){
+  const el=$('#teamNow'); if(!el) return;
+  const tot=D.reduce((a,x)=>a+x.rows.length,0); if(!tot){ el.hidden=true; return } el.hidden=false;
+  el.innerHTML=`<span class="tn-h">Team now</span>
+    <button type="button" class="tn ok" data-go="health"><b>${nOn-nBad}</b>active</button>
+    <button type="button" class="tn ${nBad?'bad':''}" data-go="health"><b>${nBad}</b>inactive</button>
+    <button type="button" class="tn" data-go="health"><b>${nOff-nLv}</b>off duty</button>
+    <button type="button" class="tn lv" data-go="health"><b>${nLv}</b>🌴 annual leave</button>
+    ${nCl?`<span class="tn"><b>${nCl}</b>closed today</span>`:''}`;
+}
+document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('#teamNow [data-go]'); if(b) setTab(b.dataset.go,true) });
 function idleNotify(D){
   if(S.demo||!S.loaded||!notifOK()||!document.hidden||pushOn) return;   // device alerts handle it once switched on   // in the foreground the Notification Centre shows it
   let done={}; try{done=JSON.parse(localStorage.getItem('rakIdleNote')||'{}')||{}}catch(_){}
@@ -2364,7 +2440,7 @@ function idleNotify(D){
   if(!fresh.length) return;
   const by={}; fresh.forEach(({x,r})=>{(by[x.id]=by[x.id]||{x,n:[]}).n.push(r.n)});
   const body=Object.values(by).map(g=>`${short(g.x.id)}: ${g.n.join(', ')}${g.x.all?' (nobody active)':''}`).join('\n')+'\nOff-duty staff are not included.';
-  sysNotify(`⏱ ${fresh.length} executive${fresh.length===1?'':'s'} inactive ${idleLimit(fresh[0].x.id)}h+`,body,'rak-idle',true);
+  sysNotify(`⏱ Inactivity · ${fresh.length} executive${fresh.length===1?'':'s'}`,body,'rak-idle',true);
   try{localStorage.setItem('rakIdleNote',JSON.stringify(done))}catch(_){}
 }
 document.addEventListener('click',e=>{ if(e.target.closest&&e.target.closest('#bAlerts')) askNotif(); if(e.target.closest&&e.target.closest('#btnIdle')) setTab('health',true) });
@@ -2407,7 +2483,7 @@ setInterval(()=>{ if(!CTX)return; if(document.hidden) idleNotify(idleData()); el
 /* ───────── self-update ─────────
    On open, on return to the foreground and every few minutes, the page downloads itself past every cache.
    If the copy on the server differs from the one running, it refreshes the cached copies and reloads. */
-const BUILD='3.1';   // shown in the footer, so you can see which version a device is running
+const BUILD='3.3';   // shown in the footer, so you can see which version a device is running
 const SELF_JS=document.currentScript?document.currentScript.textContent:'', SELF_CSS=(document.querySelector('style')||{}).textContent||'';
 $('#ver').textContent='Version '+BUILD;
 const bust=()=>{const u=new URL(location.href);u.searchParams.set('v',Date.now());location.replace(u)};
@@ -2583,11 +2659,37 @@ function ncAct(i){
   ncOpen(false); S.store=i.store; S.execAll=false; if(S.tab===i.go) render(); else setTab(i.go,true);
 }
 function ncToast(i){
-  const box=$('#nct'), d=document.createElement('div'); d.className='nct'+(i.pri==='urgent'?' u':'');
-  d.innerHTML=`<span class="na">${svgI(i.icon)}</span><div><b>${esc(i.title)}</b><small>${esc(i.text.length>120?i.text.slice(0,120)+'…':i.text)}</small><button type="button" class="nv">View</button></div><button type="button" class="nx" aria-label="Dismiss">×</button>`;
-  d.querySelector('.nv').onclick=()=>{ d.remove(); ncAct(i) }; d.querySelector('.nx').onclick=()=>d.remove();
-  box.appendChild(d); setTimeout(()=>d.remove(),i.pri==='urgent'?14000:8000);
+  const box=$('#nct'), d=document.createElement('div'), ms=i.pri==='urgent'?14000:8000, u=i.pri==='urgent';
+  while(box.children.length>=3) box.firstChild.remove();
+  d.className='nct ab'+(u?' u':''); d.style.setProperty('--ab-ms',ms+'ms');
+  d.innerHTML=`<div class="ab-top"><span class="ab-logo">RAK</span><span>UAE Retail</span>·<span class="ab-k">${esc(i.who||'Alert')}</span><time>${i.ts?esc(fTime(i.ts)):'now'}</time></div>
+    <span class="ab-av">${svgI(i.icon)}</span>
+    <div class="ab-b"><b>${esc(i.title)}</b><p>${esc(i.text)}</p></div>
+    <div class="ab-act"><button type="button" class="pri nv">View</button><button type="button" class="nx">Later</button></div><i class="ab-bar"></i>`;
+  const close=()=>{ d.classList.add('out'); setTimeout(()=>d.remove(),320) };
+  d.querySelector('.nv').onclick=e=>{ e.stopPropagation(); d.remove(); ncAct(i) }; d.querySelector('.nx').onclick=e=>{ e.stopPropagation(); close() };
+  d.onclick=()=>{ d.remove(); ncAct(i) };
+  let y0=null; d.addEventListener('touchstart',e=>{y0=e.touches[0].clientY},{passive:true}); d.addEventListener('touchmove',e=>{ if(y0!==null&&e.touches[0].clientY-y0<-24){y0=null;close()} },{passive:true});
+  box.appendChild(d); setTimeout(close,ms); playTone(u?'urgent':'message');
 }
+/* sound: a soft ping for alerts, a brighter call for urgent ones (browsers stay silent until the page is tapped once) */
+let audioCtx=null;
+const soundOn=()=>{try{return localStorage.getItem('rakSound')!=='off'}catch(_){return true}};
+function getAudio(){ try{ audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)(); if(audioCtx.state==='suspended')audioCtx.resume().catch(()=>{}) }catch(_){audioCtx=null} return audioCtx }
+function unlockAudio(){ const c=getAudio(); if(!c)return; try{const b=c.createBuffer(1,1,22050),s=c.createBufferSource();s.buffer=b;s.connect(c.destination);s.start(0)}catch(_){} if(c.state==='running')['pointerdown','keydown','touchend'].forEach(t=>removeEventListener(t,unlockAudio,true)) }
+['pointerdown','keydown','touchend'].forEach(t=>addEventListener(t,unlockAudio,true));
+function playTone(kind,force){
+  if(!force&&!soundOn())return; const c=getAudio(); if(!c||c.state==='closed')return;
+  try{ const urgent=kind==='urgent', t0=c.currentTime+.03, out=c.createGain(); out.gain.value=urgent?.36:.3; out.connect(c.destination);
+    const notes=urgent?[[987.77,0],[1318.51,.11],[1760,.22],[987.77,.62],[1318.51,.73],[1760,.84]]:[[1174.66,0],[1567.98,.14]], len=urgent?.32:.9;
+    notes.forEach(([f,at])=>{ const s=t0+at; [[1,1],[2.01,.18],[4.2,.05]].forEach(([mul,lvl])=>{ const o=c.createOscillator(),g=c.createGain(); o.type='sine'; o.frequency.value=f*mul;
+      g.gain.setValueAtTime(.0001,s); g.gain.exponentialRampToValueAtTime(lvl,s+.008); g.gain.exponentialRampToValueAtTime(.0001,s+len/Math.sqrt(mul)); o.connect(g); g.connect(out); o.start(s); o.stop(s+len+.05) }) });
+  }catch(_){}
+  try{ if(navigator.vibrate)navigator.vibrate(kind==='urgent'?[160,70,160,70,160]:[60,40,60]) }catch(_){}
+}
+function sndRender(){ const b=$('#ncSnd'); if(!b)return; const on=soundOn(); b.textContent=on?'🔊 Sound on':'🔇 Sound off'; b.setAttribute('aria-pressed',on) }
+document.addEventListener('click',e=>{ if(e.target.closest&&e.target.closest('#ncSnd')){ const on=!soundOn(); try{localStorage.setItem('rakSound',on?'on':'off')}catch(_){} sndRender(); if(on)playTone('message',true) } });
+setTimeout(sndRender,0);
 $('#btnBell').addEventListener('click',()=>ncOpen(!NC.open));
 $('#sideBell').addEventListener('click',()=>ncOpen(true));
 $('#ncX').addEventListener('click',()=>ncOpen(false));
@@ -2701,12 +2803,18 @@ function renderFeed(c){
     const tk=$('#feedTk'); tk.addEventListener('animationiteration',()=>{ if(feedNext!=null){ tk.innerHTML=feedNext; feedHtml=feedNext; feedNext=null; tk.style.animationDuration=Math.max(55,Math.round(tk.scrollWidth/35))+'s' } });
     tk.addEventListener('click',()=>tk.classList.toggle('paused')) }
   const tk=$('#feedTk');
-  if(!feedHtml){ tk.innerHTML=html; feedHtml=html; tk.style.animationDuration=Math.max(60,Math.round(tk.scrollWidth/35))+'s' }
+  if(!feedHtml){ tk.innerHTML=html; feedHtml=html; tk.style.animationDuration=Math.max(55,Math.round(tk.scrollWidth/35))+'s' }
   else if(html!==feedHtml) feedNext=html;     // swapped in when the scroll loops, never mid-sentence
 }
 
 checkUpdate();
 if(new URLSearchParams(location.search).has('demo')) useDemo(); else refresh(true);
+</script>
+<script>
+(function shine(){ if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const f=document.createElement('div'); f.className='bg-flash'; f.setAttribute('aria-hidden','true'); document.body.appendChild(f);
+  ['header.top','#liveBox'].forEach(q=>{ const h=document.querySelector(q); if(h){ const s=document.createElement('i'); s.className='hd-sheen'; s.setAttribute('aria-hidden','true'); h.prepend(s) } });
+})();
 </script>
 </body>
 </html>
