@@ -1521,7 +1521,7 @@ function barChart(el,o){
 
 /* ───────── sections ───────── */
 const ICON={users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',store:'<path d="M3 9l1.5-5h15L21 9"/><path d="M4 9v11h16V9"/><path d="M9 20v-6h6v6"/><path d="M3 9h18"/>',trophy:'<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/>',rank:'<path d="M5 21V10M12 21V4M19 21v-7"/>'};
-const ICON_OF={'Walk-ins · phone':'store','Walk-ins':'users','Daily average':'cal','Active showrooms':'store','Top showroom':'trophy','Network rank':'rank','Active executives':'users','Peak hour':'clock','Top executive':'user'};
+const ICON_OF={'Walk-ins · phone':'store','Walk-ins':'users','Daily average':'cal','Active showrooms':'store','Top showroom':'trophy','All Showrooms rank':'rank','Active executives':'users','Peak hour':'clock','Top executive':'user'};
 const P0=v=>Math.max(0,v||0);
 const chs=o=>`<span class="chs" data-keep><i>${fmt(P0(o&&o.walkin))}</i><i class="p">${fmt(P0(o&&o.phone))}</i></span>`;
 const mixbar=o=>{const w=P0(o&&o.walkin),p=P0(o&&o.phone),t=w+p;return `<span class="mixbar" data-tip="${esc(`${fmt(w)} walk-ins · ${fmt(p)} phone inquiries`)}"><i style="width:${t?w/t*100:0}%"></i><b style="width:${t?p/t*100:0}%"></b></span>${t?pct(p/t,0):'–'}`};
@@ -1615,7 +1615,7 @@ function renderPeriod(c){
     h+=mini('Active showrooms',`${act} / ${tot}`,act<tot?`${tot-act} logged nothing`:'All reported')+
        mini('Top showroom',ts?esc(short(ts.k)):'–',ts?`${fmt(ts.v)} · ${pct(ts.v/cur.total)} of total`:'');
   } else { const order=[...c.net.store.entries()].sort((x,y)=>y[1]-x[1]).map(x=>x[0]), rk=order.indexOf(S.store)+1, ros=(S.roster[S.store]||[]).filter(e=>!isOff(S.store,e)).length, act=cur.exec.size;
-    h+=mini('Network rank',rk?`#${rk} of ${S.stores.length}`:'–',c.net.total?`${pct(cur.total/c.net.total)} of all walk-ins`:'')+
+    h+=mini('All Showrooms rank',rk?`#${rk} of ${S.stores.length}`:'–',c.net.total?`${pct(cur.total/c.net.total)} of all walk-ins`:'')+
        mini('Active executives',ros?`${act} / ${Math.max(ros,act)}`:String(act),ros>act?`${ros-act} on the roster logged nothing`:'Everyone logged');
   }
   h+=mini('Peak hour',pk.i<0?'–':`${hh(pk.i)}–${hh((pk.i+1)%24)}`,pk.i<0?'in-store traffic':`${pct(pk.v/(cur.wTotal||1))} of in-store traffic`,pk.i<0?'':`Peak hour of <b>physical walk-ins</b> (phone inquiries are not counted)<br>${fmt(pk.v)} of ${fmt(cur.wTotal)} walk-ins in this hour`)+
@@ -1634,7 +1634,7 @@ function renderInsights(c){
   if(isAll){
     const rows=[...cur.store.entries()].sort((x,y)=>y[1]-x[1]);
     if(rows.length>1){ const t3=rows.slice(0,3).reduce((s,x)=>s+x[1],0);
-      add(rows[0][1]/cur.total>.4?'wrn':'inf',`<b>${esc(sname(rows[0][0]))}</b> brings in ${pct(rows[0][1]/cur.total)} of all walk-ins; the top three showrooms together account for ${pct(t3/cur.total)}. ${rows[0][1]/cur.total>.4?'Network totals mostly reflect this one showroom, so read the others on their own trend.':''}`); }
+      add(rows[0][1]/cur.total>.4?'wrn':'inf',`<b>${esc(sname(rows[0][0]))}</b> brings in ${pct(rows[0][1]/cur.total)} of all walk-ins; the top three showrooms together account for ${pct(t3/cur.total)}. ${rows[0][1]/cur.total>.4?'All Showrooms totals mostly reflect this one showroom, so read the others on their own trend.':''}`); }
     if(cmp){ const ch=S.stores.map(id=>({id,c:cur.store.get(id)||0,p:cmp.store.get(id)||0})).filter(x=>x.p>=5||x.c>=5).map(x=>({...x,d:x.c-x.p}));
       const up=ch.filter(x=>x.d>0).sort((x,y)=>y.d-x.d)[0], dnn=ch.filter(x=>x.d<0).sort((x,y)=>x.d-y.d)[0];
       if(up) add('pos',`Biggest gain: <b>${esc(sname(up.id))}</b>, up ${fmt(up.d)} walk-ins (${fmt(up.p)} → ${fmt(up.c)}).`);
@@ -1644,7 +1644,7 @@ function renderInsights(c){
   } else {
     const rows=[...cur.exec.entries()].sort((x,y)=>y[1]-x[1]);
     if(rows.length){ const s=rows[0][1]/cur.total; add(s>.5&&rows.length>1?'wrn':'inf',`<b>${esc(rows[0][0].split('\u0001')[1])}</b> logged ${pct(s)} of this showroom's walk-ins${s>.5?'. That is a heavy dependence on one person':''}.`); }
-    if(c.net.total) add('inf',`This showroom contributes <b>${pct(cur.total/net.total)}</b> of the network's walk-ins in the period.`);
+    if(c.net.total) add('inf',`This showroom contributes <b>${pct(cur.total/net.total)}</b> of the All Showrooms's walk-ins in the period.`);
   }
   const pk=peakOf(cur.hour); if(pk.i>=0){ const srt=[...cur.hour].map((v,i)=>({v,i})).sort((x,y)=>y.v-x.v).slice(0,3), t3=srt.reduce((s,x)=>s+x.v,0);
     add('inf',`Showroom traffic peaks at <b>${hh(pk.i)}–${hh((pk.i+1)%24)}</b>. The three busiest hours (${srt.map(x=>hh(x.i)).sort().join(', ')}) carry ${pct(t3/(cur.wTotal||1))} of physical walk-ins, which is where floor cover matters most.`); }
@@ -1723,7 +1723,7 @@ function renderTrend(c){
   $('#trendSub').textContent=kind==='hour'?'Hour by hour · physical walk-ins':kind==='day'?'Day by day':'Week by week (weeks start Sunday)';
 }
 
-function entityRows(c){ // stores when viewing the network, executives when viewing one showroom
+function entityRows(c){ // stores when viewing the All Showrooms, executives when viewing one showroom
   if(c.isAll) return S.stores.map(id=>({k:id,name:sname(id),v:c.cur.store.get(id)||0,p:c.cmp?(c.cmp.store.get(id)||0):null,day:c.cur.sDay.get(id)||new Map})).sort((x,y)=>y.v-x.v);
   const ks=new Set([...c.cur.exec.keys(),...(S.roster[S.store]||[]).map(e=>ek(S.store,e))]); if(c.cmp)for(const k of c.cmp.exec.keys())ks.add(k);
   return [...ks].map(k=>({k,name:k.split('\u0001')[1],v:c.cur.exec.get(k)||0,p:c.cmp?(c.cmp.exec.get(k)||0):null,day:c.cur.eDay.get(k)||new Map})).sort((x,y)=>y.v-x.v);
@@ -1809,7 +1809,7 @@ const ring=(p,txt)=>`<svg width="50" height="50" viewBox="0 0 50 50" style="flex
 function renderCards(c,st){
   $('#cards').innerHTML=st.map(r=>`<button type="button" class="card sc" data-store="${esc(r.id)}"><div class="t"><div style="min-width:0"><b>${esc(short(r.id))}</b><div class="v"><b>${fmt(r.v)}</b>${delta(r.v,r.p)}</div></div>${ring(r.share,'#'+r.rank)}</div>
     ${spark(r.sp,220,40)}
-    <dl>${S.ch==='all'?`<dt data-keep>Walk-ins · phone</dt><dd>${chs(c.spl.store.get(r.id))}</dd>`:''}<dt>Share of network</dt><dd>${pct(r.share)}</dd><dt>Per day</dt><dd>${fmt1(r.avg)}</dd><dt>One walk-in every</dt><dd data-tip="${esc('On days it logged anything, spread across opening hours '+hh(OPEN_H)+'–'+hh(CLOSE_H))}">${fEvery(r.every)}</dd><dt>Top executive</dt><dd>${r.te?esc(r.te.k)+' · '+pct(r.te.v/r.v,0):'–'}</dd><dt>Peak hour</dt><dd>${r.pk.i>=0?hh(r.pk.i):'–'}</dd><dt>Last entry</dt><dd>${r.last?ago(r.last):'never'}</dd></dl></button>`).join('');
+    <dl>${S.ch==='all'?`<dt data-keep>Walk-ins · phone</dt><dd>${chs(c.spl.store.get(r.id))}</dd>`:''}<dt>Share of All Showrooms</dt><dd>${pct(r.share)}</dd><dt>Per day</dt><dd>${fmt1(r.avg)}</dd><dt>One walk-in every</dt><dd data-tip="${esc('On days it logged anything, spread across opening hours '+hh(OPEN_H)+'–'+hh(CLOSE_H))}">${fEvery(r.every)}</dd><dt>Top executive</dt><dd>${r.te?esc(r.te.k)+' · '+pct(r.te.v/r.v,0):'–'}</dd><dt>Peak hour</dt><dd>${r.pk.i>=0?hh(r.pk.i):'–'}</dd><dt>Last entry</dt><dd>${r.last?ago(r.last):'never'}</dd></dl></button>`).join('');
 }
 function table(sel,id,cols,rows,o={}){
   const st=S.sort[id]||(S.sort[id]={k:o.k,dir:o.dir||-1}), col=cols.find(x=>x.k===st.k)||cols[0];
@@ -2040,7 +2040,7 @@ function leagueData(c){
   const frac=Math.min(1,Math.max(0,(c.nowTod/36e5-OPEN_H)/(CLOSE_H-OPEN_H))), elapsed=(T-ms)+frac, mlen=monthEnd(T)-ms+1;
   let src; if(c.isAll) src=S.stores.map(id=>({k:id,name:sname(id),day:c.sDayAll.get(id)||new Map}));
   else { const em=new Map; (S.roster[S.store]||[]).forEach(e=>em.set(e,new Map)); for(const r of c.scope){ let m=em.get(r.e); if(!m)em.set(r.e,m=new Map); m.set(r.d,(m.get(r.d)||0)+r.c) } src=[...em].map(([e,day])=>({k:e,name:e,day})) }
-  const tot={k:null,name:c.isAll?'Network':'Whole showroom',day:c.scopeDay,total:true};
+  const tot={k:null,name:c.isAll?'All Showrooms':'Whole showroom',day:c.scopeDay,total:true};
   const rows=[tot,...src].map(r=>{ const v=months.map(mo=>{let t=0;for(let d=mo.a;d<=Math.min(mo.b,T);d++)t+=r.day.get(d)||0;return t});
     const mtd=v[5], fc=elapsed>.25?mtd/elapsed*mlen:null; return{...r,v,fc,last:v[4]} });
   const body=rows.slice(1).filter(r=>r.v.some(x=>x>0)).sort((x,y)=>(y.fc??y.v[5])-(x.fc??x.v[5])||y.last-x.last);
@@ -2082,7 +2082,7 @@ function renderExecScatter(c,ex){
 /* day-part split of physical walk-ins */
 function renderDayparts(c){
   const parts=h=>{let m=0,a=0,e=0;h.forEach((v,i)=>{if(i<12)m+=v;else if(i<17)a+=v;else e+=v});return[m,a,e]};
-  let rows=[{name:c.isAll?'Network':'Whole showroom',h:c.cur.hour,tot:true}];
+  let rows=[{name:c.isAll?'All Showrooms':'Whole showroom',h:c.cur.hour,tot:true}];
   if(c.isAll) rows.push(...S.stores.map(id=>({k:id,name:short(id),h:c.cur.sHour.get(id)||Array(24).fill(0)})));
   else rows.push(...DOWL.map((n,w)=>({name:n,h:c.cur.dh[w]})));
   rows=rows.map(r=>({...r,p:parts(r.h)})).map(r=>({...r,t:r.p[0]+r.p[1]+r.p[2]})).filter(r=>r.t>0);
@@ -2100,7 +2100,7 @@ function renderWdIndex(c){
   $('#wdiH').textContent=c.isAll?'Weekday strength by showroom':'Weekday strength by executive';
   if(c.days<14){ el.innerHTML='<tbody><tr><td class="empty">Pick a period of at least two weeks so every weekday appears twice.</td></tr></tbody>'; return }
   const idx=dm=>{ const t=Array(7).fill(0); for(const [d,v] of dm) t[dow(d)]+=v; const per=t.map((v,w)=>dc[w]?v/dc[w]:null), tot=t.reduce((a,b)=>a+b,0), avg=tot/c.days; return{per,avg,tot,ix:per.map(v=>v==null||!avg?null:v/avg*100)} };
-  let rows=[{name:c.isAll?'Network':'Whole showroom',...idx(c.cur.day),tot:true}];
+  let rows=[{name:c.isAll?'All Showrooms':'Whole showroom',...idx(c.cur.day),tot:true}];
   if(c.isAll) rows.push(...S.stores.map(id=>({k:id,name:short(id),...idx(c.cur.sDay.get(id)||new Map)})).filter(r=>r.tot>=10).sort((x,y)=>y.tot-x.tot));
   else rows.push(...[...c.cur.eDay].map(([k,dm])=>({name:k.split('\u0001')[1],...idx(dm)})).filter(r=>r.tot>=10).sort((x,y)=>y.tot-x.tot).slice(0,15));
   el.innerHTML=`<thead><tr><th></th>${DOW.map(d=>`<th>${d}</th>`).join('')}</tr></thead><tbody>`+rows.map(r=>`<tr><th scope="row"${r.tot===true?' style="font-weight:750"':''}>${esc(r.name)}</th>`+r.ix.map((v,w)=>{
