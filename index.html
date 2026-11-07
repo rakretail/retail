@@ -2465,8 +2465,8 @@ function renderIdle(c){
   const btn=$('#btnIdle'); btn.hidden=!nBad; $('#idleN').textContent=nBad; btn.classList.toggle('crit',bad.some(x=>x.all));
   const tb=$('#tabIdle'); tb.hidden=!nBad; tb.textContent=nBad; tb.setAttribute('aria-label',nBad+' idle');
   const perm=!notifSupported()?'':Notification.permission==='granted'?'<span class="iwc ok">🔔 Alerts on</span>':Notification.permission==='denied'?'<span class="iwc">🔕 Alerts blocked in browser settings</span>':'<button class="btn pri" type="button" id="bAlerts">🔔 Turn on alerts</button>';
-  const head=`<div class="iwh"><span class="iwc ${nBad?'bad':'ok'}">${nBad?`${nBad} idle`:'✓ All active'}</span><span class="iwc">${nOn-nBad} active</span><span class="iwc">${nOff-nLv} off duty</span><span class="iwc lv">🌴 ${nLv} on annual leave</span>${nCl?`<span class="iwc">${nCl} closed today</span>`:''}<span class="sp2"></span>${perm}</div>`;
-  const lvList=nLv?`<p class="iwskip iwlv">🌴 On annual leave: ${D.flatMap(x=>x.leave.map(r=>`<b>${esc(r.n)}</b>${c.isAll?` · ${esc(short(x.id))}`:''} (back ${backOn(leaveOf(x.id,r.n))})`)).join(', ')}</p>`:'';
+  const head=`<div class="iwh"><span class="iwc ${nBad?'bad':'ok'}">${nBad?`${nBad} idle`:'✓ All active'}</span><span class="iwc">${nOn-nBad} active</span><span class="iwc">${nOff-nLv} off duty</span><span class="iwc lv">✈️✈️🌴🏖️🏖️ ${nLv} on annual leave</span>${nCl?`<span class="iwc">${nCl} closed today</span>`:''}<span class="sp2"></span>${perm}</div>`;
+  const lvList=nLv?`<p class="iwskip iwlv">✈️🌴🏖️ On annual leave: ${D.flatMap(x=>x.leave.map(r=>`<b>${esc(r.n)}</b>${c.isAll?` · ${esc(short(x.id))}`:''} (back ${backOn(leaveOf(x.id,r.n))})`)).join(', ')}</p>`:'';
   if(!nBad){ el.innerHTML=head+lvList+`<p class="iwnote">✓ Every on-duty executive${c.isAll?` across ${D.length} showrooms`:''} has logged within the limit.</p>`; return }
   el.innerHTML=head+`<div class="iwg">${bad.sort((x,y)=>(y.all-x.all)||y.bad.length-x.bad.length).map(x=>`<div class="iws${x.all?' all':''}">
       <div class="iws-h">${c.isAll?`<button type="button" class="lnk" data-store="${esc(x.id)}">${esc(short(x.id))}</button>`:`<b>${esc(short(x.id))}</b>`}<span>${x.bad.length} of ${x.on.length} on duty idle</span></div>
@@ -2482,7 +2482,7 @@ function renderTeamNow(D,nOn,nBad,nOff,nLv,nCl){
     <button type="button" class="tn ok" data-go="health"><b>${nOn-nBad}</b>active</button>
     <button type="button" class="tn ${nBad?'bad':''}" data-go="health"><b>${nBad}</b>inactive</button>
     <button type="button" class="tn" data-go="health"><b>${nOff-nLv}</b>off duty</button>
-    <button type="button" class="tn lv" data-go="leave"><b>${nLv}</b>🌴 annual leave</button>
+    <button type="button" class="tn lv" data-go="leave"><b>${nLv}</b>✈️🌴🏖️ annual leave</button>
     ${nCl?`<span class="tn"><b>${nCl}</b>closed today</span>`:''}`;
 }
 document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('#teamNow [data-go]'); if(!b) return;
@@ -2497,7 +2497,7 @@ function renderLeaveCal(){
   rows.sort((x,y)=>x.a-y.a||x.n.localeCompare(y.n));
   const nNow=rows.filter(r=>r.now).length;
   $('#leaveSub').textContent=rows.length?`${nNow} on leave today · ${rows.length-nNow} starting soon`:'';
-  if(!rows.length){ el.innerHTML='<p class="lvc-empty">🌴 Nobody has annual leave booked in the next 14 days.</p>'; return }
+  if(!rows.length){ el.innerHTML='<p class="lvc-empty">✈️🌴🏖️ Nobody has annual leave booked in the next 14 days.</p>'; return }
   const fD=v=>new Date(Date.parse(v+'T00:00:00Z')).toLocaleDateString('en-GB',{day:'numeric',month:'short',timeZone:'UTC'});
   const head=Array.from({length:N},(_,i)=>{ const dt=new Date((d0+i)*DAY); return `<span class="lvc-d${i===0?' t':''}" style="grid-row:1;grid-column:${i+2}"><small>${'SMTWTFS'[dt.getUTCDay()]}</small>${dt.getUTCDate()}</span>` }).join('');
   el.innerHTML=`<div class="lvc-scroll"><div class="lvc-grid" style="--n:${N}">
