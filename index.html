@@ -1314,6 +1314,24 @@ th{background:var(--surface-2)}
 "use strict";
 /* ───────── config ───────── */
 const DB='https://rakretail-default-rtdb.firebaseio.com';
+   /* ───────── sign-in for database calls ───────── */
+let _authP=null;
+function dbToken(){
+  if(!_authP) _authP=(async()=>{
+    const FB='https://www.gstatic.com/firebasejs/11.0.1/';
+    const [{initializeApp},{getAuth,signInAnonymously}]=await Promise.all([import(FB+'firebase-app.js'),import(FB+'firebase-auth.js')]);
+    const auth=getAuth(initializeApp({apiKey:"AIzaSyDfjbpGfUEzYCbKYyQi6XVt7zZ4Tp54phU",authDomain:"rakretail.firebaseapp.com",projectId:"rakretail",appId:"1:507453199562:web:520cf23c6baf435e5f1033"},'dash'));
+    await auth.authStateReady();
+    if(!auth.currentUser) await signInAnonymously(auth);
+    return auth;
+  })().catch(e=>{_authP=null;throw e});
+  return _authP.then(a=>a.currentUser.getIdToken());
+}
+async function dbFetch(url,opts){
+  let t=null;
+  try{ t=await dbToken(); }catch(e){ console.error('Firebase sign-in failed',e); }
+  return fetch(t?url+(url.includes('?')?'&':'?')+'auth='+encodeURIComponent(t):url,opts);
+}
 const NAMES={fuj:'Fujairah Showroom',rak:'RAK Showroom',mus:'Musaffah Showroom',auh:'AlKhaldya Showroom',zahia:'AlZahia Showroom',aln:'Al Ain Showroom',deira:'Deira Showroom',kludi:'Kludi Showroom',ajm:'Ajman Showroom',otl:'RAK Outlet',shj:'Sharjah Showroom',szr:'Sheikh Zayed Showroom'};
 const OFF=4*36e5, DAY=864e5;            // UAE is UTC+4 all year
 const POLL=45e3, FULL_EVERY=10*60e3;
@@ -1376,7 +1394,7 @@ const S={raw:{},roster:{},stores:[],recs:[],lastKey:{},loaded:false,demo:false,u
 try{const v=localStorage.getItem('rakCh');if(v==='all'||v==='walkin'||v==='phone')S.ch=v}catch(_){}
 
 /* ───────── data ───────── */
-async function j(url){const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}
+async function j(url){const r=await dbFetch(url,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}
 function ingest(id,obj){
   const m=S.raw[id]||(S.raw[id]=new Map());
   if(!obj) return;
@@ -2818,7 +2836,7 @@ async function pushEnable(silent){
     const m=getMessaging(getApps().find(a=>a.name==='push')||initializeApp(PUSH_CFG,'push'));
     if(!window.__pushHooked){ window.__pushHooked=true; onMessage(m,()=>{ refresh(false) }) }
     const tok=await getToken(m,{vapidKey:PUSH_VAPID_KEY,serviceWorkerRegistration:reg}), id=pushId(tok);
-    const r=await fetch(`${DB}/pushTokens/_hq/${id}.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:tok,role:'hq',name:'Head office',url:location.origin+location.pathname,ts:Date.now()})});
+    const r=await dbFetch(`${DB}/pushTokens/_hq/${id}.json`,{method:'PUT',,headers:{'Content-Type':'application/json'},body:JSON.stringify({token:tok,role:'hq',name:'Head office',url:location.origin+location.pathname,ts:Date.now()})});
     if(!r.ok) throw new Error('The database rules don’t allow pushTokens yet.');
     try{localStorage.setItem('rakPushId',id)}catch(_){} pushOn=true;
     if(!silent) ncToast({title:'Alerts are on for this device',text:'Inactivity and reporting alerts will arrive even when the dashboard is closed.',icon:'bell',pri:'normal'});
@@ -2827,7 +2845,7 @@ async function pushEnable(silent){
 }
 async function pushDisable(){
   let id=null; try{id=localStorage.getItem('rakPushId');localStorage.removeItem('rakPushId')}catch(_){}
-  if(id) await fetch(`${DB}/pushTokens/_hq/${id}.json`,{method:'DELETE'}).catch(()=>{});
+  if(id) await dbFetch(`${DB}/pushTokens/_hq/${id}.json`,{method:'DELETE'}).catch(()=>{});
   pushOn=false; renderPushCard();
 }
 /* ask the sender to deliver a message that is already saved in the database (it re-reads it there) */
