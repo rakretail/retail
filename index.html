@@ -19,6 +19,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script>try{var P="teal",T=localStorage.getItem("rakTheme");if(P)document.documentElement.dataset.palette=P;if(T==="dark"||T==="light")document.documentElement.dataset.theme=T}catch(e){}</script>
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js" crossorigin>
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js" crossorigin>
 <style>
 /* ================================================================
    RAK Retail · walk-in analytics · v4 "cobalt glaze"
@@ -1025,9 +1027,81 @@ th{background:var(--surface-2)}
 .lvc-key span{width:14px;height:10px;border-radius:3px;display:inline-block}
 .lvc-key .k1{background:linear-gradient(180deg,#fde68a,#f5b942)} .lvc-key .k2{margin-left:10px;background:repeating-linear-gradient(135deg,rgba(224,66,90,.25) 0 3px,transparent 3px 6px)}
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}}
+
+/* ───────── head-office PIN login ───────── */
+#hqLock{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;
+  background:radial-gradient(120% 90% at 20% 0%,var(--hero-b),var(--hero-a) 70%);color:var(--hero-ink);font-family:var(--fb)}
+#hqLock[hidden]{display:none}
+.hq-card{width:100%;max-width:360px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:22px;
+  padding:28px 24px 22px;text-align:center;box-shadow:0 30px 70px -30px rgba(0,0,0,.6);backdrop-filter:blur(8px)}
+.hq-card .logo{height:46px;aspect-ratio:300/174;margin:0 auto 14px;background:var(--hero-ink);-webkit-mask:var(--logo) center/contain no-repeat;mask:var(--logo) center/contain no-repeat}
+.hq-card h1{font:600 17px/1.25 var(--fd);margin:0 0 4px}
+.hq-card p{margin:0 0 18px;color:var(--hero-muted);font-size:13px}
+.hq-card input{width:100%;box-sizing:border-box;text-align:center;font:600 26px/1 var(--fb);letter-spacing:.5em;padding:14px 10px 14px 22px;
+  border-radius:14px;border:1px solid rgba(255,255,255,.22);background:rgba(0,0,0,.18);color:var(--hero-ink);outline:none}
+.hq-card input:focus{border-color:var(--hero-line)}
+.hq-card .hq-btn{width:100%;margin-top:12px;padding:13px;border:0;border-radius:14px;background:var(--hero-line);color:#14110a;font:650 14px var(--fb);cursor:pointer}
+.hq-card .hq-btn:disabled{opacity:.6;cursor:default}
+.hq-card .hq-link{background:none;border:0;color:var(--hero-muted);font:500 12.5px var(--fb);margin-top:10px;cursor:pointer;text-decoration:underline}
+.hq-err{min-height:18px;margin-top:10px;color:#ffb3b3;font-size:12.5px}
+.hq-pick{display:grid;gap:8px;margin-top:4px}
+.hq-pick button{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.06);color:var(--hero-ink);font:600 14px var(--fb);cursor:pointer}
+.hq-pick button small{color:var(--hero-muted);font-weight:500;font-size:11px;letter-spacing:.06em}
+.hq-card label{display:block;text-align:left;font-size:12px;color:var(--hero-muted);margin:12px 0 5px}
+.hq-card .hq-sm input{font-size:20px;padding:11px 10px 11px 18px}
+.hq-card select{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.22);background:rgba(0,0,0,.18);color:var(--hero-ink);font:600 14px var(--fb)}
+.hq-card select option{color:#111}
+.hq-note{background:rgba(255,255,255,.08);border-radius:12px;padding:10px 12px;font-size:12.5px;color:var(--hero-ink);margin:0 0 6px;text-align:left}
+.hq-um{position:relative}
+.hq-menu{position:absolute;right:0;top:calc(100% + 8px);z-index:60;min-width:210px;background:var(--surface);color:var(--ink);border:1px solid var(--border);
+  border-radius:14px;box-shadow:var(--shadow);padding:6px;font-family:var(--fb)}
+.hq-menu[hidden]{display:none}
+.hq-menu .who{padding:9px 10px 8px;font-size:12px;color:var(--muted);border-bottom:1px solid var(--border);margin-bottom:4px}
+.hq-menu .who b{display:block;color:var(--ink);font-size:14px}
+.hq-menu button{display:block;width:100%;text-align:left;padding:9px 10px;border:0;background:none;color:var(--ink);font:500 13.5px var(--fb);border-radius:9px;cursor:pointer}
+.hq-menu button:hover{background:var(--surface-2)}
 </style>
 </head>
 <body>
+<div id="hqLock" role="dialog" aria-modal="true" aria-label="Sign in">
+  <div class="hq-card">
+    <div class="logo" role="img" aria-label="RAK Ceramics"></div>
+    <div id="hqStepPin">
+      <h1>UAE Retail · Head office</h1>
+      <p>Enter your 4-digit PIN</p>
+      <input id="hqPin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" aria-label="PIN">
+      <button class="hq-btn" id="hqGo" type="button">Unlock</button>
+      <div class="hq-err" id="hqErr"></div>
+    </div>
+    <div id="hqStepPick" hidden>
+      <h1>Who are you?</h1>
+      <p>This PIN is shared. Choose your name.</p>
+      <div class="hq-pick" id="hqPickList"></div>
+      <button class="hq-link" id="hqPickBack" type="button">Back</button>
+    </div>
+    <div id="hqStepChange" hidden>
+      <h1 id="hqChTitle">Change your PIN</h1>
+      <p class="hq-note" id="hqChNote" hidden>You're using the starting PIN 1234. Please choose your own PIN to continue.</p>
+      <div class="hq-sm">
+        <label for="hqCur">Current PIN</label><input id="hqCur" type="password" inputmode="numeric" maxlength="4" autocomplete="off">
+        <label for="hqNew">New PIN</label><input id="hqNew" type="password" inputmode="numeric" maxlength="4" autocomplete="off">
+        <label for="hqNew2">Confirm new PIN</label><input id="hqNew2" type="password" inputmode="numeric" maxlength="4" autocomplete="off">
+      </div>
+      <button class="hq-btn" id="hqChSave" type="button">Save PIN</button>
+      <button class="hq-link" id="hqChCancel" type="button">Cancel</button>
+      <div class="hq-err" id="hqChErr"></div>
+    </div>
+    <div id="hqStepReset" hidden>
+      <h1>Reset a PIN</h1>
+      <p>The person's PIN goes back to 1234. They'll be asked to choose a new one when they next sign in.</p>
+      <label for="hqResetWho">User</label><select id="hqResetWho"></select>
+      <button class="hq-btn" id="hqResetGo" type="button">Reset PIN</button>
+      <button class="hq-link" id="hqResetCancel" type="button">Cancel</button>
+      <div class="hq-err" id="hqResetErr"></div>
+    </div>
+  </div>
+</div>
 <header class="top"><div class="wrap">
   <div class="bar">
     <div class="mark"><span class="logo" role="img" aria-label="RAK Ceramics"></span><span class="ttl" data-keep>UAE Retail<small>Walk-in analytics</small></span></div>
@@ -1037,6 +1111,11 @@ th{background:var(--surface-2)}
     <button class="hbtn msg" id="btnMsg" type="button" data-keep aria-label="Message showrooms"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="tx">Message showrooms</span><span class="n" id="msgN" hidden>0</span></button>
     <button class="hbtn inst" id="btnInstall" type="button" hidden aria-label="Install app"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span class="tx">Install app</span></button>
     <button class="hbtn ic bell" id="btnBell" type="button" aria-label="Notification centre" title="Notifications" data-keep><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="nb" id="bellN" hidden>0</span></button>
+    <div class="hq-um"><button class="hbtn ic" id="btnUser" type="button" aria-label="Account" title="Account" aria-expanded="false" data-keep><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></button>
+      <div class="hq-menu" id="hqMenu" hidden><div class="who">Signed in as<b id="hqWho"></b></div>
+        <button type="button" id="hqMChange">Change my PIN</button>
+        <button type="button" id="hqMReset" hidden>Reset someone's PIN</button>
+        <button type="button" id="hqMOut">Log out</button></div></div>
     <button class="hbtn ic" id="btnRefresh" type="button" aria-label="Refresh data" title="Refresh data"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36M21 3v6h-6"/></svg></button>
     <div class="apw"><button class="hbtn ic" id="btnTheme" type="button" aria-label="Light or dark mode" aria-expanded="false" aria-controls="appear" title="Light / dark"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17a8.5 8.5 0 0 0 0-17z" fill="currentColor"/></svg></button>
       <div class="appear" id="appear" hidden role="dialog" aria-label="Appearance">
@@ -1327,11 +1406,15 @@ function dbToken(){
   })().catch(e=>{_authP=null;throw e});
   return _authP.then(a=>a.currentUser.getIdToken());
 }
+/* data calls wait until someone has signed in with a PIN (the login itself passes noGate) */
+let _hqOpen; const hqGate=new Promise(r=>{_hqOpen=r});
 async function dbFetch(url,opts){
+  if(!(opts&&opts.noGate)) await hqGate;
   let t=null;
   try{ t=await dbToken(); }catch(e){ console.error('Firebase sign-in failed',e); }
   return fetch(t?url+(url.includes('?')?'&':'?')+'auth='+encodeURIComponent(t):url,opts);
 }
+dbToken().catch(()=>{});   // start signing in as soon as the page opens, not at the first data call
 const NAMES={fuj:'Fujairah Showroom',rak:'RAK Showroom',mus:'Musaffah Showroom',auh:'AlKhaldya Showroom',zahia:'AlZahia Showroom',aln:'Al Ain Showroom',deira:'Deira Showroom',kludi:'Kludi Showroom',ajm:'Ajman Showroom',otl:'RAK Outlet',shj:'Sharjah Showroom',szr:'Sheikh Zayed Showroom'};
 const OFF=4*36e5, DAY=864e5;            // UAE is UTC+4 all year
 const POLL=45e3, FULL_EVERY=10*60e3;
@@ -2925,6 +3008,168 @@ if(new URLSearchParams(location.search).has('demo')) useDemo(); else refresh(tru
       const b=el.getBoundingClientRect(); if(b.top<innerHeight&&b.bottom>0) return; el.classList.add('rv'); io.observe(el) });
     setTimeout(scan,1500); document.addEventListener('click',()=>setTimeout(scan,300));
   }
+})();
+</script>
+<script>
+/* ───────── head-office PIN login ─────────
+   Users live at hq/users/{name}/pin as a SHA-256 hash (never the PIN itself).
+   Everyone starts on 1234 and must choose their own PIN at first sign-in. PINs must be unique.
+   Admin can reset anyone's PIN back to 1234. */
+(function(){
+"use strict";
+const HQ_USERS=['Dilya','Hagop','Taha','Marie','Admin'], HQ_ADMIN='Admin', HQ_DEF='1234';
+const LS_U='rakHQ_user', LS_H='rakHQ_hash', LS_FAIL='rakHQ_fail';
+const el=id=>document.getElementById(id);
+let users={}, me=null, forced=false, pickPin='';
+
+async function hash(name,pin){
+  const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('rakhq|'+name+'|'+pin));
+  return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+async function load(){
+  const r=await dbFetch(DB+'/hq/users.json',{cache:'no-store',noGate:true});
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  users=(await r.json())||{};
+  const missing={};
+  for(const n of HQ_USERS) if(!(users[n]&&users[n].pin)) missing[n]={pin:await hash(n,HQ_DEF),ts:Date.now()};
+  if(Object.keys(missing).length){
+    const w=await dbFetch(DB+'/hq/users.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(missing),noGate:true});
+    if(!w.ok) throw new Error('HTTP '+w.status);
+    Object.assign(users,missing);
+  }
+}
+async function savePin(name,pin){
+  const h=await hash(name,pin);
+  const r=await dbFetch(DB+'/hq/users/'+encodeURIComponent(name)+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({pin:h,ts:Date.now()}),noGate:true});
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  users[name]={...(users[name]||{}),pin:h};
+  return h;
+}
+async function matches(pin){
+  const out=[];
+  for(const n of HQ_USERS) if(users[n]&&users[n].pin===await hash(n,pin)) out.push(n);
+  return out;
+}
+const isDefault=async n=>users[n]&&users[n].pin===await hash(n,HQ_DEF);
+
+function step(id){ ['hqStepPin','hqStepPick','hqStepChange','hqStepReset'].forEach(s=>el(s).hidden=s!==id); }
+function lockScreen(){ el('hqLock').hidden=false; document.body.style.overflow='hidden'; }
+function unlockScreen(){ el('hqLock').hidden=true; document.body.style.overflow=''; }
+function err(id,t){ el(id).textContent=t||''; }
+
+/* simple brake on guessing: 5 wrong PINs → wait 60 s */
+function failState(){ try{return JSON.parse(localStorage.getItem(LS_FAIL)||'{"n":0,"t":0}')}catch(_){return {n:0,t:0}} }
+function setFail(f){ try{localStorage.setItem(LS_FAIL,JSON.stringify(f))}catch(_){} }
+
+async function signIn(name){
+  me=name;
+  try{ localStorage.setItem(LS_U,name); localStorage.setItem(LS_H,users[name].pin); }catch(_){}
+  setFail({n:0,t:0});
+  el('hqWho').textContent=name+(name===HQ_ADMIN?' (Admin)':'');
+  el('hqMReset').hidden=name!==HQ_ADMIN;
+  if(await isDefault(name)){ openChange(true); return; }
+  finish();
+}
+function finish(){ unlockScreen(); _hqOpen(); }
+
+async function submit(){
+  if(el('hqGo').disabled) return;
+  const pin=(el('hqPin').value||'').trim(); err('hqErr');
+  const f=failState(), wait=f.t-Date.now();
+  if(wait>0){ err('hqErr','Too many wrong PINs. Try again in '+Math.ceil(wait/1000)+' s.'); return; }
+  if(!/^\d{4}$/.test(pin)){ err('hqErr','PIN must be exactly 4 digits.'); return; }
+  el('hqGo').disabled=true;
+  try{
+    await load();
+    const m=await matches(pin);
+    if(!m.length){
+      f.n=(f.n||0)+1; if(f.n>=5){ f.t=Date.now()+60e3; f.n=0; } setFail(f);
+      err('hqErr','Invalid PIN.'); el('hqPin').value=''; el('hqPin').focus(); return;
+    }
+    if(m.length===1){ await signIn(m[0]); return; }
+    pickPin=pin;
+    el('hqPickList').innerHTML=m.map(n=>`<button type="button" data-n="${n}"><span>${n}</span><small>${n===HQ_ADMIN?'ADMIN':'HEAD OFFICE'}</small></button>`).join('');
+    step('hqStepPick');
+  }catch(e){ console.error(e); err('hqErr','Connection problem. Please try again.'); }
+  finally{ el('hqGo').disabled=false; }
+}
+
+function openChange(isForced){
+  forced=!!isForced; lockScreen(); step('hqStepChange'); err('hqChErr');
+  ['hqCur','hqNew','hqNew2'].forEach(i=>el(i).value='');
+  el('hqChNote').hidden=!forced; el('hqChCancel').hidden=forced;
+  el('hqCur').closest('.hq-sm').querySelectorAll('label')[0].hidden=forced; el('hqCur').hidden=forced;
+  if(forced) el('hqCur').value=HQ_DEF;
+  setTimeout(()=>el(forced?'hqNew':'hqCur').focus(),60);
+}
+async function saveChange(){
+  err('hqChErr');
+  const cur=el('hqCur').value.trim(), nw=el('hqNew').value.trim(), nw2=el('hqNew2').value.trim();
+  if(![cur,nw,nw2].every(p=>/^\d{4}$/.test(p))){ err('hqChErr','All PINs must be exactly 4 digits.'); return; }
+  if(nw!==nw2){ err('hqChErr','New PIN and confirmation do not match.'); return; }
+  if(nw===cur){ err('hqChErr','New PIN must be different from the current PIN.'); return; }
+  if(nw===HQ_DEF){ err('hqChErr','Please choose a PIN other than 1234.'); return; }
+  el('hqChSave').disabled=true;
+  try{
+    await load();
+    if(users[me].pin!==await hash(me,cur)){ err('hqChErr','Current PIN is incorrect.'); return; }
+    for(const n of HQ_USERS) if(n!==me&&users[n]&&users[n].pin===await hash(n,nw)){ err('hqChErr','That PIN is already used by someone else. Please choose another.'); return; }
+    const h=await savePin(me,nw);
+    try{ localStorage.setItem(LS_H,h); }catch(_){}
+    if(forced){ forced=false; finish(); } else unlockScreen();
+    if(typeof toast==='function') try{ toast('PIN updated'); }catch(_){}
+  }catch(e){ console.error(e); err('hqChErr','Could not save the PIN. Please try again.'); }
+  finally{ el('hqChSave').disabled=false; }
+}
+
+function openReset(){
+  if(me!==HQ_ADMIN) return;
+  lockScreen(); step('hqStepReset'); err('hqResetErr');
+  el('hqResetWho').innerHTML=HQ_USERS.filter(n=>n!==HQ_ADMIN).map(n=>`<option>${n}</option>`).join('');
+}
+async function doReset(){
+  const n=el('hqResetWho').value; if(!n) return;
+  if(!confirm('Reset '+n+'\'s PIN to 1234?')) return;
+  el('hqResetGo').disabled=true;
+  try{ await savePin(n,HQ_DEF); unlockScreen(); alert(n+'\'s PIN is now 1234. They will choose a new one when they sign in.'); }
+  catch(e){ console.error(e); err('hqResetErr','Could not reset. Please try again.'); }
+  finally{ el('hqResetGo').disabled=false; }
+}
+function logout(){
+  if(!confirm('Log out of this device?')) return;
+  try{ localStorage.removeItem(LS_U); localStorage.removeItem(LS_H); }catch(_){}
+  location.reload();
+}
+
+/* wiring */
+el('hqGo').onclick=submit;
+el('hqPin').addEventListener('keydown',e=>{ if(e.key==='Enter') submit(); });
+el('hqPin').addEventListener('input',e=>{ const v=e.target.value.replace(/\D/g,'').slice(0,4); e.target.value=v; if(v.length===4) submit(); });
+el('hqPickList').addEventListener('click',e=>{ const b=e.target.closest('button[data-n]'); if(b) signIn(b.dataset.n); });
+el('hqPickBack').onclick=()=>{ pickPin=''; el('hqPin').value=''; step('hqStepPin'); el('hqPin').focus(); };
+el('hqChSave').onclick=saveChange;
+el('hqNew2').addEventListener('keydown',e=>{ if(e.key==='Enter') saveChange(); });
+el('hqChCancel').onclick=()=>{ if(!forced) unlockScreen(); };
+el('hqResetGo').onclick=doReset;
+el('hqResetCancel').onclick=unlockScreen;
+const menu=el('hqMenu'), ub=el('btnUser');
+ub.onclick=e=>{ e.stopPropagation(); menu.hidden=!menu.hidden; ub.setAttribute('aria-expanded',String(!menu.hidden)); };
+document.addEventListener('click',e=>{ if(!menu.hidden&&!e.target.closest('.hq-um')){ menu.hidden=true; ub.setAttribute('aria-expanded','false'); } });
+el('hqMChange').onclick=()=>{ menu.hidden=true; openChange(false); };
+el('hqMReset').onclick=()=>{ menu.hidden=true; openReset(); };
+el('hqMOut').onclick=()=>{ menu.hidden=true; logout(); };
+
+/* start: reuse a saved session if that user's PIN hasn't changed since */
+(async function boot(){
+  lockScreen(); step('hqStepPin');
+  try{
+    await load();
+    let u=null,h=null; try{ u=localStorage.getItem(LS_U); h=localStorage.getItem(LS_H); }catch(_){}
+    if(u&&h&&HQ_USERS.includes(u)&&users[u]&&users[u].pin===h){ await signIn(u); return; }
+    try{ localStorage.removeItem(LS_U); localStorage.removeItem(LS_H); }catch(_){}
+  }catch(e){ console.error(e); err('hqErr',"Can't reach the server. Check your connection and reload."); }
+  setTimeout(()=>el('hqPin').focus(),80);
+})();
 })();
 </script>
 </body>
