@@ -1314,7 +1314,7 @@ th{background:var(--surface-2)}
 "use strict";
 /* ───────── config ───────── */
 const DB='https://rakretail-default-rtdb.firebaseio.com';
-   /* ───────── sign-in for database calls ───────── */
+/* ───────── sign-in for database calls ───────── */
 let _authP=null;
 function dbToken(){
   if(!_authP) _authP=(async()=>{
@@ -2374,7 +2374,7 @@ function mAckRow(id,seen){
   return {html,yes:yes.length,no:no.length};
 }
 async function mPatch(body){
-  const r=await fetch(DB+'/.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const r=await dbFetch(DB+'/.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
   if(!r.ok){ let why='HTTP '+r.status; try{const e=await r.json(); if(e&&e.error) why=e.error}catch(_){}
     throw new Error(/permission/i.test(why)?'The database rules block this. Allow writes to stores/$store/broadcasts in Firebase.':why) }
 }
@@ -2836,7 +2836,7 @@ async function pushEnable(silent){
     const m=getMessaging(getApps().find(a=>a.name==='push')||initializeApp(PUSH_CFG,'push'));
     if(!window.__pushHooked){ window.__pushHooked=true; onMessage(m,()=>{ refresh(false) }) }
     const tok=await getToken(m,{vapidKey:PUSH_VAPID_KEY,serviceWorkerRegistration:reg}), id=pushId(tok);
-    const r=await dbFetch(`${DB}/pushTokens/_hq/${id}.json`,{method:'PUT',,headers:{'Content-Type':'application/json'},body:JSON.stringify({token:tok,role:'hq',name:'Head office',url:location.origin+location.pathname,ts:Date.now()})});
+    const r=await dbFetch(`${DB}/pushTokens/_hq/${id}.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:tok,role:'hq',name:'Head office',url:location.origin+location.pathname,ts:Date.now()})});
     if(!r.ok) throw new Error('The database rules don’t allow pushTokens yet.');
     try{localStorage.setItem('rakPushId',id)}catch(_){} pushOn=true;
     if(!silent) ncToast({title:'Alerts are on for this device',text:'Inactivity and reporting alerts will arrive even when the dashboard is closed.',icon:'bell',pri:'normal'});
