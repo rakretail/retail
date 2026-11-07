@@ -1327,7 +1327,7 @@ const fmt=n=>nf.format(Math.round(n));
 const fmt1=n=>Math.abs(n)>=100?fmt(n):new Intl.NumberFormat('en-US',{maximumFractionDigits:1}).format(n);
 const pct=(x,dp=1)=>(x*100).toFixed(dp)+'%';
 const sname=id=>NAMES[id]||String(id).replace(/([A-Z])/g,' $1').replace(/^./,c=>c.toUpperCase());
-const short=id=>sname(id).replace(/ Showroom$/,'');
+const short=id=>sname(id);
 const dn=ts=>Math.floor((ts+OFF)/DAY);
 const todOf=ts=>((ts+OFF)%DAY+DAY)%DAY;
 const dow=d=>(((d+4)%7)+7)%7;
