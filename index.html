@@ -1473,11 +1473,20 @@ function niceMax(v){ if(v<=4)return 4; const p=Math.pow(10,Math.floor(Math.log10
 /* ───────── state ───────── */
 const S={raw:{},roster:{},stores:[],recs:[],lastKey:{},loaded:false,demo:false,updated:0,err:null,lastFull:0,
   store:'all',preset:'mtd',a:0,b:0,cmpMode:'auto',ca:null,cb:null,hmScale:'row',q:'',execAll:false,idleOpen:false,sort:{},
-  ch:'all',locks:{},cfg:{},leave:{}};
+  ch:'all',locks:{},cfg:{},leave:{},partial:[]};
 try{const v=localStorage.getItem('rakCh');if(v==='all'||v==='walkin'||v==='phone')S.ch=v}catch(_){}
 
 /* ───────── data ───────── */
-async function j(url){const r=await dbFetch(url,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}
+async function j(url){
+  await hqGate;                                   // don't start the timeout clock while someone is still on the PIN screen
+  const ac=new AbortController(), tm=setTimeout(()=>ac.abort(),60e3);
+  try{ const r=await dbFetch(url,{cache:'no-store',signal:ac.signal}); if(!r.ok)throw new Error('HTTP '+r.status); return await r.json() }
+  finally{ clearTimeout(tm) }
+}
+/* one slow or failed request is retried before it is given up on */
+async function jr(url,tries=2){ let e;
+  for(let i=0;i<=tries;i++){ try{ return await j(url) }catch(x){ e=x; if(i<tries) await new Promise(r=>setTimeout(r,700*(i+1))) } }
+  throw e; }
 function ingest(id,obj){
   const m=S.raw[id]||(S.raw[id]=new Map());
   if(!obj) return;
@@ -1487,22 +1496,43 @@ function ingest(id,obj){
 }
 function rebuild(){S.recs=[];for(const id of S.stores){const m=S.raw[id];if(m)for(const r of m.values())S.recs.push(r)}S.recs.sort((x,y)=>x.t-y.t)}
 async function loadFull(){
-  const idx=await j(DB+'/stores.json?shallow=true'); const ids=Object.keys(idx||{}).sort();
-  const raw={},roster={};
+  let ids=[]; try{ ids=Object.keys(await jr(DB+'/stores.json?shallow=true')||{}) }catch(e){ console.warn('Showroom list failed, using the known list',e) }
+  ids=[...new Set([...ids,...Object.keys(NAMES),...S.stores])].sort();      // every known showroom is always polled, even if the shallow list misses one
+  const raw={}, okIds=new Set(), failed=[], roster={...S.roster};
   await Promise.all(ids.map(async id=>{
-    const [w,r,lk,cf,lv]=await Promise.all([j(`${DB}/stores/${id}/walkins.json`),j(`${DB}/stores/${id}/executiveList.json`).catch(()=>null),
-      j(`${DB}/stores/${id}/locks.json`).catch(()=>null),j(`${DB}/stores/${id}/settings.json`).catch(()=>null),j(`${DB}/stores/${id}/leave.json`).catch(()=>null)]);
-    raw[id]=w; roster[id]=r?[...new Set(Object.values(r).map(x=>String(x).trim()).filter(Boolean))]:[];
-    S.locks[id]=lk&&typeof lk==='object'?lk:{}; S.cfg[id]=cf&&typeof cf==='object'?cf:{}; S.leave[id]=lv&&typeof lv==='object'?lv:{};
+    try{
+      const w=await jr(`${DB}/stores/${id}/walkins.json`,2);
+      const [r,lk,cf,lv]=await Promise.all(['executiveList','locks','settings','leave'].map(k=>jr(`${DB}/stores/${id}/${k}.json`,1).catch(()=>undefined)));
+      raw[id]=w; okIds.add(id);
+      if(r!==undefined) roster[id]=r?[...new Set(Object.values(r).map(x=>String(x).trim()).filter(Boolean))]:[]; else if(!roster[id]) roster[id]=[];
+      if(lk!==undefined) S.locks[id]=lk&&typeof lk==='object'?lk:{};
+      if(cf!==undefined) S.cfg[id]=cf&&typeof cf==='object'?cf:{};
+      if(lv!==undefined) S.leave[id]=lv&&typeof lv==='object'?lv:{};
+    }catch(e){ failed.push(id); console.error('Showroom load failed:',id,e) }
   }));
-  S.raw={};S.lastKey={};S.stores=ids;S.roster=roster; ids.forEach(id=>ingest(id,raw[id])); rebuild(); S.lastFull=Date.now();
+  if(!okIds.size) throw new Error('No showroom could be loaded');
+  const oldRaw=S.raw, oldKeys=S.lastKey;
+  S.raw={}; S.lastKey={}; S.stores=ids; S.roster=roster;
+  for(const id of ids){
+    if(okIds.has(id)) ingest(id,raw[id]);
+    else if(oldRaw[id]){ S.raw[id]=oldRaw[id]; if(oldKeys[id]) S.lastKey[id]=oldKeys[id] }     // keep what we already had for a showroom that failed this time
+  }
+  S.partial=failed; rebuild();
+  S.lastFull=failed.length?Date.now()-FULL_EVERY+60e3:Date.now();             // after a failure, try the full load again in about a minute
 }
 async function loadNew(){
+  const failed=[];
   await Promise.all(S.stores.map(async id=>{
-    const q=S.lastKey[id]?`?orderBy=%22%24key%22&startAt=%22${encodeURIComponent(S.lastKey[id])}%22`:'';
-    const [w,lk,cf,lv]=await Promise.all([j(`${DB}/stores/${id}/walkins.json${q}`),j(`${DB}/stores/${id}/locks.json`).catch(()=>undefined),j(`${DB}/stores/${id}/settings.json`).catch(()=>undefined),j(`${DB}/stores/${id}/leave.json`).catch(()=>undefined)]);
-    ingest(id,w); if(lk!==undefined)S.locks[id]=lk||{}; if(cf!==undefined)S.cfg[id]=cf||{}; if(lv!==undefined)S.leave[id]=lv||{};
-  })); rebuild();
+    try{
+      /* the latest 400 entries by key, not "everything after the last key I saw": a device with a wrong clock can no longer hide newer entries */
+      const have=S.raw[id]&&S.raw[id].size, q=have?'?orderBy=%22%24key%22&limitToLast=400':'';
+      const [w,lk,cf,lv]=await Promise.all([jr(`${DB}/stores/${id}/walkins.json${q}`,1),j(`${DB}/stores/${id}/locks.json`).catch(()=>undefined),j(`${DB}/stores/${id}/settings.json`).catch(()=>undefined),j(`${DB}/stores/${id}/leave.json`).catch(()=>undefined)]);
+      ingest(id,w); if(lk!==undefined)S.locks[id]=lk||{}; if(cf!==undefined)S.cfg[id]=cf||{}; if(lv!==undefined)S.leave[id]=lv||{};
+    }catch(e){ failed.push(id); console.error('Showroom refresh failed:',id,e) }
+  }));
+  S.partial=failed; rebuild();
+  if(failed.length&&failed.length===S.stores.length) throw new Error('No showroom could be refreshed');
+  if(failed.length) S.lastFull=Math.min(S.lastFull,Date.now()-FULL_EVERY+60e3);
 }
 let busy=false;
 async function refresh(full){
@@ -2216,7 +2246,8 @@ function render(){
   const ok=S.loaded; $('#loading').hidden=ok||!!S.err; $('#app').hidden=$('#hero').hidden=$('#hpanels').hidden=$('#ticker').hidden=!ok;
   $('#dot').className='dot'+(S.err?' err':ok&&!S.demo?' on':''); tick();
   $('#banner').innerHTML=S.err?`<div class="banner err"><span><b>Couldn't reach the live walk-in database.</b> ${ok?'Showing the last data that loaded.':'Check the internet connection, then try again.'}</span><button class="btn pri" type="button" id="bRetry">Try again</button>${ok?'':'<button class="btn" type="button" id="bDemo">Preview the layout with sample data</button>'}</div>`
-    :S.demo?`<div class="banner demo"><span><b>Sample data.</b> These numbers are invented to preview the layout. They are not your showrooms' figures.</span><button class="btn pri" type="button" id="bRetry">Load live data</button></div>`:'';
+    :S.demo?`<div class="banner demo"><span><b>Sample data.</b> These numbers are invented to preview the layout. They are not your showrooms' figures.</span><button class="btn pri" type="button" id="bRetry">Load live data</button></div>`
+    :(S.partial&&S.partial.length)?`<div class="banner demo"><span><b>${S.partial.length} showroom${S.partial.length===1?'':'s'} could not be loaded just now:</b> ${S.partial.map(id=>esc(sname(id))).join(', ')}. Their figures may be missing or out of date. Retrying automatically.</span><button class="btn pri" type="button" id="bRetry">Try again</button></div>`:'';
   if(!ok) return;
   const c=CTX=context();
   document.querySelectorAll('#presets .chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.p===S.preset));
@@ -2658,7 +2689,7 @@ setInterval(()=>{ if(!CTX)return; if(document.hidden) idleNotify(idleData()); el
 /* ───────── self-update ─────────
    On open, on return to the foreground and every few minutes, the page downloads itself past every cache.
    If the copy on the server differs from the one running, it refreshes the cached copies and reloads. */
-const BUILD='3.3';   // shown in the footer, so you can see which version a device is running
+const BUILD='3.3.1';   // shown in the footer, so you can see which version a device is running
 const SELF_JS=document.currentScript?document.currentScript.textContent:'', SELF_CSS=(document.querySelector('style')||{}).textContent||'';
 $('#ver').textContent='Version '+BUILD;
 const bust=()=>{const u=new URL(location.href);u.searchParams.set('v',Date.now());location.replace(u)};
