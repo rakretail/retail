@@ -643,6 +643,9 @@ body{background:radial-gradient(1100px 520px at -5% -10%,color-mix(in srgb,var(-
 .freset:hover{color:var(--ink);border-style:solid}
 .fend{display:flex;align-items:center;gap:10px;flex-wrap:nowrap}   /* dates & comparison sits with reset filters */
 .fend .more .pop{left:auto;right:0}
+.fbrk{flex-basis:100%;height:0}   /* dates & comparison ends the showrooms row; channels + reset start the next */
+#moreDates .pop{left:auto;right:0}
+@media (max-width:640px){#moreDates .pop{left:0;right:auto}}
 @media (max-width:640px){.fend .more .pop{left:0;right:auto}}
 
 .sh h2::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--gold);margin-right:10px;vertical-align:2px}
@@ -1180,6 +1183,102 @@ th{background:var(--surface-2)}
 @media (max-width:1100px){.cmp-kpis,.cmp-hl{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:900px){.cmp-2col{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:700px){.cmp-periods{grid-template-columns:minmax(0,1fr)}.ck-v{font-size:22px}.cmp-hl{grid-template-columns:minmax(0,1fr)}}
+
+/* ================================================================
+   v9 · premium finish — quieter surfaces, refined type, gold hairlines.
+   Layout fix: the scope summary now lives in the filter bar (right of
+   "Dates & comparison"), so it can no longer sit on top of the tabs.
+   ================================================================ */
+:root{--gold-grad:linear-gradient(135deg,#F3DD8E 0%,#E0B565 45%,#B8862E 100%);--ease:cubic-bezier(.2,.8,.2,1);--r:20px}
+:root[data-palette="navy"]:not([data-theme="dark"]){--page:#F2F4F8;--surface-2:#F5F7FA;--border:#E2E7EF;--muted:#667385}
+body{letter-spacing:-.003em;font-feature-settings:"tnum" 1}
+::selection{background:color-mix(in srgb,var(--hl) 35%,transparent)}
+*{scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--ink) 22%,transparent) transparent}
+.bg-flash{display:none!important}                                   /* the full-page light strike read as a gimmick */
+.hd-sheen::before{animation-duration:14s;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent)}
+
+/* header: deep navy, a warm glow and a single gold hairline */
+:root[data-palette="navy"] header.top{background:
+  radial-gradient(700px 240px at 88% -60%,rgba(224,181,101,.22),transparent 65%),
+  radial-gradient(900px 300px at 10% 160%,rgba(31,95,168,.35),transparent 60%),
+  linear-gradient(115deg,#071628 0%,#0D2541 45%,#153A66 100%)}
+header.top::after{height:2px;background:linear-gradient(90deg,var(--brand) 0 110px,#E0B565 110px 170px,rgba(224,181,101,.45) 170px,rgba(224,181,101,0) 80%)}
+.top .bar{padding:14px 0 14px}
+.mark .ttl{border-left:1px solid rgba(224,181,101,.55);padding-left:14px;letter-spacing:.2px}
+.mark .ttl small{letter-spacing:.3px;opacity:.85}
+.live,.hbtn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:background .2s,border-color .2s,transform .2s var(--ease)}
+.hbtn:hover{background:rgba(255,255,255,.12);border-color:rgba(224,181,101,.45)}
+.hbtn.msg{background:var(--gold-grad);color:#241703;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 8px 20px -10px rgba(224,181,101,.7)}
+.hbtn.msg:hover{background:var(--gold-grad);filter:brightness(1.05);transform:translateY(-1px)}
+
+/* filter bar: one calm toolbar */
+.filters{background:color-mix(in srgb,var(--surface) 82%,transparent);border-bottom:1px solid var(--border);box-shadow:0 10px 30px -26px rgba(15,42,71,.45)}
+.filters .wrap{padding-top:14px;padding-bottom:14px;gap:10px}
+.chips{background:var(--surface-2);border:1px solid var(--border);padding:4px;gap:2px;box-shadow:inset 0 1px 2px rgba(15,42,71,.05)}
+.chip{font-size:12.5px;font-weight:600;letter-spacing:.1px;color:var(--ink-2);padding:5px 14px;transition:background .18s,color .18s,box-shadow .18s}
+.chip:hover{background:var(--surface);color:var(--ink)}
+.chip[aria-pressed=true]{background:linear-gradient(180deg,color-mix(in srgb,var(--primary) 82%,#fff),var(--primary));color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 6px 14px -8px color-mix(in srgb,var(--primary) 80%,transparent)}
+#chans .chip[data-ch=walkin][aria-pressed=true]{background:linear-gradient(180deg,color-mix(in srgb,var(--walk) 85%,#fff),var(--walk))}
+#chans .chip[data-ch=phone][aria-pressed=true]{background:linear-gradient(180deg,color-mix(in srgb,var(--phone) 85%,#fff),var(--phone))}
+.more>summary{border:1px solid var(--border);background:var(--surface);font-weight:600;color:var(--ink);box-shadow:0 1px 2px rgba(15,42,71,.05);transition:border-color .18s,box-shadow .18s}
+.more>summary:hover{border-color:color-mix(in srgb,var(--hl) 60%,var(--border));box-shadow:0 4px 12px -8px rgba(15,42,71,.35)}
+.more>summary svg{color:var(--hl-deep)}
+.more .pop{border-radius:18px;box-shadow:0 1px 2px rgba(15,42,71,.06),0 28px 60px -24px rgba(15,42,71,.45)}
+.freset{border-color:var(--border);color:var(--muted)}
+/* scope summary, right-aligned in the first filter row */
+.filters .mini-scope{margin-left:auto;font-size:12.5px;color:var(--muted);padding:7px 14px 7px 12px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.filters .mini-scope::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:9px;vertical-align:1px;background:var(--hl);box-shadow:0 0 0 3px color-mix(in srgb,var(--hl) 22%,transparent)}
+.filters .mini-scope b{color:var(--ink);font-weight:700}
+.filters .mini-scope:empty{display:none}
+@media (max-width:760px){.filters .mini-scope{margin-left:0;white-space:normal}}
+@media (max-width:640px){.top .bar .hq-um{order:5}.top .bar{gap:6px}.top .bar>.live{flex:1 1 0;min-width:0;overflow:hidden}#liveTxt{overflow:hidden;text-overflow:ellipsis}}   /* keep the account button with the other header buttons */
+
+/* section tabs: one segmented rail, active tab in navy with a gold tick */
+.tabs{background:color-mix(in srgb,var(--page) 84%,transparent);border-bottom:1px solid var(--border)}
+.tabl{flex:0 1 auto;gap:2px;padding:5px;margin:10px 0;background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:0 1px 2px rgba(15,42,71,.04),0 10px 24px -20px rgba(15,42,71,.35)}
+.tabs .tab{min-height:40px;padding:0 18px;border:0;border-radius:11px;background:transparent;box-shadow:none;font-size:13px;font-weight:600;color:var(--muted);transition:background .18s,color .18s}
+.tabs .tab:hover{background:var(--surface-2);color:var(--ink)}
+:root[data-palette] .tabs .tab[aria-selected=true]{color:#fff;background:linear-gradient(180deg,color-mix(in srgb,var(--primary) 80%,#fff),var(--primary));box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 8px 18px -10px color-mix(in srgb,var(--primary) 85%,transparent)}
+:root[data-palette] .tabs .tab[aria-selected=true]::after{display:block;content:"";position:absolute;left:calc(50% - 10px);right:auto;width:20px;bottom:5px;height:2px;border-radius:2px;background:var(--gold-grad)}
+@media (max-width:640px){.tabl{margin:8px 0}.tabs .tab{padding:0 12px;min-height:36px;font-size:12.5px}}
+
+/* cards: softer depth, more air */
+.card{border-radius:20px;padding:22px 24px}
+:root[data-palette="navy"]:not([data-theme="dark"]) .card:not(.nct){
+  background:linear-gradient(180deg,#fff,#FCFDFE) padding-box,linear-gradient(150deg,#fff 0%,rgba(31,95,168,.14) 50%,rgba(200,150,62,.30) 100%) border-box!important;
+  box-shadow:inset 0 1px 0 #fff,0 1px 2px rgba(15,42,71,.04),0 16px 36px -24px rgba(15,42,71,.30)!important}
+@media (hover:hover){.card.sc,.card.eo,button.podr,.attr{transition:transform .25s var(--ease),box-shadow .25s var(--ease)}.card.sc:hover{transform:translateY(-2px)}}
+.mini{padding:18px 20px}
+@media (max-width:640px){.card{padding:16px}}
+
+/* type: lighter, more confident numbers */
+.eo .ev,.mini .v,.hpv b,.sc .v b,.pd .pv b,.rec .v,.podr .pv{font-weight:700}
+.eo .ev{font-size:32px;letter-spacing:-.035em}
+.eo{min-height:156px;padding:18px 20px 14px}
+.eo::after{left:20px;right:auto;width:44px;height:3px;background:var(--gold-grad)}
+.sh{margin-bottom:16px}
+.sh h2{font-weight:700;letter-spacing:2.4px;color:var(--ink-2)}
+.card h3,.chead h3{font-weight:700;letter-spacing:.9px;font-size:12.5px;color:var(--ink)}
+.card .sub{font-weight:500;color:var(--muted)}
+.pane>section+section{margin-top:34px}
+
+/* tables: quiet headers */
+th{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}
+.hm th,.hm thead th{text-transform:none;letter-spacing:0}
+tbody tr.click:hover td{background:color-mix(in srgb,var(--s1) 5%,var(--surface))}
+
+/* live box: gold hairline frame */
+:root[data-palette="navy"] .livebox{background:
+  radial-gradient(600px 260px at 92% -30%,rgba(224,181,101,.18),transparent 65%),
+  linear-gradient(120deg,#071628 0%,#0F2A47 50%,#1B4F8C 120%);border:1px solid rgba(224,181,101,.28);box-shadow:0 30px 60px -36px rgba(7,22,40,.85),inset 0 1px 0 rgba(255,255,255,.08)}
+.livebox .hp{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.09)}
+/* every row ends on the same right edge: the period chips and the tab rail stretch to fill their row */
+@media (min-width:901px){
+  #presets{flex:1 1 0;min-width:0;flex-wrap:nowrap}
+  #presets .chip{flex:1 1 auto;padding-left:10px;padding-right:10px;text-align:center}
+  .tabs .tabl{flex:1 1 auto}
+  .tabs .tab{flex:1 1 auto;justify-content:center;padding:0 12px}
+}
 </style>
 </head>
 <body>
@@ -1276,12 +1375,6 @@ th{background:var(--surface-2)}
     <div class="pop msel-pop"><div class="msel-act"><button type="button" class="lnk" id="selAll">Select all</button><button type="button" class="lnk" id="selNone">Clear</button></div>
       <div class="msel-list" id="storeList"></div><p class="msel-hint">Untick a showroom to exclude it. “Only” shows just that showroom.</p></div></details>
   <div class="chips" id="presets" role="group" aria-label="Period"></div>
-  <div class="chips" id="chans" role="group" aria-label="Channel" data-keep>
-    <button type="button" class="chip" data-ch="all" aria-pressed="true">All inquiries</button>
-    <button type="button" class="chip" data-ch="walkin" aria-pressed="false">Walk-ins</button>
-    <button type="button" class="chip" data-ch="phone" aria-pressed="false">Phone</button>
-  </div>
-  <div class="fend">
   <details class="more" id="moreDates"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18"/></svg><span id="rangeLbl">Dates &amp; comparison</span></summary>
     <div class="pop">
       <div class="fld"><label for="dA">From</label><input type="date" id="dA"></div>
@@ -1291,9 +1384,17 @@ th{background:var(--surface-2)}
       <div class="fld" id="cmpCustom" hidden><label for="cA">Compare</label><input type="date" id="cA" aria-label="Comparison from"><input type="date" id="cB" aria-label="Comparison to"></div>
     </div>
   </details>
+  <span class="fbrk" aria-hidden="true"></span>
+  <div class="chips" id="chans" role="group" aria-label="Channel" data-keep>
+    <button type="button" class="chip" data-ch="all" aria-pressed="true">All inquiries</button>
+    <button type="button" class="chip" data-ch="walkin" aria-pressed="false">Walk-ins</button>
+    <button type="button" class="chip" data-ch="phone" aria-pressed="false">Phone</button>
+  </div>
+  <div class="fend">
   <button type="button" class="freset" id="btnReset" data-keep title="Back to all showrooms, this month, all inquiries">Reset filters</button>
   </div>
   <div class="scope" id="scope"></div>
+  <span class="mini-scope" id="miniScope" aria-live="polite"></span>
 </div></div>
 
 <nav class="tabs" aria-label="Sections"><div class="wrap">
@@ -1305,7 +1406,6 @@ th{background:var(--surface-2)}
     <button class="tab" role="tab" type="button" data-tab="compare" aria-selected="false">Date Comparison</button>
     <button class="tab" role="tab" type="button" data-tab="health" aria-selected="false">Management &amp; Admin<span class="bd" id="tabIdle" hidden data-keep></span></button>
   </div>
-  <span class="mini-scope" id="miniScope"></span>
 </div></nav>
 
 <main><div class="wrap">
