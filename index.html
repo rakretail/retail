@@ -641,6 +641,9 @@ body{background:radial-gradient(1100px 520px at -5% -10%,color-mix(in srgb,var(-
 .fsel select{border:0;background:transparent;font-weight:650;color:var(--ink);min-height:34px;padding-right:6px}
 .freset{border:1px dashed var(--axis);background:none;border-radius:999px;padding:6px 13px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;min-height:34px}
 .freset:hover{color:var(--ink);border-style:solid}
+.fend{display:flex;align-items:center;gap:10px;flex-wrap:nowrap}   /* dates & comparison sits with reset filters */
+.fend .more .pop{left:auto;right:0}
+@media (max-width:640px){.fend .more .pop{left:0;right:auto}}
 
 .sh h2::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--gold);margin-right:10px;vertical-align:2px}
 .mini::before{background:linear-gradient(var(--p1),var(--gold))}
@@ -913,7 +916,7 @@ th{background:var(--surface-2)}
 .side{display:none!important}
 .shell{display:block!important}
 .tabs{display:block!important;position:sticky;top:0;z-index:31}
-.filters{position:static!important}
+.filters{position:relative!important;z-index:35}   /* above the sticky tabs (31) so the showroom and dates pop-overs are never hidden */
 .tabs .wrap{gap:16px}
 /* section tabs: clear pill buttons, the active one in deep teal (as on the showroom pages) */
 .tabs{background:color-mix(in srgb,var(--page) 92%,transparent)}
@@ -1278,6 +1281,7 @@ th{background:var(--surface-2)}
     <button type="button" class="chip" data-ch="walkin" aria-pressed="false">Walk-ins</button>
     <button type="button" class="chip" data-ch="phone" aria-pressed="false">Phone</button>
   </div>
+  <div class="fend">
   <details class="more" id="moreDates"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18"/></svg><span id="rangeLbl">Dates &amp; comparison</span></summary>
     <div class="pop">
       <div class="fld"><label for="dA">From</label><input type="date" id="dA"></div>
@@ -1288,6 +1292,7 @@ th{background:var(--surface-2)}
     </div>
   </details>
   <button type="button" class="freset" id="btnReset" data-keep title="Back to all showrooms, this month, all inquiries">Reset filters</button>
+  </div>
   <div class="scope" id="scope"></div>
 </div></div>
 
@@ -3043,7 +3048,7 @@ setInterval(()=>{ if(!CTX)return; if(document.hidden) idleNotify(idleData()); el
 /* ───────── self-update ─────────
    On open, on return to the foreground and every few minutes, the page downloads itself past every cache.
    If the copy on the server differs from the one running, it refreshes the cached copies and reloads. */
-const BUILD='3.4.0';   // shown in the footer, so you can see which version a device is running
+const BUILD='3.4.1';   // shown in the footer, so you can see which version a device is running
 const SELF_JS=document.currentScript?document.currentScript.textContent:'', SELF_CSS=(document.querySelector('style')||{}).textContent||'';
 $('#ver').textContent='Version '+BUILD;
 const bust=()=>{const u=new URL(location.href);u.searchParams.set('v',Date.now());location.replace(u)};
