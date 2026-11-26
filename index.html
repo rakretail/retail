@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<script>try{var P="teal",T=localStorage.getItem("rakTheme");if(P)document.documentElement.dataset.palette=P;if(T==="dark"||T==="light")document.documentElement.dataset.theme=T}catch(e){}</script>
+<script>try{var P="navy",T=localStorage.getItem("rakTheme");if(P)document.documentElement.dataset.palette=P;if(T==="dark"||T==="light")document.documentElement.dataset.theme=T}catch(e){}</script>
 <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js" crossorigin>
 <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js" crossorigin>
 <style>
@@ -1061,6 +1061,122 @@ th{background:var(--surface-2)}
 .hq-menu .who b{display:block;color:var(--ink);font-size:14px}
 .hq-menu button{display:block;width:100%;text-align:left;padding:9px 10px;border:0;background:none;color:var(--ink);font:500 13.5px var(--fb);border-radius:9px;cursor:pointer}
 .hq-menu button:hover{background:var(--surface-2)}
+
+/* ================================================================
+   v8 · executive palette — navy / corporate blue / gold
+   colour carries meaning: green = growth, red = decline, blue = Period 1, slate = Period 2
+   ================================================================ */
+:root[data-palette="navy"]{
+  --p1:#1F5FA8; --p1d:#0F2A47; --acc:#C8963E; --hA:#0F2A47; --hB:#163E6E; --hLine:#E0B565; --hMuted:#B9C6D8;
+  color-scheme:light;
+  --page:#F4F6F9; --surface:#ffffff; --surface-2:#F4F6F9; --surface-3:#E3E8EF;
+  --ink:#1B2430; --ink-2:#3A4656; --muted:#5B6776;
+  --grid:rgba(15,42,71,.08); --axis:rgba(15,42,71,.18); --band:rgba(31,95,168,.035); --border:#E3E8EF;
+  --shadow:0 1px 2px rgba(15,42,71,.05),0 10px 28px -12px rgba(15,42,71,.16);
+  --s1:#1F5FA8; --s1-deep:#0F2A47; --s1-soft:#9DBBE0; --hl:#C8963E; --hl-deep:#9A7022;
+  --seq-lo:#E8EFF8; --seq-hi:#17447C; --seq-on-hi:#ffffff; --cell-empty:#EEF2F7;
+  --walk:#1F5FA8; --phone:#2A9D9F; --primary:#0F2A47;
+  --div-up:#1E8E5A; --div-down:#C73E3E; --div-mid:#E6EAF0;
+  --up:#1E8E5A; --down:#C73E3E; --good:#1E8E5A; --warn:#D99A1E; --serious:#E8743B; --crit:#C73E3E;
+  --hero-a:#0F2A47; --hero-b:#163E6E; --hero-ink:#ffffff; --hero-muted:rgba(255,255,255,.78); --hero-line:#E0B565; --hero-panel:rgba(255,255,255,.08);
+}
+@media (prefers-color-scheme:dark){ :root[data-palette="navy"]:not([data-theme="light"]){
+  color-scheme:dark;
+  --page:#0A1422; --surface:#101C2E; --surface-2:#14233A; --surface-3:#1B2E4A;
+  --ink:#E6EDF6; --ink-2:#BCC9DA; --muted:#8A9BB2;
+  --grid:rgba(255,255,255,.06); --axis:rgba(255,255,255,.14); --band:rgba(255,255,255,.025); --border:rgba(255,255,255,.09);
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+  --s1:#5B9BE0; --s1-deep:#3F7FC4; --s1-soft:#1F4A7C; --hl:#E0B565; --hl-deep:#C8963E;
+  --seq-lo:#0F2038; --seq-hi:#5B9BE0; --seq-on-hi:#07121F; --cell-empty:#111F33;
+  --walk:#5B9BE0; --phone:#4CC3C5; --primary:#3F7FC4;
+  --div-up:#3CC38A; --div-down:#F07C7C; --div-mid:#1B2E4A; --up:#3CC38A; --down:#F07C7C; --good:#3CC38A; --crit:#F07C7C;
+  --hero-a:#0A1B30; --hero-b:#1F5FA8;
+}}
+:root[data-palette="navy"][data-theme="dark"]{
+  color-scheme:dark;
+  --page:#0A1422; --surface:#101C2E; --surface-2:#14233A; --surface-3:#1B2E4A;
+  --ink:#E6EDF6; --ink-2:#BCC9DA; --muted:#8A9BB2;
+  --grid:rgba(255,255,255,.06); --axis:rgba(255,255,255,.14); --band:rgba(255,255,255,.025); --border:rgba(255,255,255,.09);
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+  --s1:#5B9BE0; --s1-deep:#3F7FC4; --s1-soft:#1F4A7C; --hl:#E0B565; --hl-deep:#C8963E;
+  --seq-lo:#0F2038; --seq-hi:#5B9BE0; --seq-on-hi:#07121F; --cell-empty:#111F33;
+  --walk:#5B9BE0; --phone:#4CC3C5; --primary:#3F7FC4;
+  --div-up:#3CC38A; --div-down:#F07C7C; --div-mid:#1B2E4A; --up:#3CC38A; --down:#F07C7C; --good:#3CC38A; --crit:#F07C7C;
+  --hero-a:#0A1B30; --hero-b:#1F5FA8;
+}
+
+/* the older teal-specific surfaces (header, live box, active tab, glass cards, big KPI numbers) re-coloured for navy */
+:root[data-palette="navy"] body{background:radial-gradient(900px 620px at -8% -12%,rgba(31,95,168,.10),transparent 62%),radial-gradient(820px 600px at 108% -4%,rgba(15,42,71,.07),transparent 60%),radial-gradient(1000px 700px at 50% 112%,rgba(200,150,62,.07),transparent 62%),var(--page)!important;background-attachment:fixed!important}
+:root[data-palette="navy"] header.top{background:linear-gradient(120deg,#0A1F38 0%,#0F2A47 45%,#163E6E 100%)}
+:root[data-palette="navy"] .livebox{background:linear-gradient(120deg,#0A1F38 0%,#0F2A47 50%,#1B4F8C 115%)}
+:root[data-palette="navy"] .tab[aria-selected=true]{background:linear-gradient(180deg,#1F5FA8,#0F2A47);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 8px 16px -10px rgba(15,42,71,.7)}
+:root[data-palette="navy"]:not([data-theme="dark"]) .card:not(.nct){background:linear-gradient(180deg,#fff,#fbfcfe) padding-box,linear-gradient(145deg,#fff,rgba(31,95,168,.18) 48%,rgba(200,150,62,.34)) border-box!important;border:1px solid transparent!important;box-shadow:inset 0 1px 0 #fff,0 14px 32px -20px rgba(15,42,71,.35),0 2px 6px -3px rgba(15,42,71,.08)!important}
+:root[data-palette="navy"][data-theme="dark"] .card:not(.nct){background:linear-gradient(180deg,rgba(20,35,58,.95),rgba(14,26,44,.92)) padding-box,linear-gradient(145deg,rgba(255,255,255,.12),rgba(91,155,224,.16) 48%,rgba(224,181,101,.28)) border-box!important;border:1px solid transparent!important}
+@media (prefers-color-scheme:dark){:root[data-palette="navy"]:not([data-theme="light"]) .card:not(.nct){background:linear-gradient(180deg,rgba(20,35,58,.95),rgba(14,26,44,.92)) padding-box,linear-gradient(145deg,rgba(255,255,255,.12),rgba(91,155,224,.16) 48%,rgba(224,181,101,.28)) border-box!important;border:1px solid transparent!important;box-shadow:none!important}}
+:root[data-palette="navy"] .eo .ev{background:linear-gradient(180deg,#0F2A47 10%,#1F5FA8 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
+:root[data-palette="navy"][data-theme="dark"] .eo .ev{background:none;color:var(--ink)}
+@media (prefers-color-scheme:dark){:root[data-palette="navy"]:not([data-theme="light"]) .eo .ev{background:none;color:var(--ink)}}
+
+/* live-sync indicator states */
+.dot.off{background:#f59e0b}
+.dot.sync{background:#5B9BE0;animation:pulse 1s infinite}
+
+/* showroom multi-select */
+.msel-pop{width:min(320px,calc(100vw - 32px))!important;max-height:min(70vh,480px);overflow:auto}
+.msel-cnt{background:var(--s1);color:#fff;border-radius:999px;font-size:11px;padding:1px 8px;font-weight:700}
+.msel-act{display:flex;justify-content:space-between;gap:12px;font-size:13px}
+.msel-list{display:grid;gap:2px}
+.msel-row{display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:10px;cursor:pointer;font-size:13.5px}
+.msel-row:hover{background:var(--surface-2)}
+.msel-row input{width:17px;height:17px;accent-color:var(--s1);flex:none;margin:0}
+.msel-row span{flex:1;min-width:0}
+.msel-row .only{border:0;background:none;color:var(--s1);font-size:12px;font-weight:650;cursor:pointer;opacity:0;padding:2px 6px}
+.msel-row:hover .only,.msel-row:focus-within .only{opacity:1}
+@media (hover:none){.msel-row .only{opacity:1}}
+.msel-hint{margin:0;font-size:12px;color:var(--muted)}
+
+/* date comparison tab — plain document flow: nothing sticky, nothing absolutely positioned, so nothing can sit on top of anything */
+.pane[data-pane="compare"]{position:static}
+.cmp-ctl{display:grid;gap:16px}
+.cmp-periods{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.cmp-periods.one{grid-template-columns:minmax(0,1fr);max-width:520px}
+.cmp-per{border:1px solid var(--border);border-radius:14px;padding:14px;display:grid;gap:10px;background:var(--surface-2)}
+.cmp-per h4{margin:0;font-size:13px;display:flex;align-items:center;gap:8px}
+.cmp-per h4 i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.cmp-row{display:flex;gap:10px;flex-wrap:wrap}
+.cmp-row label{display:grid;gap:4px;font-size:12px;color:var(--muted);flex:1 1 140px;min-width:0}
+.cmp-row input{width:100%;min-height:38px;border:1px solid var(--border);border-radius:10px;padding:6px 10px;background:var(--surface);color:var(--ink)}
+.cmp-act{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.cmp-err{color:var(--down);font-size:13px;font-weight:600}
+.cmp-out{margin-top:24px}
+.cmp-out>section+section{margin-top:24px}
+.cmp-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.ck{padding:16px 18px}
+.ck-l{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.ck-v{font-size:26px;font-weight:700;margin:4px 0 2px;line-height:1.15;color:var(--ink)}
+.ck-s{font-size:12.5px;color:var(--ink-2);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.cmp-hl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.cmp-hl>div{border:1px solid var(--border);border-left:3px solid var(--hl);border-radius:12px;padding:12px 14px;background:var(--surface-2);min-width:0}
+.cmp-hl small{display:block;color:var(--muted);font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.cmp-hl b{display:block;font-size:15px;margin-top:2px;overflow-wrap:anywhere}
+.cmp-hl span{font-size:12.5px;color:var(--ink-2)}
+.cmp-sum{margin:0;padding-left:18px;display:grid;gap:6px;line-height:1.5}
+.cmp-tbl{min-width:560px}
+.cmp-tbl th,.cmp-tbl td{text-align:right;white-space:nowrap}
+.cmp-tbl th:first-child,.cmp-tbl td:first-child{text-align:left}
+.cmp-tbl tfoot td{font-weight:700;border-top:2px solid var(--border)}
+.cmp-2col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.cb-row{display:grid;grid-template-columns:minmax(96px,160px) minmax(0,1fr);gap:12px;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)}
+.cb-row:last-child{border-bottom:0}
+.cb-n{font-size:13px;font-weight:600;overflow-wrap:anywhere}
+.cb-bars{display:grid;gap:3px}
+.cb-b{display:flex;align-items:center;gap:8px;height:16px}
+.cb-b i{display:block;height:10px;border-radius:0 5px 5px 0;min-width:2px}
+.cb-b b{font-size:12px;font-weight:650}
+.cmp-note{font-size:12px;color:var(--muted);margin:10px 0 0}
+@media (max-width:1100px){.cmp-kpis,.cmp-hl{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:900px){.cmp-2col{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:700px){.cmp-periods{grid-template-columns:minmax(0,1fr)}.ck-v{font-size:22px}.cmp-hl{grid-template-columns:minmax(0,1fr)}}
 </style>
 </head>
 <body>
@@ -1121,6 +1237,7 @@ th{background:var(--surface-2)}
       <div class="appear" id="appear" hidden role="dialog" aria-label="Appearance">
         <p class="aph">Colours</p>
         <div class="pals" id="pals">
+          <button type="button" data-pal="navy" style="--a:#0F2A47;--b:#1F5FA8;--c:#C8963E"><i></i>Navy, blue &amp; gold</button>
           <button type="button" data-pal="teal" style="--a:#003f3f;--b:#006666;--c:#C9A646"><i></i>Teal &amp; gold</button>
           <button type="button" data-pal="executive" style="--a:#0B1F3B;--b:#13294B;--c:#D4AF37"><i></i>Navy &amp; gold</button>
           <button type="button" data-pal="emerald" style="--a:#0a2b24;--b:#0f8a68;--c:#d9a53a"><i></i>Emerald</button>
@@ -1141,6 +1258,7 @@ th{background:var(--surface-2)}
     <button type="button" data-tab="showrooms"><svg viewBox="0 0 24 24"><path d="M3 9l1.5-5h15L21 9"/><path d="M4 9v11h16V9"/><path d="M9 20v-6h6v6"/></svg><span>Showroom Performance</span></button>
     <button type="button" data-tab="team"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Executive Performance</span></button>
     <button type="button" data-tab="timing"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg><span>Traffic Intelligence</span></button>
+    <button type="button" data-tab="compare"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>Date Comparison</span></button>
     <button type="button" data-tab="health"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.6.85 1 1.51 1H21a2 2 0 1 1 0 4h-.09c-.66 0-1.25.4-1.51 1z"/></svg><span>Management &amp; Admin</span><i class="sbd" id="sideIdle" hidden data-keep></i></button>
   </nav>
   <div class="side-foot">
@@ -1151,7 +1269,9 @@ th{background:var(--surface-2)}
 <div class="mainc">
 
 <div class="filters"><div class="wrap">
-  <label class="fsel" data-keep><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l1.5-5h15L21 9"/><path d="M4 9v11h16V9"/></svg><select id="selStore" aria-label="Showroom"><option value="all">all showrooms</option></select></label>
+  <details class="more msel" id="storeSel" data-keep><summary><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l1.5-5h15L21 9"/><path d="M4 9v11h16V9"/></svg><span id="storeLbl">All showrooms</span><span class="msel-cnt" id="storeCnt" hidden></span></summary>
+    <div class="pop msel-pop"><div class="msel-act"><button type="button" class="lnk" id="selAll">Select all</button><button type="button" class="lnk" id="selNone">Clear</button></div>
+      <div class="msel-list" id="storeList"></div><p class="msel-hint">Untick a showroom to exclude it. “Only” shows just that showroom.</p></div></details>
   <div class="chips" id="presets" role="group" aria-label="Period"></div>
   <div class="chips" id="chans" role="group" aria-label="Channel" data-keep>
     <button type="button" class="chip" data-ch="all" aria-pressed="true">All inquiries</button>
@@ -1177,6 +1297,7 @@ th{background:var(--surface-2)}
     <button class="tab" role="tab" type="button" data-tab="showrooms" aria-selected="false" id="tabShow">Showroom Performance</button>
     <button class="tab" role="tab" type="button" data-tab="team" aria-selected="false">Executive Performance</button>
     <button class="tab" role="tab" type="button" data-tab="timing" aria-selected="false">Traffic Intelligence</button>
+    <button class="tab" role="tab" type="button" data-tab="compare" aria-selected="false">Date Comparison</button>
     <button class="tab" role="tab" type="button" data-tab="health" aria-selected="false">Management &amp; Admin<span class="bd" id="tabIdle" hidden data-keep></span></button>
   </div>
   <span class="mini-scope" id="miniScope"></span>
@@ -1319,6 +1440,25 @@ th{background:var(--surface-2)}
     </section>
   </div>
 
+  <!-- ═════════ DATE COMPARISON ═════════ -->
+  <div class="pane" data-pane="compare" hidden>
+    <section>
+      <div class="sh"><h2>Date comparison</h2><span id="cpScope"></span></div>
+      <div class="card cmp-ctl">
+        <div class="seg" id="cpMode" role="group" aria-label="Comparison type"><button type="button" data-cm="one" aria-pressed="false">Single period</button><button type="button" data-cm="two" aria-pressed="true">Compare two periods</button></div>
+        <div class="cmp-periods" id="cpPeriods">
+          <div class="cmp-per"><h4><i style="background:var(--s1)"></i>Period 1</h4>
+            <div class="cmp-row"><label for="p1f">From date<input type="date" id="p1f"></label><label for="p1t">To date<input type="date" id="p1t"></label></div></div>
+          <div class="cmp-per" id="cpP2"><h4><i style="background:#8A97A8"></i>Period 2 · comparison</h4>
+            <div class="cmp-row"><label for="p2f">From date<input type="date" id="p2f"></label><label for="p2t">To date<input type="date" id="p2t"></label></div></div>
+        </div>
+        <div class="cmp-act"><button class="btn pri" id="cpApply" type="button">Apply Comparison</button><button class="btn" id="cpReset" type="button">Reset Dates</button><span class="cmp-err" id="cpErr" role="alert"></span></div>
+        <p class="cmp-note" style="margin:0">The showroom and channel filters above apply to every figure here. The two periods are independent and can be any length, so compare daily averages when the lengths differ.</p>
+      </div>
+    </section>
+    <div class="cmp-out" id="cpOut"></div>
+  </div>
+
   <!-- ═════════ DATA QUALITY ═════════ -->
   <div class="pane" data-pane="health" hidden>
     <section data-keep>
@@ -1415,9 +1555,9 @@ async function dbFetch(url,opts){
   return fetch(t?url+(url.includes('?')?'&':'?')+'auth='+encodeURIComponent(t):url,opts);
 }
 dbToken().catch(()=>{});   // start signing in as soon as the page opens, not at the first data call
-const NAMES={fuj:'Fujairah Showroom',rak:'RAK Showroom',mus:'Musaffah Showroom',auh:'AlKhaldya Showroom',zahia:'AlZahia Showroom',aln:'Al Ain Showroom',deira:'Deira Showroom',kludi:'Kludi Showroom',ajm:'Ajman Showroom',otl:'RAK Outlet',shj:'Sharjah Showroom',szr:'Sheikh Zayed Showroom'};
+const NAMES={fuj:'Fujairah Showroom',rak:'RAK Showroom',mus:'Musaffah Showroom',auh:'AlKhaldya Showroom',zahia:'Al Salam Showroom',aln:'Al Ain Showroom',deira:'Deira Showroom',kludi:'Kludi Showroom',ajm:'Ajman Showroom',otl:'RAK Outlet',shj:'Sharjah Showroom',szr:'Sheikh Zayed Showroom'};
 const OFF=4*36e5, DAY=864e5;            // UAE is UTC+4 all year
-const POLL=45e3, FULL_EVERY=10*60e3;
+const POLL=45e3, FULL_EVERY=10*60e3, SAFETY=5*60e3;   // with live listeners the timer is only a safety net
 const OPEN_H=8, CLOSE_H=21;             // entries outside this window are flagged as off-hours
 
 /* ───────── helpers ───────── */
@@ -1471,9 +1611,13 @@ function delta(cur,prev,o={}){
 function niceMax(v){ if(v<=4)return 4; const p=Math.pow(10,Math.floor(Math.log10(v))); for(const m of [1,2,2.5,4,5,8,10]) if(m*p>=v) return m*p; return 10*p; }
 
 /* ───────── state ───────── */
-const S={raw:{},roster:{},stores:[],recs:[],lastKey:{},loaded:false,demo:false,updated:0,err:null,lastFull:0,
+const S={raw:{},roster:{},allStores:[],hidden:new Set(),recs:[],lastKey:{},loaded:false,demo:false,updated:0,err:null,lastFull:0,
   store:'all',preset:'mtd',a:0,b:0,cmpMode:'auto',ca:null,cb:null,hmScale:'row',q:'',execAll:false,idleOpen:false,sort:{},
-  ch:'all',locks:{},cfg:{},leave:{},partial:[]};
+  ch:'all',locks:{},cfg:{},leave:{},partial:[],sync:''};
+/* S.allStores = every showroom in the database (always loaded); S.hidden = showrooms the viewer has unticked;
+   S.stores = the showrooms in view, so every chart that loops over S.stores follows the filter automatically.
+   S.store stays 'all' or one showroom id (drill-in); it is derived from the selection. */
+Object.defineProperty(S,'stores',{get(){return S.allStores.filter(id=>!S.hidden.has(id))},set(v){S.allStores=v},enumerable:true,configurable:true});
 try{const v=localStorage.getItem('rakCh');if(v==='all'||v==='walkin'||v==='phone')S.ch=v}catch(_){}
 
 /* ───────── data ───────── */
@@ -1494,10 +1638,10 @@ function ingest(id,obj){
     m.set(k,{k,s:id,e:String(v.executive||'Unknown').trim()||'Unknown',c:Number(v.count)||0,t,d:dn(t),h:Math.floor(todOf(t)/36e5),tod:todOf(t),ty:v.type==='phone'?'phone':'walkin',b:String(v.submittedBy||'')});
     if(!S.lastKey[id]||k>S.lastKey[id]) S.lastKey[id]=k;}
 }
-function rebuild(){S.recs=[];for(const id of S.stores){const m=S.raw[id];if(m)for(const r of m.values())S.recs.push(r)}S.recs.sort((x,y)=>x.t-y.t)}
+function rebuild(){S.recs=[];for(const id of S.allStores){const m=S.raw[id];if(m)for(const r of m.values())S.recs.push(r)}S.recs.sort((x,y)=>x.t-y.t)}
 async function loadFull(){
   let ids=[]; try{ ids=Object.keys(await jr(DB+'/stores.json?shallow=true')||{}) }catch(e){ console.warn('Showroom list failed, using the known list',e) }
-  ids=[...new Set([...ids,...Object.keys(NAMES),...S.stores])].sort();      // every known showroom is always polled, even if the shallow list misses one
+  ids=[...new Set([...ids,...Object.keys(NAMES),...S.allStores])].sort();      // every known showroom is always polled, even if the shallow list misses one
   const raw={}, okIds=new Set(), failed=[], roster={...S.roster};
   await Promise.all(ids.map(async id=>{
     try{
@@ -1522,7 +1666,7 @@ async function loadFull(){
 }
 async function loadNew(){
   const failed=[];
-  await Promise.all(S.stores.map(async id=>{
+  await Promise.all(S.allStores.map(async id=>{
     try{
       /* the latest 400 entries by key, not "everything after the last key I saw": a device with a wrong clock can no longer hide newer entries */
       const have=S.raw[id]&&S.raw[id].size, q=have?'?orderBy=%22%24key%22&limitToLast=400':'';
@@ -1531,16 +1675,17 @@ async function loadNew(){
     }catch(e){ failed.push(id); console.error('Showroom refresh failed:',id,e) }
   }));
   S.partial=failed; rebuild();
-  if(failed.length&&failed.length===S.stores.length) throw new Error('No showroom could be refreshed');
+  if(failed.length&&failed.length===S.allStores.length) throw new Error('No showroom could be refreshed');
   if(failed.length) S.lastFull=Math.min(S.lastFull,Date.now()-FULL_EVERY+60e3);
 }
-let busy=false;
+let busy=false; const RT={on:false,again:false,subs:{},attach:null,started:false,failAt:0};
 async function refresh(full){
-  if(busy||S.demo) return; busy=true;
+  if(S.demo) return; if(busy){ RT.again=true; return } busy=true; paintLive();
   try{ if(full||!S.loaded||Date.now()-S.lastFull>FULL_EVERY) await loadFull(); else await loadNew();
-    S.loaded=true;S.err=null;S.updated=Date.now(); }
+    S.loaded=true;S.err=null;S.updated=Date.now(); startRealtime(); }
   catch(e){ S.err=e; console.error('Walk-in data load failed',e); }
   busy=false; fillStores(); render();
+  if(RT.again){ RT.again=false; setTimeout(()=>refresh(false),400) }
 }
 
 /* demo data: only used when the live database cannot be reached and the viewer asks for a preview */
@@ -1563,7 +1708,7 @@ function demoData(){
   return out;
 }
 function useDemo(){const d=demoData();S.raw={};S.lastKey={};S.stores=Object.keys(d).sort();S.roster={};
-  for(const id of S.stores){ingest(id,d[id].walkins);S.roster[id]=Object.values(d[id].executiveList)} rebuild();S.demo=true;S.loaded=true;S.err=null;S.updated=Date.now();fillStores();render()}
+  for(const id of S.allStores){ingest(id,d[id].walkins);S.roster[id]=Object.values(d[id].executiveList)} rebuild();S.demo=true;S.loaded=true;S.err=null;S.updated=Date.now();fillStores();render()}
 
 /* ───────── aggregation ───────── */
 function agg(recs){
@@ -1596,25 +1741,25 @@ function cmpRange(){
 function context(){
   const now=Date.now(), today=dn(now), nowTod=todOf(now);
   resolveRange(today);
-  const validAll=S.recs.filter(r=>r.t<=now), valid=S.ch==='all'?validAll:validAll.filter(r=>r.ty===S.ch), scope=S.store==='all'?valid:valid.filter(r=>r.s===S.store);
+  const validAll=S.recs.filter(r=>r.t<=now), valid=S.ch==='all'?validAll:validAll.filter(r=>r.ty===S.ch), selOnly=a=>S.store==='all'?(S.hidden.size?a.filter(r=>!S.hidden.has(r.s)):a):a.filter(r=>r.s===S.store), scope=selOnly(valid);
   const a=S.a,b=S.b, live=b>=today, cr=cmpRange();
   const cur=agg(scope.filter(r=>r.d>=a&&r.d<=b));
   const cut=r=>!(live&&r.d===cr.b&&r.tod>nowTod);               // like-for-like: stop the comparison at the same time of day
   const cmp=cr?agg(scope.filter(r=>r.d>=cr.a&&r.d<=cr.b&&cut(r))):null;
   /* hour-of-day (peak hour, heatmap, hourly bars, daily rhythm) = physical walk-ins only: phone inquiries count in every
      total but don't arrive at the showroom at a set hour */
-  const wScope=(S.store==='all'?validAll:validAll.filter(r=>r.s===S.store)).filter(r=>r.ty==='walkin');
+  const wScope=selOnly(validAll).filter(r=>r.ty==='walkin');
   const hw=agg(wScope.filter(r=>r.d>=a&&r.d<=b)); cur.hour=hw.hour; cur.dh=hw.dh; cur.sHour=hw.sHour; cur.wTotal=hw.total;
   if(cmp){ const hc=agg(wScope.filter(r=>r.d>=cr.a&&r.d<=cr.b&&cut(r))); cmp.hour=hc.hour; cmp.dh=hc.dh; cmp.sHour=hc.sHour; cmp.wTotal=hc.total; }
   /* walk-in vs phone split for the period and for today (same showroom scope, both channels) */
   const mk=()=>({walkin:0,phone:0}), gs=(m,k)=>{let x=m.get(k);if(!x)m.set(k,x=mk());return x};
   const spl={t:mk(),store:new Map,exec:new Map,day:new Map,today:mk(),todayStore:new Map,todayExec:new Map}, splCmp=cr?{t:mk(),store:new Map,exec:new Map}:null;
-  for(const r of (S.store==='all'?validAll:validAll.filter(x=>x.s===S.store))){
+  for(const r of selOnly(validAll)){
     if(r.d===today){ spl.today[r.ty]+=r.c; gs(spl.todayStore,r.s)[r.ty]+=r.c; gs(spl.todayExec,r.e)[r.ty]+=r.c; }
     if(r.d>=a&&r.d<=b){ spl.t[r.ty]+=r.c; gs(spl.store,r.s)[r.ty]+=r.c; gs(spl.exec,ek(r.s,r.e))[r.ty]+=r.c; gs(spl.day,r.d)[r.ty]+=r.c; }
     if(splCmp&&r.d>=cr.a&&r.d<=cr.b&&cut(r)){ splCmp.t[r.ty]+=r.c; gs(splCmp.store,r.s)[r.ty]+=r.c; gs(splCmp.exec,ek(r.s,r.e))[r.ty]+=r.c; }
   }
-  const net=agg(valid.filter(r=>r.d>=a&&r.d<=b)), netCmp=cr?agg(valid.filter(r=>r.d>=cr.a&&r.d<=cr.b&&cut(r))):null;
+  const nb=S.store==='all'?selOnly(valid):valid, net=agg(nb.filter(r=>r.d>=a&&r.d<=b)), netCmp=cr?agg(nb.filter(r=>r.d>=cr.a&&r.d<=cr.b&&cut(r))):null;
   const scopeDay=new Map, sDayAll=new Map;
   for(const r of valid){ let m=sDayAll.get(r.s); if(!m)sDayAll.set(r.s,m=new Map); m.set(r.d,(m.get(r.d)||0)+r.c); }
   for(const r of scope) scopeDay.set(r.d,(scopeDay.get(r.d)||0)+r.c);
@@ -2047,7 +2192,7 @@ function renderCal(c){
     for(let dw=0;dw<7;dw++){ const d=ws+dw; if(d>c.today)continue; const v=g(d), p=Math.round(Math.min(1,v/cap)*100), sel=d>=c.a&&d<=c.b;
       s+=`<rect class="cd" data-day="${d}" x="${x}" y="${top+dw*(cell+gap)}" width="${cell}" height="${cell}" rx="4" style="fill:${v?`color-mix(in oklab,var(--seq-hi) ${p}%,var(--seq-lo))`:'var(--cell-empty)'}" ${sel?'stroke="var(--ink)" stroke-width="1.6"':''} data-tip="${esc(`<b>${fDayL(d)} ${UD(d).getUTCFullYear()}</b><br>${fmt(v)} walk-ins`)}"/>`; } }
   el.innerHTML=`<svg width="${lw+weeks*(cell+gap)}" height="${H}" role="img" aria-label="Daily walk-ins calendar">${s}</svg>`;
-  $('#calSub').textContent=`${c.isAll?'All showrooms':sname(S.store)} · last ${weeks} weeks`;
+  $('#calSub').textContent=`${selName(true)} · last ${weeks} weeks`;
 }
 /* ridgeline: the hourly shape of each showroom (or each weekday when one showroom is selected) */
 function smoothPath(p,base){ let d=`M${p[0][0].toFixed(1)},${p[0][1].toFixed(1)}`;
@@ -2117,7 +2262,7 @@ function renderRecords(c){
   const same=[]; for(let d=T-7;d>=first;d-=7) same.push(g(d)); const tNow=g(T), beat=same.filter(v=>tNow>v).length;
   const hr=new Map; for(const r of c.scope) if(r.ty==='walkin'){ const k=r.d*24+r.h; hr.set(k,(hr.get(k)||0)+r.c) } const bh=topOf(hr);
   const inP=x=>x>=c.a&&x<=c.b, R=(k,v,s,hl,tip)=>`<div class="rec${hl?' hl':''}"${tip?` data-tip="${esc(tip)}"`:''}><div class="k">${k}</div><div class="v">${v}</div><div class="s">${s}</div></div>`;
-  $('#recSub').textContent=c.isAll?'All showrooms':sname(S.store);
+  $('#recSub').textContent=selName(true);
   if(!bd){ $('#recs').innerHTML='<div class="empty" style="grid-column:1/-1">No entries yet</div>'; return }
   $('#recs').innerHTML=
     R('Best day ever',fmt(bd.v),fDayL(bd.d)+' '+UD(bd.d).getUTCFullYear(),inP(bd.d))+
@@ -2244,25 +2389,26 @@ let CTX=null;
 function render(){
   tip.className='';tip._el=null;
   const ok=S.loaded; $('#loading').hidden=ok||!!S.err; $('#app').hidden=$('#hero').hidden=$('#hpanels').hidden=$('#ticker').hidden=!ok;
-  $('#dot').className='dot'+(S.err?' err':ok&&!S.demo?' on':''); tick();
+  paintLive();
   $('#banner').innerHTML=S.err?`<div class="banner err"><span><b>Couldn't reach the live walk-in database.</b> ${ok?'Showing the last data that loaded.':'Check the internet connection, then try again.'}</span><button class="btn pri" type="button" id="bRetry">Try again</button>${ok?'':'<button class="btn" type="button" id="bDemo">Preview the layout with sample data</button>'}</div>`
     :S.demo?`<div class="banner demo"><span><b>Sample data.</b> These numbers are invented to preview the layout. They are not your showrooms' figures.</span><button class="btn pri" type="button" id="bRetry">Load live data</button></div>`
     :(S.partial&&S.partial.length)?`<div class="banner demo"><span><b>${S.partial.length} showroom${S.partial.length===1?'':'s'} could not be loaded just now:</b> ${S.partial.map(id=>esc(sname(id))).join(', ')}. Their figures may be missing or out of date. Retrying automatically.</span><button class="btn pri" type="button" id="bRetry">Try again</button></div>`:'';
   if(!ok) return;
+  if(!S.stores.length){ $('#app').hidden=true; renderStoreSel(); $('#banner').innerHTML='<div class="banner demo"><span><b>No showroom selected.</b> Tick at least one showroom to see the dashboard.</span><button class="btn pri" type="button" id="bAllSel">Select all showrooms</button></div>'; return }
   const c=CTX=context();
   document.querySelectorAll('#presets .chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.p===S.preset));
-  $('#dA').value=iso(c.a); $('#dB').value=iso(c.b); $('#selStore').value=S.store; $('#selCmp').value=S.cmpMode; $('#cmpCustom').hidden=S.cmpMode!=='custom';
+  $('#dA').value=iso(c.a); $('#dB').value=iso(c.b); renderStoreSel(); $('#selCmp').value=S.cmpMode; $('#cmpCustom').hidden=S.cmpMode!=='custom';
   if(S.cmpMode==='custom'&&S.ca!=null){$('#cA').value=iso(S.ca);$('#cB').value=iso(S.cb)}
   $('#scope').innerHTML=c.isAll?'':`<span class="sc-chip">${esc(sname(S.store))}<button type="button" data-store="all">Show all</button></span>`;
   if(FIRST){document.body.classList.add('first');setTimeout(()=>document.body.classList.remove('first'),2200)}
   document.querySelectorAll('#chans .chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.ch===S.ch));
   const pl=PRESETS.find(p=>p[0]===S.preset); $('#rangeLbl').textContent=pl?'Dates & comparison':fRange(c.a,c.b);
-  $('#miniScope').innerHTML=`${esc(c.isAll?'All showrooms':short(S.store))} · ${esc(pl?pl[1]:fRange(c.a,c.b))} · <b>${fmt(c.cur.total)}</b> walk-ins`;
+  $('#miniScope').innerHTML=`${esc(selName(true))} · ${esc(pl?pl[1]:fRange(c.a,c.b))} · <b>${fmt(c.cur.total)}</b> walk-ins`;
   
   showTab();
   /* the hero, the idle watch and the footer notes always run; each tab only draws its own charts (they measure their width) */
   renderIdle(c); renderLive(c); renderPeriod(c); renderHealth(c);
-  $('#heroStore').textContent=c.isAll?'all showrooms':sname(S.store); addTargetMarker(c);
+  $('#heroStore').textContent=selName(false); addTargetMarker(c);
   const T=S.tab;
   if(T==='overview'){ renderExecOverview(c); renderInsights(c); trimInsights(); renderPulse(c); renderTrend(c); renderOdd(c); renderRecords(c); renderCal(c); }
   else if(T==='showrooms'){ const rows=entityRows(c); renderRank(c,rows); renderQuad(c,rows); renderLeague(c); renderEntHeat(c,rows);
@@ -2270,10 +2416,11 @@ function render(){
     if(c.isAll){const st=storeStats(c); renderCards(c,st); renderStoreTable(c,st)} }
   else if(T==='team'){ const ex=execStats(c); renderExecTable(c,ex); renderExecScatter(c,ex); }
   else if(T==='timing'){ renderWhen(c); renderDayparts(c); renderWdIndex(c); renderRidge(c); }
+  else if(T==='compare'){ renderCompare(c); }
   FIRST=false; relabelDom(); ncRender();
 }
 /* ───────── tabs ───────── */
-const TABS=['overview','showrooms','team','timing','health'];
+const TABS=['overview','showrooms','team','timing','compare','health'];
 S.tab='overview';
 try{ const h=location.hash.slice(1), t=localStorage.getItem('rakTab'); S.tab=TABS.includes(h)?h:TABS.includes(t)?t:'overview' }catch(_){}
 function showTab(){
@@ -2295,10 +2442,15 @@ $('#tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]'); 
 $('#tabs').addEventListener('keydown',e=>{ if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return; const i=TABS.indexOf(S.tab)+(e.key==='ArrowRight'?1:-1), t=TABS[(i+TABS.length)%TABS.length];
   setTab(t); const b=document.querySelector(`#tabs [data-tab="${t}"]`); if(b)b.focus() });
 window.addEventListener('hashchange',()=>{const h=location.hash.slice(1); if(TABS.includes(h)&&h!==S.tab) setTab(h)});
-function tick(){ $('#liveTxt').textContent=S.demo?'Sample data':S.err?(S.loaded?'Offline · last update '+ago(S.updated):'Not connected'):S.loaded?'Live · updated '+ago(S.updated):'Connecting…' }
-function fillStores(){ const s=$('#selStore'); const want=['all',...S.stores].join(); if(s.dataset.k===want)return; s.dataset.k=want;
-  s.innerHTML='<option value="all">all showrooms</option>'+[...S.stores].sort((x,y)=>sname(x).localeCompare(sname(y))).map(id=>`<option value="${esc(id)}">${esc(sname(id))}</option>`).join('');
-  if(S.store!=='all'&&!S.stores.includes(S.store))S.store='all'; }
+function tick(){ paintLive() }
+function fillStores(){
+  const all=S.allStores;
+  if(!S._synced&&all.length){ S._synced=1; if(S.store!=='all'&&all.includes(S.store)) S.hidden=new Set(all.filter(x=>x!==S.store)) }   // a single showroom restored after an update reload
+  for(const id of [...S.hidden]) if(!all.includes(id)) S.hidden.delete(id);
+  syncStore();
+  const l=$('#storeList'), want=all.join(); if(l.dataset.k!==want){ l.dataset.k=want;
+    l.innerHTML=[...all].sort((x,y)=>sname(x).localeCompare(sname(y))).map(id=>`<label class="msel-row"><input type="checkbox" value="${esc(id)}"><span>${esc(sname(id))}</span><button type="button" class="only" data-only="${esc(id)}">Only</button></label>`).join(''); }
+  renderStoreSel(); }
 
 /* ───────── export ───────── */
 function crc32(u){let c,crc=~0;for(let i=0;i<u.length;i++){c=(crc^u[i])&255;for(let k=0;k<8;k++)c=c&1?(c>>>1)^0xEDB88320:c>>>1;crc=(crc>>>8)^c}return~crc>>>0}
@@ -2331,7 +2483,7 @@ function save(blob,name){const a=document.createElement('a');a.href=URL.createOb
 function rawRows(c){return c.scope.filter(r=>r.d>=c.a&&r.d<=c.b).map(r=>[iso(r.d),fTime(r.t),DOWL[dow(r.d)],sname(r.s),r.e,r.ty==='phone'?'Phone inquiry':'Walk-in',r.c])}
 function exportXlsx(){
   const c=CTX; if(!c)return; const r1=n=>Math.round(n*10)/10, st=storeStats(c), ex=execStats(c), f=forecast(c), pk=peakOf(c.cur.hour);
-  const sum=[['Metric','Value'],['Report','RAK Retail walk-in analytics'+(S.demo?' (SAMPLE DATA)':'')],['Showroom',c.isAll?'All showrooms':sname(S.store)],['Period',fRange(c.a,c.b)],['Comparison period',c.cr?fRange(c.cr.a,c.cr.b):'None'],
+  const sum=[['Metric','Value'],['Report','RAK Retail walk-in analytics'+(S.demo?' (SAMPLE DATA)':'')],['Showroom',selName(true)],['Period',fRange(c.a,c.b)],['Comparison period',c.cr?fRange(c.cr.a,c.cr.b):'None'],
     ['Walk-ins',c.cur.total],['Comparison walk-ins',c.cmp?c.cmp.total:''],['Change %',c.cmp&&c.cmp.total?r1((c.cur.total-c.cmp.total)/c.cmp.total*100):''],['Entries logged',c.cur.n],['Days in period',c.days],['Daily average',r1(c.cur.total/c.days)],
     ['Peak hour',pk.i>=0?hh(pk.i):''],['Month to date',f.mtd],['Month-end forecast',Math.round(f.proj)],['Last month total',f.last],['Channel',CH_LABEL[S.ch]],['Physical walk-ins',P0(c.spl.t.walkin)],['Phone inquiries',P0(c.spl.t.phone)],['Phone share of inquiries %',(P0(c.spl.t.walkin)+P0(c.spl.t.phone))?r1(P0(c.spl.t.phone)/(P0(c.spl.t.walkin)+P0(c.spl.t.phone))*100):''],['Generated (UAE time)',iso(c.today)+' '+fTime(c.now)]];
   const so=id=>c.spl.store.get(id)||{}, eo=k=>c.spl.exec.get(k)||{}, ph=o=>{const t=P0(o.walkin)+P0(o.phone);return t?r1(P0(o.phone)/t*100):''};
@@ -2358,7 +2510,6 @@ function exportCsv(){ const c=CTX; if(!c)return; const q=v=>/[",\n]/.test(String
 const PRESETS=[['today','Today'],['yday','Yesterday'],['7d','Last 7 days'],['30d','Last 30 days'],['mtd','This month'],['lastm','Last month'],['90d','Last 90 days'],['all','All time']];
 $('#presets').innerHTML=PRESETS.map(([p,l])=>`<button type="button" class="chip" data-p="${p}" aria-pressed="false">${l}</button>`).join('');
 $('#presets').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;S.preset=b.dataset.p;render()});
-$('#selStore').addEventListener('change',e=>{S.store=e.target.value;S.execAll=false;render()});
 $('#selCmp').addEventListener('change',e=>{S.cmpMode=e.target.value; if(S.cmpMode==='custom'&&S.ca==null){const l=S.b-S.a+1;S.ca=S.a-l;S.cb=S.a-1} render()});
 const onDate=()=>{const a=fromIso($('#dA').value),b=fromIso($('#dB').value);if(a==null||b==null)return;S.preset='custom';S.a=a;S.b=b;render()};
 $('#dA').addEventListener('change',onDate); $('#dB').addEventListener('change',onDate);
@@ -2376,7 +2527,7 @@ document.addEventListener('click',e=>{
   const so=e.target.closest('[data-sort]'); if(so){const [id,k]=so.dataset.sort.split('|'),st=S.sort[id]; if(st.k===k)st.dir=-st.dir; else{st.k=k;st.dir=(k==='name'||k==='e'||k==='s')?1:-1} render(); return}
   const hs=e.target.closest('[data-hs]'); if(hs){S.hmScale=hs.dataset.hs;document.querySelectorAll('[data-hs]').forEach(b=>b.setAttribute('aria-pressed',b===hs));render();return}
   const il=e.target.closest('[data-idle]'); if(il){S.idleOpen=!S.idleOpen;if(CTX)renderInsights(CTX);const nb=document.querySelector('[data-idle]');if(nb)nb.focus();return}
-  const sr=e.target.closest('[data-store]'); if(sr){S.store=sr.dataset.store;S.execAll=false;render();window.scrollTo({top:0,behavior:'smooth'});return}
+  const sr=e.target.closest('[data-store]'); if(sr){setOnly(sr.dataset.store);S.execAll=false;render();window.scrollTo({top:0,behavior:'smooth'});return}
   if(e.target.id==='bRetry'){S.demo=false;$('#loading').hidden=false;refresh(true);return}
   if(e.target.id==='bDemo'){useDemo();return}
 });
@@ -2391,9 +2542,9 @@ document.addEventListener('mousemove',e=>{ if(Date.now()-touchAt<1200)return; co
 document.addEventListener('pointerdown',e=>{ if(e.pointerType==='mouse')return; touchAt=Date.now(); const t=e.target.closest&&e.target.closest('[data-tip]'); if(!t){tip.className='';tip._el=null;return} showTip(t,e.clientX,e.clientY,true)},{passive:true});
 document.addEventListener('mouseleave',()=>{tip.className=''}); window.addEventListener('scroll',()=>{tip.className='';tip._el=null},{passive:true,capture:true});
 /* appearance: colour palette + light / dark / auto, remembered on this device */
-const PALS=['teal','emerald','ocean','aubergine','charcoal','executive'], HERO={teal:'#006666',executive:'#0B1F3B',emerald:'#0a2b24',ocean:'#061c2b',aubergine:'#1c0f29',charcoal:'#141619'};
+const PALS=['navy','teal','emerald','ocean','aubergine','charcoal','executive'], HERO={navy:'#0F2A47',teal:'#006666',executive:'#0B1F3B',emerald:'#0a2b24',ocean:'#061c2b',aubergine:'#1c0f29',charcoal:'#141619'};
 function applyLook(){
-  const r=document.documentElement; let pal='teal',mode='auto';
+  const r=document.documentElement; let pal='navy',mode='auto';
   try{ mode=localStorage.getItem('rakTheme')||mode }catch(_){}
   if(!PALS.includes(pal))pal='teal'; r.dataset.palette=pal;
   if(mode==='dark'||mode==='light') r.dataset.theme=mode; else delete r.dataset.theme;
@@ -2404,16 +2555,219 @@ function applyLook(){
 applyLook();
 const apBtn=$('#btnTheme'), apBox=$('#appear');
 const apShow=on=>{apBox.hidden=!on;apBtn.setAttribute('aria-expanded',on)};
-apBtn.addEventListener('click',e=>{ e.stopPropagation(); const dark=getComputedStyle(document.documentElement).colorScheme.includes('dark'); try{localStorage.setItem('rakTheme',dark?'light':'dark');localStorage.setItem('rakPal','teal')}catch(_){} applyLook(); if(S.loaded) render() });
+apBtn.addEventListener('click',e=>{ e.stopPropagation(); const dark=getComputedStyle(document.documentElement).colorScheme.includes('dark'); try{localStorage.setItem('rakTheme',dark?'light':'dark');localStorage.setItem('rakPal','navy')}catch(_){} applyLook(); if(S.loaded) render() });
 apBox.addEventListener('click',e=>{ e.stopPropagation(); const p=e.target.closest('[data-pal]'), md=e.target.closest('[data-mode]');
   try{ if(p)localStorage.setItem('rakPal',p.dataset.pal); if(md)localStorage.setItem('rakTheme',md.dataset.mode) }catch(_){}
   if(p||md){ applyLook(); if(S.loaded) render() } });
 document.addEventListener('click',()=>{ if(!apBox.hidden) apShow(false) });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!apBox.hidden){apShow(false);apBtn.focus()} });
 let rz,lastW=innerWidth;window.addEventListener('resize',()=>{if(innerWidth===lastW)return;lastW=innerWidth;clearTimeout(rz);rz=setTimeout(()=>{if(S.loaded)render()},160)});   // phones fire resize while scrolling; only a width change needs a redraw
-setInterval(()=>{ if(!document.hidden) refresh(false) },POLL);
+setInterval(()=>{ if(!document.hidden&&(!RT.on||Date.now()-S.updated>SAFETY)) refresh(false) },POLL);   // listeners do the work while connected
 setInterval(tick,20e3);
 document.addEventListener('visibilitychange',()=>{ if(!document.hidden&&Date.now()-S.updated>POLL) refresh(false) });
+/* ───────── showroom multi-select ───────── */
+function syncStore(){ const v=S.stores; S.store=(S.allStores.length>1&&v.length===1)?v[0]:'all' }
+function setOnly(id){ if(id==='all'||!S.allStores.includes(id)) S.hidden.clear(); else S.hidden=new Set(S.allStores.filter(x=>x!==id)); syncStore() }
+function selName(cap){ const n=S.stores.length,t=S.allStores.length;
+  if(S.store!=='all') return sname(S.store);
+  if(!S.hidden.size) return cap?'All showrooms':'all showrooms';
+  return n+' of '+t+' showrooms' }
+function renderStoreSel(){
+  const n=S.stores.length,t=S.allStores.length, lbl=$('#storeLbl'), cnt=$('#storeCnt'); if(!lbl) return;
+  lbl.textContent=!t?'Showrooms':n===t?'All showrooms':n===0?'None selected':n===1?sname(S.stores[0]):n+' of '+t+' showrooms';
+  cnt.hidden=n===t; cnt.textContent=n+' / '+t;
+  document.querySelectorAll('#storeList input').forEach(i=>{ i.checked=!S.hidden.has(i.value) }) }
+function selChanged(){ syncStore(); S.execAll=false; render() }
+$('#storeList').addEventListener('change',e=>{ const i=e.target.closest('input'); if(!i)return; if(i.checked)S.hidden.delete(i.value); else S.hidden.add(i.value); selChanged() });
+$('#storeList').addEventListener('click',e=>{ const b=e.target.closest('[data-only]'); if(!b)return; e.preventDefault(); setOnly(b.dataset.only); selChanged() });
+$('#selAll').addEventListener('click',()=>{ S.hidden.clear(); selChanged() });
+$('#selNone').addEventListener('click',()=>{ S.hidden=new Set(S.allStores); selChanged() });
+document.addEventListener('click',e=>{ if(e.target.id==='bAllSel'){ S.hidden.clear(); selChanged(); return }
+  const d=$('#storeSel'); if(d.open&&!d.contains(e.target)) d.open=false });
+$('#storeSel').addEventListener('toggle',()=>{ if($('#storeSel').open) $('#moreDates').open=false });
+$('#moreDates').addEventListener('toggle',()=>{ if($('#moreDates').open) $('#storeSel').open=false });
+
+/* ───────── live connection + real-time sync ─────────
+   Firebase Realtime Database listeners (the same project and database the page already reads) tell this page the moment
+   a showroom logs an entry on any device. Only the showroom that changed is re-read. The old 45-second timer now only
+   runs as a safety net (every few minutes) while the listeners are connected, and as the normal refresh if they cannot start. */
+function paintLive(){
+  const dot=$('#dot'), txt=$('#liveTxt'); if(!dot) return;
+  const ok=S.loaded; let cls='dot', t;
+  if(S.demo) t='Sample data';
+  else if(!navigator.onLine||S.sync==='offline'){ cls+=' off'; t='Offline · showing data from '+(S.updated?ago(S.updated):'earlier') }
+  else if(S.err){ cls+=' err'; t=ok?'Connection error · last update '+ago(S.updated):'Not connected' }
+  else if(!ok||busy){ cls+=' sync'; t=ok?'Syncing…':'Connecting…' }
+  else { cls+=' on'; t=(RT.on?'Live':'Connected')+' · updated '+ago(S.updated) }
+  dot.className=cls; if(txt.textContent!==t) txt.textContent=t }
+window.addEventListener('offline',()=>{ S.sync='offline'; paintLive() });
+window.addEventListener('online',()=>{ S.sync=''; paintLive(); refresh(false) });
+const pend=new Set(); let pokeT=0;
+function poke(id){ if(id)pend.add(id); clearTimeout(pokeT); pokeT=setTimeout(flush,600) }
+async function flush(){
+  if(busy){ pokeT=setTimeout(flush,800); return }
+  if(!pend.size||S.demo) return; const ids=[...pend]; pend.clear(); busy=true; paintLive();
+  try{ await Promise.all(ids.map(async id=>{
+      const q=S.raw[id]&&S.raw[id].size?'?orderBy=%22%24key%22&limitToLast=400':'';
+      ingest(id,await jr(`${DB}/stores/${id}/walkins.json${q}`,1)) }));
+    rebuild(); S.err=null; S.updated=Date.now() }
+  catch(e){ console.error('Live update failed',e); S.err=e }
+  busy=false; render() }
+async function startRealtime(){
+  if(S.demo||RT.started){ if(RT.attach) S.allStores.forEach(RT.attach); return }
+  if(Date.now()-RT.failAt<60e3) return; RT.started=true;
+  try{
+    await dbToken();
+    const FB='https://www.gstatic.com/firebasejs/11.0.1/';
+    const [{getApp},{getDatabase,ref,query,limitToLast,onValue}]=await Promise.all([import(FB+'firebase-app.js'),import(FB+'firebase-database.js')]);
+    const db=getDatabase(getApp('dash'),DB);
+    onValue(ref(db,'.info/connected'),snap=>{ const up=!!snap.val();
+      if(up){ const back=S.sync==='offline'; S.sync=''; RT.on=true; if(back) refresh(false) }      // reconnected: catch up on anything missed
+      else { RT.on=false; if(S.loaded) S.sync='offline' }
+      paintLive() });
+    RT.attach=id=>{ if(RT.subs[id]) return; let first=true;
+      RT.subs[id]=onValue(query(ref(db,'stores/'+id+'/walkins'),limitToLast(25)),()=>{ if(first){first=false;return} poke(id) },
+        e=>{ console.warn('Live listener refused for',id,e&&e.message); RT.on=false; paintLive() }) };
+    S.allStores.forEach(RT.attach);
+  }catch(e){ console.warn('Real-time listeners unavailable; falling back to timed refresh',e); RT.started=false; RT.on=false; RT.failAt=Date.now() }
+}
+
+/* ───────── date comparison ───────── */
+const CP={mode:'two',a1:null,b1:null,a2:null,b2:null,init:false};
+const CP2='#8A97A8';   // Period 2 colour (slate); Period 1 uses the palette blue
+const cpDefaults=t=>{ const a1=monthStart(t), a2=addMonths(a1,-1); return{a1,b1:t,a2,b2:Math.min(addMonths(t,-1),monthEnd(a2))} };
+const gPct=(cur,prev)=>prev>0?(cur-prev)/prev*100:(cur===0&&prev===0?0:null);        // no baseline → null, shown as n/a (never Infinity or NaN)
+const gTxt=g=>g==null?'n/a':(g>0?'+':'')+g.toFixed(1)+'%';
+const gSpan=g=>{ if(g==null) return '<span class="d flat">n/a</span>'; const c=Math.abs(g)<.05?'flat':g>0?'up':'down'; return `<span class="d ${c}">${c==='flat'?'■':g>0?'▲':'▼'} ${gTxt(g)}</span>` };
+const dTxt=v=>v==null?'n/a':(v>0?'+':v<0?'−':'')+fmt1(Math.abs(v));
+const dCls=v=>v==null||Math.abs(v)<1e-9?'':v>0?' style="color:var(--up);font-weight:650"':' style="color:var(--down);font-weight:650"';
+function cpFill(){ $('#p1f').value=iso(CP.a1); $('#p1t').value=iso(CP.b1); $('#p2f').value=iso(CP.a2); $('#p2t').value=iso(CP.b2) }
+function cpShowMode(){ const two=CP.mode==='two'; $('#cpP2').hidden=!two; $('#cpPeriods').classList.toggle('one',!two);
+  document.querySelectorAll('#cpMode [data-cm]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.cm===CP.mode)) }
+function cpApply(){
+  const g=id=>fromIso($(id).value), a1=g('#p1f'), b1=g('#p1t'), a2=g('#p2f'), b2=g('#p2t'), two=CP.mode==='two'; let err='';
+  if(a1==null||b1==null||(two&&(a2==null||b2==null))) err='Please choose every date.';
+  else if(a1>b1) err='Period 1: the From date must be on or before the To date.';
+  else if(two&&a2>b2) err='Period 2: the From date must be on or before the To date.';
+  $('#cpErr').textContent=err; if(err) return;
+  CP.a1=a1; CP.b1=b1; if(two){ CP.a2=a2; CP.b2=b2 } if(S.loaded) render() }
+$('#cpApply').addEventListener('click',cpApply);
+$('#cpReset').addEventListener('click',()=>{ Object.assign(CP,cpDefaults(dn(Date.now()))); cpFill(); $('#cpErr').textContent=''; if(S.loaded) render() });
+$('#cpMode').addEventListener('click',e=>{ const b=e.target.closest('[data-cm]'); if(!b||b.dataset.cm===CP.mode) return; CP.mode=b.dataset.cm; cpShowMode(); cpApply() });
+['#p1f','#p1t','#p2f','#p2t'].forEach(id=>$(id).addEventListener('keydown',e=>{ if(e.key==='Enter') cpApply() }));
+
+function cpRows(now){ const one=S.store!=='all';
+  return S.recs.filter(r=>r.t<=now&&(S.ch==='all'||r.ty===S.ch)&&(one?r.s===S.store:!S.hidden.has(r.s))) }
+function cpAgg(a,b,rows,today){
+  const last=Math.min(b,today), nd=Math.max(0,last-a+1), day=new Map, store=new Map; let total=0;
+  for(const r of rows){ if(r.d<a||r.d>last) continue; total+=r.c; day.set(r.d,(day.get(r.d)||0)+r.c); store.set(r.s,(store.get(r.s)||0)+r.c) }
+  const dowSum=Array(7).fill(0), dowDays=Array(7).fill(0); for(let d=a;d<=last;d++) dowDays[dow(d)]++; for(const [d,v] of day) dowSum[dow(d)]+=v;
+  let hi=null, lo=null; for(const [d,v] of day){ if(!hi||v>hi.v||(v===hi.v&&d<hi.d)) hi={d,v}; if(!lo||v<lo.v||(v===lo.v&&d<lo.d)) lo={d,v} }
+  return{a,b,last,nd,total,avg:nd?total/nd:0,day,store,hi,lo,dowSum,dowDays} }
+function cpBuckets(P,kind){ const m=new Map;
+  for(let d=P.a;d<=P.last;d++){ const k=kind==='week'?d-((dow(d)+6)%7):monthStart(d); let x=m.get(k); if(!x)m.set(k,x={k,t:0,n:0}); x.t+=P.day.get(d)||0; x.n++ }
+  return [...m.values()].map(x=>({...x,l:kind==='week'?'Week of '+fDay(x.k):MON[UD(x.k).getUTCMonth()]+' '+UD(x.k).getUTCFullYear()})) }
+function cpTrend(el,P1,P2){
+  const W=Math.max(300,el.clientWidth||640), H=240, m={l:40,r:12,t:14,b:28}, pw=W-m.l-m.r, ph=H-m.t-m.b;
+  const ser=P=>P?Array.from({length:P.nd},(_,i)=>P.day.get(P.a+i)||0):[], s1=ser(P1), s2=ser(P2);
+  const n=Math.max(s1.length,s2.length,1), mx=niceMax(Math.max(1,...s1,...s2)), x=i=>m.l+(n===1?pw/2:i*pw/(n-1)), y=v=>m.t+ph-(v/mx)*ph;
+  let g=''; for(let i=0;i<=4;i++){ const v=mx*i/4, yy=y(v); g+=`<line x1="${m.l}" x2="${W-m.r}" y1="${yy}" y2="${yy}" stroke="${i?'var(--grid)':'var(--axis)'}"/><text x="${m.l-6}" y="${yy+4}" text-anchor="end" font-size="11" fill="var(--muted)">${fmt1(v)}</text>` }
+  const line=(a,col,dash)=>a.length?`<polyline points="${a.map((v,i)=>x(i).toFixed(1)+','+y(v).toFixed(1)).join(' ')}" fill="none" stroke="${col}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"${dash?' stroke-dasharray="6 4"':''}/>`:'';
+  const step=Math.max(1,Math.ceil(n/Math.max(2,Math.floor(pw/66)))); let xl='';
+  for(let i=0;i<n;i+=step) xl+=`<text x="${x(i)}" y="${H-8}" text-anchor="middle" font-size="11" fill="var(--muted)">${P2?'Day '+(i+1):fDay(P1.a+i)}</text>`;
+  const cw=n===1?pw:pw/(n-1); let hv='';
+  for(let i=0;i<n;i++){ const t=[]; if(i<s1.length) t.push(`${P2?'Period 1 · ':''}${fDayL(P1.a+i)}: <b>${fmt(s1[i])}</b>`); if(P2&&i<s2.length) t.push(`Period 2 · ${fDayL(P2.a+i)}: <b>${fmt(s2[i])}</b>`);
+    hv+=`<rect x="${x(i)-cw/2}" y="${m.t}" width="${cw}" height="${ph}" fill="transparent" data-tip="${esc(t.join('<br>'))}"/>` }
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" role="img" aria-label="Daily walk-ins">${g}${xl}${line(s2,CP2,true)}${line(s1,'var(--s1)',false)}${hv}</svg>` }
+
+function renderCompare(c){
+  if(!CP.init){ CP.init=true; Object.assign(CP,cpDefaults(c.today)); cpFill() } cpShowMode();
+  const two=CP.mode==='two', out=$('#cpOut'), rows=cpRows(c.now);
+  $('#cpScope').textContent=`${selName(true)} · ${CH_LABEL[S.ch]}`;
+  const P1=cpAgg(CP.a1,CP.b1,rows,c.today), P2=two?cpAgg(CP.a2,CP.b2,rows,c.today):null;
+  const noun='walk-ins', ids=S.stores;
+  const sr=ids.map(id=>{ const v1=P1.store.get(id)||0, v2=P2?(P2.store.get(id)||0):0;
+      return{id,name:sname(id),v1,v2,s1:P1.total?v1/P1.total:0,s2:P2&&P2.total?v2/P2.total:0,a1:P1.nd?v1/P1.nd:0,a2:P2&&P2.nd?v2/P2.nd:0,g:P2?gPct(v1,v2):null,d:v1-v2} })
+    .sort((x,y)=>y.v1-x.v1||x.name.localeCompare(y.name));
+  const lab=(P,n)=>`${n} (${fRange(P.a,P.b)})`;
+  const dayCell=h=>h?`${fmt(h.v)} <small class="mut">${fDay(h.d)}</small>`:'–';
+  const empty=!P1.total&&(!P2||!P2.total);
+  /* ---- executive summary + highlights ---- */
+  const sum=[], hl=[];
+  const best=sr.find(r=>r.v1>0), weak=[...sr].filter(r=>r.v1>0).sort((x,y)=>x.v1-y.v1||x.name.localeCompare(y.name))[0], none=sr.filter(r=>r.v1===0);
+  if(two){
+    const gt=gPct(P1.total,P2.total), dt=P1.total-P2.total, ga=gPct(P1.avg,P2.avg);
+    sum.push(`${lab(P1,'Period 1')} recorded <b>${fmt(P1.total)}</b> ${noun}, against <b>${fmt(P2.total)}</b> in ${lab(P2,'Period 2')}: ${dt===0?'no change':`<b>${dTxt(dt)}</b> (${gTxt(gt)})`}.`);
+    if(P1.nd!==P2.nd) sum.push(`The periods are different lengths (${P1.nd} days against ${P2.nd}), so the daily average is the fairer comparison: ${fmt1(P1.avg)} against ${fmt1(P2.avg)} a day (${gTxt(ga)}).`);
+    else sum.push(`Both periods cover ${P1.nd} day${P1.nd===1?'':'s'}; the daily average is ${fmt1(P1.avg)} against ${fmt1(P2.avg)} (${gTxt(ga)}).`);
+    const up=[...sr].filter(r=>r.d>0).sort((x,y)=>y.d-x.d), dn_=[...sr].filter(r=>r.d<0).sort((x,y)=>x.d-y.d);
+    sum.push(up.length?`<b>Improved:</b> ${up.slice(0,3).map(r=>`${esc(r.name)} (${dTxt(r.d)}${r.g==null?'':', '+gTxt(r.g)})`).join('; ')}${up.length>3?` and ${up.length-3} more`:''}.`:'<b>Improved:</b> no showroom is ahead of Period 2.');
+    sum.push(dn_.length?`<b>Declined:</b> ${dn_.slice(0,3).map(r=>`${esc(r.name)} (${dTxt(r.d)}${r.g==null?'':', '+gTxt(r.g)})`).join('; ')}${dn_.length>3?` and ${dn_.length-3} more`:''}.`:'<b>Declined:</b> no showroom is behind Period 2.');
+    if(P1.hi||P2.hi) sum.push(`<b>Busiest day:</b> ${P1.hi?`Period 1 — ${fDayL(P1.hi.d)} (${fmt(P1.hi.v)})`:'Period 1 — none'}; ${P2.hi?`Period 2 — ${fDayL(P2.hi.d)} (${fmt(P2.hi.v)})`:'Period 2 — none'}.`);
+    const bigG=sr.filter(r=>r.v2>=5&&r.g!=null).sort((x,y)=>y.g-x.g)[0], decl=dn_[0];
+    hl.push(['Best showroom (Period 1)',best?best.name:'–',best?`${fmt(best.v1)} ${noun} · ${pct(best.s1)} of the total`:'No entries']);
+    hl.push(['Highest growth',bigG&&bigG.g>0?bigG.name:'–',bigG&&bigG.g>0?`${gTxt(bigG.g)} · ${dTxt(bigG.d)}`:'No showroom grew (baseline of 5 or more)']);
+    hl.push(['Largest decline',decl?decl.name:'–',decl?`${dTxt(decl.d)}${decl.g==null?'':' · '+gTxt(decl.g)}`:'No showroom declined']);
+    hl.push(['Overall change',gTxt(gt),Math.abs(gt||0)>=10?'A significant difference (10% or more)':gt==null?'Period 2 has no baseline':'Within 10%']);
+  } else {
+    sum.push(`${lab(P1,'This period')} recorded <b>${fmt(P1.total)}</b> ${noun} over ${P1.nd} day${P1.nd===1?'':'s'}, an average of <b>${fmt1(P1.avg)}</b> a day.`);
+    if(best) sum.push(`<b>${esc(best.name)}</b> led with ${fmt(best.v1)} ${noun} (${pct(best.s1)} of the total)${weak&&weak!==best?`; the lowest showroom with entries was <b>${esc(weak.name)}</b> with ${fmt(weak.v1)} (${pct(weak.s1)})`:''}.`);
+    if(none.length&&P1.total) sum.push(`No entries in the period: ${none.map(r=>esc(r.name)).join(', ')}.`);
+    if(P1.hi) sum.push(`<b>Busiest day:</b> ${fDayL(P1.hi.d)} with ${fmt(P1.hi.v)}${P1.lo&&P1.lo.d!==P1.hi.d?`; <b>quietest day with entries:</b> ${fDayL(P1.lo.d)} with ${fmt(P1.lo.v)}`:''}.`);
+    const wk=P1.dowSum.map((v,i)=>({i,a:P1.dowDays[i]?v/P1.dowDays[i]:0,n:P1.dowDays[i]})).filter(x=>x.n); const bw=[...wk].sort((x,y)=>y.a-x.a)[0], lw=[...wk].sort((x,y)=>x.a-y.a)[0];
+    if(bw&&wk.length>1) sum.push(`By weekday, <b>${DOWL[bw.i]}</b> is the strongest (${fmt1(bw.a)} a day) and <b>${DOWL[lw.i]}</b> the weakest (${fmt1(lw.a)}).`);
+    hl.push(['Best showroom',best?best.name:'–',best?`${fmt(best.v1)} ${noun} · ${pct(best.s1)} of the total`:'No entries']);
+    hl.push(['Lowest showroom',weak&&weak!==best?weak.name:'–',weak&&weak!==best?`${fmt(weak.v1)} ${noun} · ${pct(weak.s1)} of the total`:'–']);
+    hl.push(['Highest day',P1.hi?fDayL(P1.hi.d):'–',P1.hi?`${fmt(P1.hi.v)} ${noun}`:'']);
+    hl.push(['Daily average',fmt1(P1.avg),`${P1.nd} day${P1.nd===1?'':'s'} in the period`]);
+  }
+  /* ---- KPI cards ---- */
+  const kp=(l,v1,v2,f,sub1,sub2)=>`<div class="card ck"><div class="ck-l">${l}</div><div class="ck-v">${v1==null?'–':f(v1)}</div><div class="ck-s">${two?`<span style="color:var(--muted)">Period 2: ${v2==null?'–':f(v2)}</span>${v1!=null&&v2!=null?gSpan(gPct(v1,v2)):''}`:(sub1||'')}</div></div>`;
+  const kpis=`<div class="cmp-kpis">${kp('Total walk-ins',P1.total,P2&&P2.total,fmt,`${P1.nd} day${P1.nd===1?'':'s'}`)}${kp('Daily average',P1.avg,P2&&P2.avg,fmt1,'per day')}${kp('Highest day',P1.hi&&P1.hi.v,P2&&P2.hi&&P2.hi.v,fmt,P1.hi?fDayL(P1.hi.d):'')}${kp('Lowest day',P1.lo&&P1.lo.v,P2&&P2.lo&&P2.lo.v,fmt,P1.lo?fDayL(P1.lo.d)+' · days with entries':'')}</div>`;
+  /* ---- tables ---- */
+  const metric=(name,v1,v2,f,h1,h2)=>{ const d=v1!=null&&v2!=null?v1-v2:null;
+    return `<tr><td>${name}</td><td class="n">${h1||(v1==null?'–':f(v1))}</td><td class="n">${h2||(v2==null?'–':f(v2))}</td><td class="n"${dCls(d)}>${dTxt(d)}</td><td class="n">${v1!=null&&v2!=null?gSpan(gPct(v1,v2)):'<span class="d flat">n/a</span>'}</td></tr>` };
+  const mTbl=two?`<div class="tw"><table class="cmp-tbl"><thead><tr><th>Metric</th><th>Period 1</th><th>Period 2</th><th>Difference</th><th>Growth %</th></tr></thead><tbody>
+      ${metric('Total walk-ins',P1.total,P2.total,fmt)}${metric('Daily average',P1.avg,P2.avg,fmt1)}
+      ${metric('Highest day',P1.hi&&P1.hi.v,P2.hi&&P2.hi.v,fmt,dayCell(P1.hi),dayCell(P2.hi))}${metric('Lowest day (with entries)',P1.lo&&P1.lo.v,P2.lo&&P2.lo.v,fmt,dayCell(P1.lo),dayCell(P2.lo))}
+      <tr><td>Days in period</td><td class="n">${P1.nd}</td><td class="n">${P2.nd}</td><td class="n">${dTxt(P1.nd-P2.nd)}</td><td class="n"></td></tr></tbody></table></div>`
+    :`<div class="tw"><table class="cmp-tbl"><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody>
+      <tr><td>Total walk-ins</td><td class="n">${fmt(P1.total)}</td></tr><tr><td>Daily average</td><td class="n">${fmt1(P1.avg)}</td></tr>
+      <tr><td>Highest day</td><td class="n">${dayCell(P1.hi)}</td></tr><tr><td>Lowest day (with entries)</td><td class="n">${dayCell(P1.lo)}</td></tr>
+      <tr><td>Days in period</td><td class="n">${P1.nd}</td></tr></tbody></table></div>`;
+  const sTbl=two?`<div class="tw"><table class="cmp-tbl"><thead><tr><th>Showroom</th><th>Period 1</th><th>Share</th><th>Period 2</th><th>Share</th><th>Difference</th><th>Growth %</th></tr></thead><tbody>
+      ${sr.map(r=>`<tr><td>${esc(r.name)}</td><td class="n"><b>${fmt(r.v1)}</b></td><td class="n">${pct(r.s1)}</td><td class="n">${fmt(r.v2)}</td><td class="n">${pct(r.s2)}</td><td class="n"${dCls(r.d)}>${dTxt(r.d)}</td><td class="n">${gSpan(r.g)}</td></tr>`).join('')}</tbody>
+      <tfoot><tr><td>Total</td><td class="n">${fmt(P1.total)}</td><td class="n">${P1.total?'100.0%':'–'}</td><td class="n">${fmt(P2.total)}</td><td class="n">${P2.total?'100.0%':'–'}</td><td class="n"${dCls(P1.total-P2.total)}>${dTxt(P1.total-P2.total)}</td><td class="n">${gSpan(gPct(P1.total,P2.total))}</td></tr></tfoot></table></div>`
+    :`<div class="tw"><table class="cmp-tbl"><thead><tr><th>Rank</th><th>Showroom</th><th>Walk-ins</th><th>Contribution</th><th>Daily average</th></tr></thead><tbody>
+      ${sr.map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.name)}</td><td class="n"><b>${fmt(r.v1)}</b></td><td class="n">${pct(r.s1)}</td><td class="n">${fmt1(r.a1)}</td></tr>`).join('')}</tbody>
+      <tfoot><tr><td></td><td>Total</td><td class="n">${fmt(P1.total)}</td><td class="n">${P1.total?'100.0%':'–'}</td><td class="n">${fmt1(P1.avg)}</td></tr></tfoot></table></div>`;
+  const order=[1,2,3,4,5,6,0], wd=(P)=>order.map(i=>P.dowDays[i]?P.dowSum[i]/P.dowDays[i]:null);
+  const w1=wd(P1), w2=P2?wd(P2):null;
+  const wTbl=`<div class="tw"><table class="cmp-tbl"><thead><tr><th>Average per day</th>${order.map(i=>`<th>${DOW[i]}</th>`).join('')}</tr></thead><tbody>
+      <tr><td><span style="color:var(--s1)">●</span> Period 1</td>${w1.map(v=>`<td class="n">${v==null?'–':fmt1(v)}</td>`).join('')}</tr>
+      ${two?`<tr><td><span style="color:${CP2}">●</span> Period 2</td>${w2.map(v=>`<td class="n">${v==null?'–':fmt1(v)}</td>`).join('')}</tr>
+      <tr><td>Growth %</td>${w1.map((v,i)=>`<td class="n">${v!=null&&w2[i]!=null?gSpan(gPct(v,w2[i])):'–'}</td>`).join('')}</tr>`:''}</tbody></table></div>`;
+  const bTbl=(P,name,kind)=>{ const b=cpBuckets(P,kind); if(b.length<2) return ''; return `<div><h3>${name}</h3><div class="tw"><table class="cmp-tbl" style="min-width:380px"><thead><tr><th>${kind==='week'?'Week':'Month'}</th><th>Walk-ins</th><th>Days</th><th>Per day</th></tr></thead><tbody>
+      ${b.map(x=>`<tr><td>${esc(x.l)}</td><td class="n"><b>${fmt(x.t)}</b></td><td class="n">${x.n}</td><td class="n">${fmt1(x.n?x.t/x.n:0)}</td></tr>`).join('')}</tbody></table></div></div>`};
+  const spanM=P=>monthStart(P.a)!==monthStart(P.last);
+  const trendTbls=[ P1.nd>=8?bTbl(P1,two?'Period 1 · weekly':'Weekly trend','week'):'', two&&P2.nd>=8?bTbl(P2,'Period 2 · weekly','week'):'',
+    spanM(P1)?bTbl(P1,two?'Period 1 · monthly':'Monthly trend','month'):'', two&&spanM(P2)?bTbl(P2,'Period 2 · monthly','month'):'' ].filter(Boolean);
+  const mx=Math.max(1,...sr.flatMap(r=>[r.v1,r.v2]));
+  const bars=sr.map(r=>`<div class="cb-row"><span class="cb-n">${esc(r.name)}</span><div class="cb-bars"><div class="cb-b"><i style="width:${r.v1/mx*100}%;background:var(--s1)"></i><b>${fmt(r.v1)}</b></div>${two?`<div class="cb-b"><i style="width:${r.v2/mx*100}%;background:${CP2}"></i><b>${fmt(r.v2)}</b></div>`:''}</div></div>`).join('');
+  const leg=`<div class="legend"><span><i class="lg" style="background:var(--s1)"></i>Period 1 · ${esc(fRange(P1.a,P1.b))}</span>${two?`<span><i class="lg" style="background:${CP2}"></i>Period 2 · ${esc(fRange(P2.a,P2.b))}</span>`:''}</div>`;
+  out.innerHTML=empty?`<section><div class="card"><p class="note" style="margin:0">No ${noun} were recorded for ${esc(selName(false))} in the selected period${two?'s':''}. Try different dates or showrooms.</p></div></section>`:
+  `<section><div class="sh"><h2>Executive summary</h2></div><div class="card"><ul class="cmp-sum">${sum.map(x=>`<li>${x}</li>`).join('')}</ul></div></section>
+   <section>${kpis}</section>
+   <section><div class="sh"><h2>Management highlights</h2></div><div class="cmp-hl">${hl.map(h=>`<div><small>${esc(h[0])}</small><b>${esc(h[1])}</b><span>${esc(h[2])}</span></div>`).join('')}</div></section>
+   <section><div class="sh"><h2>${two?'Period comparison':'Period summary'}</h2></div><div class="card">${mTbl}</div></section>
+   <section><div class="sh"><h2>${two?'Showroom-by-showroom comparison':'Showroom ranking and contribution'}</h2></div>
+     <div class="cmp-2col"><div class="card">${sTbl}</div><div class="card"><h3>${two?'Walk-ins by showroom':'Contribution by showroom'}</h3>${bars}${leg}</div></div></section>
+   <section><div class="sh"><h2>Daily trend</h2><span>${two?'Day 1 of each period lines up, so periods of different lengths can still be compared':'Walk-ins per day'}</span></div><div class="card"><div id="cpTrend"></div>${leg}</div></section>
+   <section><div class="sh"><h2>Weekday pattern</h2></div><div class="card">${wTbl}</div></section>
+   ${trendTbls.length?`<section><div class="sh"><h2>Weekly and monthly trends</h2></div><div class="card cmp-2col">${trendTbls.join('')}</div></section>`:''}
+   <p class="cmp-note">Daily average = total ÷ calendar days in the period up to today. Highest and lowest day only consider days that have entries. Growth % = (Period 1 − Period 2) ÷ Period 2; where Period 2 is zero it shows n/a rather than a misleading number.</p>`;
+  const tr=$('#cpTrend'); if(tr) cpTrend(tr,P1,P2) }
+
 /* ───────── messages to showrooms ─────────
    Each message is written to stores/{id}/broadcasts/{msgId} for every selected showroom, in one request.
    The showroom pages listen live: the message pops up and leads their Live Feed until `until`.
@@ -2422,7 +2776,7 @@ const MSG_MAX=280;
 const SENDERS=['Hagop','Dilya'];
 const M={to:new Set(),sent:[],busy:false,from:'Hagop'};
 function mRenderFrom(){ $('#mFrom').querySelectorAll('[data-from]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.from===M.from)) }
-const mStores=()=>(S.stores&&S.stores.length?S.stores:Object.keys(NAMES)).slice().sort((a,b)=>short(a).localeCompare(short(b)));
+const mStores=()=>(S.allStores&&S.allStores.length?S.allStores:Object.keys(NAMES)).slice().sort((a,b)=>short(a).localeCompare(short(b)));
 const mId=()=>'m'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 function mUntil(v){ const now=Date.now();
   if(v==='2h')return now+2*36e5; if(v==='24h')return now+24*36e5; if(v==='3d')return now+3*DAY; if(v==='7d')return now+7*DAY;
@@ -2689,7 +3043,7 @@ setInterval(()=>{ if(!CTX)return; if(document.hidden) idleNotify(idleData()); el
 /* ───────── self-update ─────────
    On open, on return to the foreground and every few minutes, the page downloads itself past every cache.
    If the copy on the server differs from the one running, it refreshes the cached copies and reloads. */
-const BUILD='3.3.1';   // shown in the footer, so you can see which version a device is running
+const BUILD='3.4.0';   // shown in the footer, so you can see which version a device is running
 const SELF_JS=document.currentScript?document.currentScript.textContent:'', SELF_CSS=(document.querySelector('style')||{}).textContent||'';
 $('#ver').textContent='Version '+BUILD;
 const bust=()=>{const u=new URL(location.href);u.searchParams.set('v',Date.now());location.replace(u)};
@@ -2743,7 +3097,7 @@ const svgI=k=>`<svg viewBox="0 0 24 24" aria-hidden="true">${EI[k]}</svg>`;
 function eoCard(cls,icon,label,val,sub,tip,sp,btn){const tag=btn?'button':'div';return `<${tag} class="card eo ${cls}"${btn?` type="button" ${btn}`:''}${tip?` data-tip="${esc(tip)}"`:''}><div class="eh"><span class="ei">${svgI(icon)}</span>${label}</div><div class="ev">${val}</div><div class="es">${sub||'&nbsp;'}</div>${sp||''}</${tag}>`}
 /* last 14 days for the KPI sparklines, both channels, same showroom scope */
 function last14(c){ const w=Array(14).fill(0),p=Array(14).fill(0),st=Array(14).fill(null).map(()=>new Set), d0=c.today-13;
-  for(const r of S.recs){ if(r.t>c.now||r.d<d0||(S.store!=='all'&&r.s!==S.store))continue; const i=r.d-d0; (r.ty==='phone'?p:w)[i]+=r.c; st[i].add(r.s) }
+  for(const r of S.recs){ if(r.t>c.now||r.d<d0||(S.store!=='all'?r.s!==S.store:S.hidden.has(r.s)))continue; const i=r.d-d0; (r.ty==='phone'?p:w)[i]+=r.c; st[i].add(r.s) }
   return{w:w.map(P0),p:p.map(P0),t:w.map((v,i)=>P0(v)+P0(p[i])),s:st.map(x=>x.size)} }
 function attentionList(c,H){
   const out=[], rank={crit:0,ser:1,warn:2};
@@ -2757,7 +3111,7 @@ function renderExecOverview(c){
   const H=healthRows(c,true), rep=S.stores.filter(id=>{const o=sp.store.get(id);return o&&(o.walkin||o.phone)}).length, today=sp.todayStore.size;
   const att=attentionList(c,H.filter(h=>c.isAll||h.id===S.store)), attStores=new Set(att.map(a=>a.id));
   const vs=c.cr?` vs ${fRange(c.cr.a,c.cr.b)}`:'', L14=last14(c), sk=(a,lbl)=>`<span data-tip="${esc(lbl+': '+a.join(' · '))}">${spark(a,220,30)}</span>`;
-  $('#eoSub').textContent=`${c.isAll?'All UAE showrooms':sname(S.store)} · ${fRange(c.a,c.b)}${c.cr?' · compared with '+fRange(c.cr.a,c.cr.b):''}`;
+  $('#eoSub').textContent=`${c.isAll?(S.hidden.size?selName(true):'All UAE showrooms'):sname(S.store)} · ${fRange(c.a,c.b)}${c.cr?' · compared with '+fRange(c.cr.a,c.cr.b):''}`;
   $('#eoKpis').innerHTML=
     eoCard('','walk','Physical walk-ins',fmt(w),c.splCmp?`${delta(w,cw)} <span>was ${fmt(cw)}</span>`:`${fmt1(w/c.days)} per day`,`Customers who came into the showroom${vs}`,sk(L14.w,'Walk-ins, last 14 days'))+
     eoCard('ph','phone','Phone inquiries',fmt(p),c.splCmp?`${delta(p,cp)} <span>was ${fmt(cp)}</span>`:`${fmt1(p/c.days)} per day`,`Calls, messages and quotation requests received by phone${vs}`,sk(L14.p,'Phone inquiries, last 14 days'))+
@@ -2790,7 +3144,7 @@ document.addEventListener('click',e=>{ const g=e.target.closest&&e.target.closes
 /* sidebar, reset, quick actions */
 $('#sideNav').addEventListener('click',e=>{const b=e.target.closest('[data-tab]'); if(b) setTab(b.dataset.tab,true)});
 $('#sideMsg').addEventListener('click',mOpen);
-$('#btnReset').addEventListener('click',()=>{ S.store='all';S.preset='mtd';S.cmpMode='auto';S.ca=S.cb=null;S.ch='all';S.q='';S.execAll=false;
+$('#btnReset').addEventListener('click',()=>{ S.hidden.clear();syncStore();S.preset='mtd';S.cmpMode='auto';S.ca=S.cb=null;S.ch='all';S.q='';S.execAll=false;
   try{localStorage.setItem('rakCh','all')}catch(_){} const q=$('#execQ'); if(q)q.value=''; render() });
 
 /* head-office messaging summary in Management & Admin */
@@ -2819,7 +3173,7 @@ function ncItems(){
     title:`${short(h.id)} · ${h.s[1].toLowerCase()}`,text:h.last?`Last entry ${ago(h.last)} (${fDay(dn(h.last))}, ${fTime(h.last)}). Check whether the showroom is closed or the team stopped logging.`:'This showroom has never logged an entry.',ts:h.last||0,store:h.id,go:'health'});
   const now=Date.now();
   for(const b of M.sent.slice(0,20)){ let y=0,t=0; for(const id of b.stores){ const sn=b.seen[id]||{}, n=Object.keys(sn).length; y+=n; t+=Math.max(n,(S.roster[id]||[]).filter(e=>!isOff(id,e)).length) }
-    it.push({id:'msg|'+b.id,kind:'msg',pri:b.urgent?'urgent':'normal',icon:'msg',who:b.from||'Head office',title:`To ${b.stores.length===S.stores.length?'all showrooms':b.stores.length+' showroom'+(b.stores.length===1?'':'s')}`,
+    it.push({id:'msg|'+b.id,kind:'msg',pri:b.urgent?'urgent':'normal',icon:'msg',who:b.from||'Head office',title:`To ${b.stores.length===S.allStores.length?'all showrooms':b.stores.length+' showroom'+(b.stores.length===1?'':'s')}`,
       text:b.text,ts:b.ts,live:!b.until||b.until>now,ack:{y,t}}); }
   return it.sort((a,b)=>b.ts-a.ts);
 }
@@ -2862,7 +3216,7 @@ function ncOpen(on){ NC.open=on; $('#nc').hidden=$('#ncScrim').hidden=!on; if(on
 function ncAct(i){
   ncRead.add(i.id); ncRender();
   if(i.kind==='msg'){ ncOpen(false); mOpen(); return }
-  ncOpen(false); S.store=i.store; S.execAll=false; if(S.tab===i.go) render(); else setTab(i.go,true);
+  ncOpen(false); setOnly(i.store); S.execAll=false; if(S.tab===i.go) render(); else setTab(i.go,true);
 }
 function ncToast(i){
   const box=$('#nct'), d=document.createElement('div'), ms=i.pri==='urgent'?14000:8000, u=i.pri==='urgent';
