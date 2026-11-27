@@ -3502,7 +3502,7 @@ if(new URLSearchParams(location.search).has('demo')) useDemo(); else refresh(tru
 </script>
 <script>
 /* ───────── head-office PIN login ─────────
-   Users live at hq/users/{name}/pin as a SHA-256 hash (never the PIN itself).
+   Users live at hq/users/{name}/pin as a SHA-256 hash.
    Everyone starts on 1234 and must choose their own PIN at first sign-in. PINs must be unique.
    Admin can reset anyone's PIN back to 1234. */
 (function(){
